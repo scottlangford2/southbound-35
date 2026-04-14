@@ -1,0 +1,18 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+*.egg-info/
+
+# Data (downloaded at runtime)
+posts/*/data/*.csv
+!posts/*/data/.gitkeep
+
+# Figures (regenerate from code)
+posts/*/figures/*.png
+posts/*/graphics/*.png
+!posts/*/figures/.gitkeep
+!posts/*/graphics/.gitkeep
+
+.DS_Store
