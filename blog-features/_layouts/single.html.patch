@@ -1,0 +1,28 @@
+Context-only patch. The academicpages `_layouts/single.html` has a block
+that prints the post meta (date + read time). Drop the view-count include
+next to read-time. Exact surrounding lines will vary by theme version —
+search for `read-time.html` in your single.html and add the new line
+immediately after it, inside the same `<p class="page__meta">` (or
+equivalent) block.
+
+--- a/_layouts/single.html
++++ b/_layouts/single.html
+@@   around the read-time include   @@
+     {% if page.read_time %}
+       <span class="page__meta-sep"> · </span>
+       {% include read-time.html %}
+     {% endif %}
++    {% if site.goatcounter.code %}
++      <span class="page__meta-sep"> · </span>
++      {% include view-count.html %}
++    {% endif %}
+   </p>
+
+Notes:
+  - If your single.html doesn't already have a `page__meta` block, you
+    can put `{% include view-count.html %}` anywhere in the post header
+    area. The include renders an inline `<span>`, so it composes with
+    existing layout flow.
+  - The `if site.goatcounter.code` guard keeps the layout clean until
+    you've actually configured GoatCounter — no broken fragment appears
+    before setup.
