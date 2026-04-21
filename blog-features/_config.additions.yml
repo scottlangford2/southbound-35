@@ -1,0 +1,27 @@
+# Merge these keys into scott_langford/_config.yml. Existing `comments:`
+# and `analytics:` blocks are currently set to `false` / `provider: false`
+# — overwrite them with the blocks below.
+
+# ── Comments (giscus via the "custom" provider slot) ───────────────────────
+comments:
+  provider: "custom"
+
+giscus:
+  repo:          "scottlangford2/scott_langford"
+  repo_id:       "REPLACE_ME"           # e.g. "R_kgDOAbCdEf"
+  category:      "Blog Comments"
+  category_id:   "REPLACE_ME"           # e.g. "DIC_kwDOAbCdEf4ABc12"
+  mapping:       "pathname"             # one discussion per URL path
+  strict:        "0"
+  reactions_enabled: "1"
+  emit_metadata: "0"
+  input_position: "bottom"
+  theme:         "preferred_color_scheme"
+  lang:          "en"
+
+# ── Analytics / view counter (GoatCounter via the "custom" slot) ───────────
+analytics:
+  provider: "custom"
+
+goatcounter:
+  code: "REPLACE_ME"                    # e.g. "southbound35" (your subdomain)
