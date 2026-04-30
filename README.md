@@ -12,6 +12,7 @@ Each post with figures or data analysis has its own folder under `posts/`. Every
 | 2026-04-08 | [How Dangerous Is Spring Break, Really?](https://scottlangford2.github.io/scott_langford/posts/2026/04/spring-break-mortality/) | [`posts/spring-break-mortality/`](posts/spring-break-mortality/) |
 | 2026-04-10 | [Hevel on the Back Nine](https://scottlangford2.github.io/scott_langford/posts/2026/04/scheffler-ecclesiastes/) | *(essay — no replication code)* |
 | 2026-04-13 | Where Is All of This Going? | [`posts/hays-projections/`](posts/hays-projections/) |
+| 2026-04-30 | [Did LIV Golfers Get Worse After They Defected?](https://scottlangford2.github.io/scott_langford/posts/2026/04/liv-defectors-majors/) | [`posts/liv-defectors-majors/`](posts/liv-defectors-majors/) |
 
 ## Quickstart
 
