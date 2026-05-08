@@ -1,14 +1,19 @@
 # Alliance Regional Water Authority imported supply by project phase.
 # Source: ARWA project documents and partner-city ACFR disclosures.
-#   https://allianceregionalwater.com/
+#   https://alliancewater.org/what-we-do
+#   https://www.alliancewaterproject.com/
+#   https://kfriese.com/projects/alliance-water-phase-1b-segment-b-pipeline-design/
 # Cumulative MGD = total nameplate capacity across all partner cities
 # (Kyle, San Marcos, Buda, Canyon Regional Water Authority).
 # Status: completed | in_construction | planned
-# Values are PLACEHOLDERS; replace with figures from the ARWA system
-# master plan / annual report before publication.
+# Phase 1A came online with the initial Carrizo wellfield development;
+# Phase 1B added pipeline + plant capacity targeting delivery to
+# customers in 2023; the Carrizo plant is being built out toward a
+# design capacity of 39.5 MGD across all partners over the life of
+# the project.
 phase,year_online,cumulative_mgd,status
 Pre-ARWA,2010,0.0,completed
-Phase 1A,2020,10.0,completed
-Phase 1B,2024,16.0,completed
+Phase 1A,2020,5.0,completed
+Phase 1B,2023,15.0,completed
 Phase 2,2030,28.0,planned
-Phase 3,2040,42.0,planned
+Phase 3,2040,39.5,planned

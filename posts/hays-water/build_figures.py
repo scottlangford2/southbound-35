@@ -240,7 +240,7 @@ def fig_arwa_ramp():
                         xytext=(6, 8), textcoords="offset points",
                         fontsize=8.5, fontweight="bold")
 
-    today = 2025
+    today = 2026
     ax.axvline(today, color=COLORS["darkgray"], lw=0.8, ls="--", alpha=0.7)
     ax.text(today + 0.5, ax.get_ylim()[1] * 0.05, "today",
             fontsize=8.5, color=COLORS["darkgray"], style="italic")
