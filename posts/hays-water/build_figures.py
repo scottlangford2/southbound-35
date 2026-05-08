@@ -12,36 +12,30 @@ Usage:
     python build_figures.py
 """
 
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+
 import matplotlib.pyplot as plt
-import matplotlib as mpl
 import matplotlib.patches as mpatches
 import geopandas as gpd
 import pandas as pd
-from pathlib import Path
 
-# Same palette as hays-growth / hays-projections for visual continuity
-RED    = "#DC3520"
-BLUE   = "#1F77B4"
-ORANGE = "#FF7F0E"
-GREEN  = "#2CA02C"
-GRAY   = "#999999"
+from econ_style import apply as apply_econ_style, COLORS, redbar, source_line, BG
+
+apply_econ_style()
+
+# Convenience aliases for legacy code that referenced specific colors
+BLUE   = COLORS["blue"]
+ORANGE = COLORS["yellow"]   # used as a warm secondary in maps
+GREEN  = COLORS["green"]
+RED    = COLORS["red"]
+GRAY   = COLORS["darkgray"]
 DPI    = 150
 
 # Texas projected CRS for accurate area / shape rendering. EPSG:3083
 # is the NAD83 Texas Centric Albers Equal Area projection.
 TEXAS_CRS = "EPSG:3083"
-
-mpl.rcParams.update({
-    "figure.dpi": DPI, "figure.facecolor": "white", "axes.facecolor": "white",
-    "axes.spines.top": False, "axes.spines.right": False,
-    "axes.grid": True, "axes.grid.axis": "y",
-    "grid.color": "#E5E5E5", "grid.linewidth": 0.8,
-    "font.family": "sans-serif", "font.size": 11,
-    "axes.titlesize": 12, "axes.titleweight": "bold",
-    "axes.labelsize": 10, "xtick.labelsize": 9, "ytick.labelsize": 9,
-    "legend.fontsize": 9, "legend.frameon": False,
-    "figure.constrained_layout.use": True,
-})
 
 ROOT   = Path(__file__).parent
 INPUT  = ROOT / "inputs"
@@ -91,29 +85,32 @@ def fig_demand():
     df = _read_csv("twdb_water_use_hays.csv").sort_values("year")
 
     fig, ax = plt.subplots(figsize=(7.0, 4.5))
+    redbar(fig)
+
     ax.stackplot(
         df["year"],
         df["municipal"], df["irrigation"], df["mining"], df["manufacturing"],
         labels=["Municipal", "Irrigation", "Mining", "Manufacturing"],
-        colors=[BLUE, GREEN, ORANGE, GRAY], alpha=0.85,
+        colors=[COLORS["blue"], COLORS["green"], COLORS["yellow"],
+                COLORS["darkgray"]],
     )
 
     historical = df[df["year"] <= 2025]
     if not historical.empty:
         boundary = historical["year"].max()
-        ax.axvline(boundary, color="#555", lw=1, ls="--", alpha=0.6)
-        ax.text(boundary + 0.5, ax.get_ylim()[1] * 0.92, "projected →",
-                fontsize=8.5, color="#555", style="italic")
+        ax.axvline(boundary, color=COLORS["darkgray"], lw=0.8, ls="--",
+                   alpha=0.7)
+        ax.text(boundary + 0.5, ax.get_ylim()[1] * 0.92, "projected",
+                fontsize=8.5, color=COLORS["darkgray"], style="italic")
 
     ax.set_xlabel("Year")
     ax.set_ylabel("Demand (thousand acre-feet/yr)")
     ax.set_title("Hays County Water Demand: Historical and Projected")
     ax.set_xlim(df["year"].min(), df["year"].max())
     ax.legend(loc="upper left")
-    ax.text(0, -0.12,
-            "Sources: TWDB Historical Water Use Estimates; "
-            "TWDB 2026 RWP Board-Adopted Demand Projections.",
-            transform=ax.transAxes, fontsize=7, color=GRAY)
+    source_line(ax,
+                "Sources: TWDB Historical Water Use Estimates; "
+                "TWDB 2026 RWP Board-Adopted Demand Projections.")
 
     fig.savefig(OUT / "hays_water_demand.png", dpi=DPI, bbox_inches="tight")
     plt.close(fig)
@@ -136,10 +133,12 @@ def fig_aquifer_map():
     in_hays = gpd.overlay(aquifers, hays[["geometry"]], how="intersection")
 
     # Distinct, full-opacity fills so the layers read clearly.
-    colors = {"TRINITY": "#F4A460", "EDWARDS": "#4A90D9"}
+    colors = {"TRINITY": COLORS["yellow"], "EDWARDS": COLORS["blue"]}
 
     fig, ax = plt.subplots(figsize=(6.5, 6.5))
-    hays.plot(ax=ax, color="white", edgecolor="black", linewidth=1.4, zorder=1)
+    redbar(fig)
+    hays.plot(ax=ax, color=BG, edgecolor=COLORS["darkgray"],
+              linewidth=1.2, zorder=1)
 
     # Trinity first (covers most of the county), then Edwards drawn on
     # top so the eastern recharge band is visible.
@@ -158,10 +157,11 @@ def fig_aquifer_map():
     handles = [mpatches.Patch(color=colors["TRINITY"], label="Trinity aquifer"),
                mpatches.Patch(color=colors["EDWARDS"], label="Edwards aquifer")]
     ax.legend(handles=handles, loc="lower left",
-              frameon=True, framealpha=0.95, fontsize=9)
-    ax.text(0.0, -0.04,
-            "Sources: TWDB Major Aquifers; Census TIGER 2023 county boundary.",
-            transform=ax.transAxes, fontsize=7, color=GRAY)
+              frameon=True, framealpha=0.95, fontsize=9,
+              facecolor=BG, edgecolor="none")
+    source_line(ax,
+                "Sources: TWDB Major Aquifers; Census TIGER 2023 county boundary.",
+                y=-0.02)
 
     fig.savefig(OUT / "hays_aquifer_map.png", dpi=DPI, bbox_inches="tight")
     plt.close(fig)
@@ -181,13 +181,15 @@ def fig_gcd_map():
     gcd_all = gpd.read_file(SHAPES / "gcd" / "TWDB_GCD_NOV2019.shp").to_crs(TEXAS_CRS)
 
     targets = [
-        ("HAYS TRINITY GROUNDWATER CONSERVATION DISTRICT",     "HTGCD",  "#F4A460"),
-        ("BARTON SPRINGS/EDWARDS AQUIFER CONSERVATION DISTRICT", "BSEACD", "#4A90D9"),
-        ("EDWARDS AQUIFER AUTHORITY",                          "EAA",    "#7BB37B"),
+        ("HAYS TRINITY GROUNDWATER CONSERVATION DISTRICT",     "HTGCD",  COLORS["yellow"]),
+        ("BARTON SPRINGS/EDWARDS AQUIFER CONSERVATION DISTRICT", "BSEACD", COLORS["blue"]),
+        ("EDWARDS AQUIFER AUTHORITY",                          "EAA",    COLORS["green"]),
     ]
 
     fig, ax = plt.subplots(figsize=(6.5, 6.5))
-    hays.plot(ax=ax, color="white", edgecolor="black", linewidth=1.4, zorder=1)
+    redbar(fig)
+    hays.plot(ax=ax, color=BG, edgecolor=COLORS["darkgray"],
+              linewidth=1.2, zorder=1)
 
     legend_handles = []
     for full_name, short, color in targets:
@@ -205,10 +207,11 @@ def fig_gcd_map():
     ax.set_axis_off()
     ax.set_title("Hays County: Groundwater Conservation Districts")
     ax.legend(handles=legend_handles, loc="lower left",
-              frameon=True, framealpha=0.95, fontsize=9)
-    ax.text(0.0, -0.04,
-            "Sources: TWDB GCD Boundaries (Nov 2019); Census TIGER 2023.",
-            transform=ax.transAxes, fontsize=7, color=GRAY)
+              frameon=True, framealpha=0.95, fontsize=9,
+              facecolor=BG, edgecolor="none")
+    source_line(ax,
+                "Sources: TWDB GCD Boundaries (Nov 2019); Census TIGER 2023.",
+                y=-0.02)
 
     fig.savefig(OUT / "hays_gcd_map.png", dpi=DPI, bbox_inches="tight")
     plt.close(fig)
@@ -220,34 +223,35 @@ def fig_arwa_ramp():
     df = _read_csv("arwa_phases.csv").sort_values("year_online")
 
     fig, ax = plt.subplots(figsize=(7.0, 4.2))
+    redbar(fig)
+
     ax.step(df["year_online"], df["cumulative_mgd"],
-            where="post", color=BLUE, lw=2.5, zorder=3)
+            where="post", color=COLORS["blue"], lw=2.5, zorder=3)
     ax.fill_between(df["year_online"], 0, df["cumulative_mgd"],
-                    step="post", color=BLUE, alpha=0.18)
+                    step="post", color=COLORS["blue"], alpha=0.18)
 
     for _, row in df.iterrows():
         if row["cumulative_mgd"] > 0:
             ax.scatter(row["year_online"], row["cumulative_mgd"],
-                       color=BLUE, s=60, zorder=5,
-                       edgecolor="white", linewidth=1.2)
+                       color=COLORS["blue"], s=60, zorder=5,
+                       edgecolor=BG, linewidth=1.2)
             ax.annotate(f"{row['phase']}\n{row['cumulative_mgd']:.0f} MGD",
                         (row["year_online"], row["cumulative_mgd"]),
                         xytext=(6, 8), textcoords="offset points",
                         fontsize=8.5, fontweight="bold")
 
     today = 2025
-    ax.axvline(today, color="#555", lw=1, ls="--", alpha=0.6)
+    ax.axvline(today, color=COLORS["darkgray"], lw=0.8, ls="--", alpha=0.7)
     ax.text(today + 0.5, ax.get_ylim()[1] * 0.05, "today",
-            fontsize=8.5, color="#555", style="italic")
+            fontsize=8.5, color=COLORS["darkgray"], style="italic")
 
     ax.set_xlabel("Year online")
     ax.set_ylabel("Cumulative imported supply (MGD)")
     ax.set_title("ARWA Imported Supply: Phase Ramp-Up")
     ax.set_xlim(df["year_online"].min() - 2, df["year_online"].max() + 5)
     ax.set_ylim(0, df["cumulative_mgd"].max() * 1.25)
-    ax.text(0, -0.13,
-            "Sources: Alliance Regional Water Authority; partner-city ACFRs.",
-            transform=ax.transAxes, fontsize=7, color=GRAY)
+    source_line(ax,
+                "Sources: Alliance Regional Water Authority; partner-city ACFRs.")
 
     fig.savefig(OUT / "hays_arwa_ramp.png", dpi=DPI, bbox_inches="tight")
     plt.close(fig)
