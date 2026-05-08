@@ -12,28 +12,23 @@ Usage:
     python build_figures.py
 """
 
-import matplotlib.pyplot as plt
-import matplotlib as mpl
-import numpy as np
+import sys
 from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-RED    = "#DC3520"
-BLUE   = "#1F77B4"
-ORANGE = "#FF7F0E"
-GRAY   = "#999999"
+import matplotlib.pyplot as plt
+import numpy as np
+
+from econ_style import apply as apply_econ_style, COLORS, redbar, source_line, BG
+
+apply_econ_style()
+
+# Aliases so the existing figure code keeps reading.
+RED    = COLORS["red"]
+BLUE   = COLORS["blue"]
+ORANGE = COLORS["yellow"]
+GRAY   = COLORS["darkgray"]
 DPI    = 150
-
-mpl.rcParams.update({
-    "figure.dpi": DPI, "figure.facecolor": "white", "axes.facecolor": "white",
-    "axes.spines.top": False, "axes.spines.right": False,
-    "axes.grid": True, "axes.grid.axis": "y",
-    "grid.color": "#E5E5E5", "grid.linewidth": 0.8,
-    "font.family": "sans-serif", "font.size": 11,
-    "axes.titlesize": 12, "axes.titleweight": "bold",
-    "axes.labelsize": 10, "xtick.labelsize": 9, "ytick.labelsize": 9,
-    "legend.fontsize": 9, "legend.frameon": False,
-    "figure.constrained_layout.use": True,
-})
 
 OUT = Path(__file__).parent / "figures"
 OUT.mkdir(exist_ok=True)
@@ -45,6 +40,7 @@ def fig_population():
     pop   = [65_614, 97_589, 157_107, 241_067, 302_000]
 
     fig, ax = plt.subplots(figsize=(7.0, 4.5))
+    redbar(fig)
     ax.plot(years, [p / 1000 for p in pop], color=BLUE, marker="o", lw=2.5, ms=8, zorder=5)
 
     for yr, p in zip(years, pop):
@@ -52,7 +48,7 @@ def fig_population():
         ax.annotate(label, (yr, p / 1000), textcoords="offset points",
                     xytext=(0, 12), ha="center", fontsize=8.5, fontweight="bold", color="#333")
 
-    ax.axvspan(2000, 2020, alpha=0.08, color=ORANGE, label="20-year tripling (97K → 241K)")
+    ax.axvspan(2000, 2020, alpha=0.20, color=ORANGE, label="20-year tripling (97K to 241K)")
     ax.set_ylabel("Population (thousands)")
     ax.set_title("Hays County Population, 1990–2025")
     ax.set_xlim(1988, 2027)
@@ -77,6 +73,7 @@ def fig_cities():
     width = 0.35
 
     fig, ax = plt.subplots(figsize=(7.0, 4.5))
+    redbar(fig)
     ax.bar(x - width/2, pop_2010, width, color=GRAY, alpha=0.6, label="2010 Census")
     ax.bar(x + width/2, pop_now, width, color=BLUE, alpha=0.80, label="2025 (est.)")
 
@@ -108,6 +105,7 @@ def fig_affordability():
     colors   = [GRAY, ORANGE, BLUE]
 
     fig, ax = plt.subplots(figsize=(7.0, 4.0))
+    redbar(fig)
     bars = ax.bar(counties, medians, color=colors, alpha=0.80, width=0.55)
 
     for bar, val in zip(bars, medians):

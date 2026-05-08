@@ -22,34 +22,28 @@ Usage:
     python build_figures.py
 """
 
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+
 import matplotlib.pyplot as plt
-import matplotlib as mpl
 import numpy as np
 from scipy.optimize import curve_fit
-from pathlib import Path
 import json
 import urllib.request
 
-RED    = "#DC3520"
-BLUE   = "#1F77B4"
-ORANGE = "#FF7F0E"
-GRAY   = "#999999"
-GREEN  = "#2CA02C"
-PURPLE = "#9467BD"
-BROWN  = "#8C564B"
-DPI    = 150
+from econ_style import apply as apply_econ_style, COLORS, redbar, BG
 
-mpl.rcParams.update({
-    "figure.dpi": DPI, "figure.facecolor": "white", "axes.facecolor": "white",
-    "axes.spines.top": False, "axes.spines.right": False,
-    "axes.grid": True, "axes.grid.axis": "y",
-    "grid.color": "#E5E5E5", "grid.linewidth": 0.8,
-    "font.family": "sans-serif", "font.size": 11,
-    "axes.titlesize": 12, "axes.titleweight": "bold",
-    "axes.labelsize": 10, "xtick.labelsize": 9, "ytick.labelsize": 9,
-    "legend.fontsize": 8, "legend.frameon": False,
-    "figure.constrained_layout.use": True,
-})
+apply_econ_style()
+
+RED    = COLORS["red"]
+BLUE   = COLORS["blue"]
+ORANGE = COLORS["yellow"]
+GRAY   = COLORS["darkgray"]
+GREEN  = COLORS["green"]
+PURPLE = COLORS["purple"]
+BROWN  = COLORS["tan"]
+DPI    = 150
 
 OUT = Path(__file__).parent / "figures"
 OUT.mkdir(exist_ok=True)
@@ -164,6 +158,7 @@ def fig_projection():
 
     # --- Plot ---
     fig, ax = plt.subplots(figsize=(10, 6.5))
+    redbar(fig)
 
     import matplotlib.lines as mlines
     import matplotlib.patches as mpatches
@@ -258,9 +253,10 @@ def fig_comparison():
     colors   = [GRAY, ORANGE, BLUE, GRAY]
 
     fig, ax = plt.subplots(figsize=(7.0, 4.0))
+    redbar(fig)
     alphas = [0.5, 0.8, 0.8, 0.5]
     bars = ax.bar(counties, pops, color=colors, width=0.55,
-                  edgecolor="white", linewidth=0.5)
+                  edgecolor=BG, linewidth=0.5)
     for bar, a in zip(bars, alphas):
         bar.set_alpha(a)
 

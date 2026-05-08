@@ -806,21 +806,17 @@ def summarize(df: pd.DataFrame):
 # ---------------------------------------------------------------------------
 # Charts
 # ---------------------------------------------------------------------------
-FIG_DIR = "figures"
-plt.rcParams.update({
-    "figure.dpi": 130,
-    "savefig.dpi": 160,
-    "font.size": 11,
-    "axes.spines.top": False,
-    "axes.spines.right": False,
-    "axes.grid": True,
-    "grid.alpha": 0.25,
-    "grid.linestyle": "-",
-})
+import sys
+from pathlib import Path as _Path
+sys.path.insert(0, str(_Path(__file__).resolve().parents[2]))
+from econ_style import apply as apply_econ_style, COLORS, redbar  # noqa: E402
 
-WORSE_COLOR = "#C0392B"   # red
-BETTER_COLOR = "#1E8449"  # green
-NEUTRAL = "#7F8C8D"
+apply_econ_style()
+
+FIG_DIR = "figures"
+WORSE_COLOR  = COLORS["red"]      # red, used for "got worse"
+BETTER_COLOR = COLORS["green"]    # green, used for "got better"
+NEUTRAL      = COLORS["darkgray"]
 
 
 def _per_defector_deltas(df: pd.DataFrame) -> pd.DataFrame:
@@ -850,6 +846,7 @@ def _per_defector_cut_deltas(df: pd.DataFrame) -> pd.DataFrame:
 def chart_player_deltas(df: pd.DataFrame, path: str):
     g = _per_defector_deltas(df)
     fig, ax = plt.subplots(figsize=(8, 9))
+    redbar(fig)
     colors = [WORSE_COLOR if d > 0 else BETTER_COLOR for d in g["delta"]]
     ax.barh(g.index, g["delta"], color=colors, edgecolor="white")
     ax.axvline(0, color="black", lw=0.8)
@@ -872,6 +869,7 @@ def chart_player_deltas(df: pd.DataFrame, path: str):
 def chart_cut_rates(df: pd.DataFrame, path: str):
     g = _per_defector_cut_deltas(df)
     fig, ax = plt.subplots(figsize=(7, 7))
+    redbar(fig)
     sizes = 30 + 8 * g["n_post"]
     colors = [WORSE_COLOR if d < 0 else BETTER_COLOR if d > 0 else NEUTRAL
               for d in g["delta"]]
@@ -910,6 +908,7 @@ def chart_event_study(df: pd.DataFrame, path: str):
     _, _, table = event_study_strokes(df, rounds=(1, 2), control_age=True)
     table = table[(table["event_time"] >= -10) & (table["event_time"] <= 8)]
     fig, ax = plt.subplots(figsize=(9.5, 5))
+    redbar(fig)
     pre = table[table["event_time"] < 0]
     post = table[table["event_time"] >= 0]
     for chunk, color, label in [(pre, "#34495E", "pre-defection"),
@@ -945,6 +944,7 @@ def chart_heterogeneity(df: pd.DataFrame, path: str):
     order = ["star", "older", "journeyman"]
     het = het.set_index("group").reindex(order).reset_index()
     fig, ax = plt.subplots(figsize=(10, 4.8))
+    redbar(fig)
     y = np.arange(len(het))
     colors = [WORSE_COLOR if b > 0 else BETTER_COLOR for b in het["beta"]]
     ax.barh(y, het["beta"], xerr=1.96 * het["se"], color=colors,
@@ -988,6 +988,7 @@ def chart_spec_comparison(df: pd.DataFrame, path: str):
                       "n":    len(s)})
     sp = pd.DataFrame(specs)
     fig, ax = plt.subplots(figsize=(8, 4))
+    redbar(fig)
     y = np.arange(len(sp))[::-1]
     colors = [WORSE_COLOR if b > 0 else BETTER_COLOR for b in sp["beta"]]
     ax.errorbar(sp["beta"], y, xerr=1.96 * sp["se"], fmt="o", color="#34495E",
@@ -1020,6 +1021,7 @@ def chart_dechambeau(df: pd.DataFrame, path: str):
     by_major = (d.groupby(["major_id", "date", "post"])["sv_field"]
                   .mean().reset_index().sort_values("date"))
     fig, ax = plt.subplots(figsize=(10, 4.5))
+    redbar(fig)
     pre = by_major[by_major["post"] == 0]
     post = by_major[by_major["post"] == 1]
     ax.scatter(pre["date"], pre["sv_field"], color="#34495E",
@@ -1052,6 +1054,7 @@ def chart_distribution(df: pd.DataFrame, path: str):
     pre = d.loc[d["post"] == 0, "sv_field"]
     post = d.loc[d["post"] == 1, "sv_field"]
     fig, ax = plt.subplots(figsize=(8, 4.5))
+    redbar(fig)
     bins = np.arange(-12, 14, 1)
     ax.hist(pre, bins=bins, density=True, alpha=0.55, color="#34495E",
             label=f"pre-LIV  (n={len(pre):,} rounds, mean {pre.mean():+.2f})")
