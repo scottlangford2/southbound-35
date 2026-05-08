@@ -1,0 +1,16 @@
+# Hays County cities by primary source aquifer.
+# Aquifer = primary potable supply for the city's utility customers.
+# Schematic_longitude is artificially spread for chart legibility; do
+# not use for geographic analysis.
+# True longitudes are noted in the comment column. Cities with mixed
+# supply (Buda especially) are assigned to their dominant Edwards or
+# Trinity portfolio source as of 2026.
+# Verify against city utility service-area maps and BSEACD/HTGCD
+# boundary files before publication.
+city,aquifer,schematic_longitude,true_longitude,note
+Wimberley,Trinity,-98.16,-98.0987,Squarely Trinity; Jacob's Well
+Dripping Springs,Trinity,-98.04,-98.0867,Trinity; west of recharge zone
+San Marcos,Edwards,-97.93,-97.9414,Edwards Authority side; San Marcos Springs
+Kyle,Edwards,-97.87,-97.8772,Edwards/GBRA mix; ARWA partner
+Buda,Edwards,-97.81,-97.8403,Straddles BSEACD boundary; ARWA partner
+Niederwald,Edwards,-97.72,-97.7444,Edwards/GBRA service

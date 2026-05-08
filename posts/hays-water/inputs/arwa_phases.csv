@@ -1,0 +1,14 @@
+# Alliance Regional Water Authority imported supply by project phase.
+# Source: ARWA project documents and partner-city ACFR disclosures.
+#   https://allianceregionalwater.com/
+# Cumulative MGD = total nameplate capacity across all partner cities
+# (Kyle, San Marcos, Buda, Canyon Regional Water Authority).
+# Status: completed | in_construction | planned
+# Values are PLACEHOLDERS; replace with figures from the ARWA system
+# master plan / annual report before publication.
+phase,year_online,cumulative_mgd,status
+Pre-ARWA,2010,0.0,completed
+Phase 1A,2020,10.0,completed
+Phase 1B,2024,16.0,completed
+Phase 2,2030,28.0,planned
+Phase 3,2040,42.0,planned
