@@ -13,6 +13,7 @@ Each post with figures or data analysis has its own folder under `posts/`. Every
 | 2026-04-10 | [Hevel on the Back Nine](https://scottlangford2.github.io/scott_langford/posts/2026/04/scheffler-ecclesiastes/) | *(essay — no replication code)* |
 | 2026-04-13 | Where Is All of This Going? | [`posts/hays-projections/`](posts/hays-projections/) |
 | 2026-04-30 | [Did LIV Golfers Get Worse After They Defected?](https://scottlangford2.github.io/scott_langford/posts/2026/04/liv-defectors-majors/) | [`posts/liv-defectors-majors/`](posts/liv-defectors-majors/) |
+| 2026-05-11 | [Where the Water Will Come From](https://scottlangford2.github.io/scott_langford/posts/2026/05/hays-county-water/) | [`posts/hays-water/`](posts/hays-water/) |
 
 ## Quickstart
 
