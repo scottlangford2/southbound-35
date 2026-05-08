@@ -122,16 +122,24 @@ def apply():
     })
 
 
-def redbar(fig, width_frac: float = 0.04, height_frac: float = 0.012,
-           x: float = 0.0, y: float = 0.985):
+def redbar(fig, width_in: float = 0.32, height_in: float = 0.06,
+           x_in: float = 0.0, y_in: float = 0.0):
     """Draw the small red accent bar at the top-left of a figure.
 
-    Coordinates are in figure fraction. The default places a thin
-    horizontal red bar in the upper-left, just above the chart title,
-    in the style of The Economist's print and web charts.
+    Sized in absolute inches (not figure fraction) so the bar is the
+    same physical size regardless of figure aspect ratio. Defaults to
+    a 0.32" by 0.06" rectangle anchored to the top-left edge of the
+    figure, just above the title.
     """
+    fig_w, fig_h = fig.get_size_inches()
+    # Convert inches to figure fraction; anchor x at left edge, y so
+    # the rectangle's bottom sits 0.04" below the top edge.
+    x_frac = x_in / fig_w
+    w_frac = width_in / fig_w
+    h_frac = height_in / fig_h
+    y_frac = 1.0 - h_frac - (y_in / fig_h) - (0.04 / fig_h)
     rect = plt.Rectangle(
-        (x, y), width_frac, height_frac,
+        (x_frac, y_frac), w_frac, h_frac,
         transform=fig.transFigure,
         facecolor=COLORS["red"], edgecolor="none",
         clip_on=False, zorder=20,

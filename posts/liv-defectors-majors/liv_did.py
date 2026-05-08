@@ -809,7 +809,7 @@ def summarize(df: pd.DataFrame):
 import sys
 from pathlib import Path as _Path
 sys.path.insert(0, str(_Path(__file__).resolve().parents[2]))
-from econ_style import apply as apply_econ_style, COLORS, redbar  # noqa: E402
+from econ_style import apply as apply_econ_style, COLORS, redbar, BG  # noqa: E402
 
 apply_econ_style()
 
@@ -883,15 +883,24 @@ def chart_cut_rates(df: pd.DataFrame, path: str):
     ax.set_title("Cut rates at majors, pre vs. post defection\n"
                  "(below the dashed line = made fewer cuts after moving)",
                  loc="left", fontsize=12)
-    # label a few notable players
-    label_players = ["Jon Rahm", "Bryson DeChambeau", "Brooks Koepka",
-                     "Cameron Smith", "Phil Mickelson", "Bubba Watson",
-                     "Patrick Reed", "Dustin Johnson"]
-    for p in label_players:
+    # label a few notable players. Per-player offsets keep overlapping
+    # labels (e.g. DeChambeau and Koepka, who land near the same y) apart.
+    label_offsets = {
+        "Jon Rahm":          (8, 5),
+        "Patrick Reed":      (8, -10),
+        "Bryson DeChambeau": (-8, 12),  # push up-left to clear Koepka
+        "Brooks Koepka":     (8, -10),  # push down-right
+        "Dustin Johnson":    (8, 5),
+        "Cameron Smith":     (8, 5),
+        "Phil Mickelson":    (8, 5),
+        "Bubba Watson":      (8, 5),
+    }
+    for p, (dx, dy) in label_offsets.items():
         if p in g.index:
+            ha = "right" if dx < 0 else "left"
             ax.annotate(p, (g.loc[p, "pre"], g.loc[p, "post"]),
-                        xytext=(5, 5), textcoords="offset points",
-                        fontsize=8, color="#34495E")
+                        xytext=(dx, dy), textcoords="offset points",
+                        ha=ha, fontsize=8, color=COLORS["darkgray"])
     fig.tight_layout()
     fig.savefig(path, bbox_inches="tight")
     plt.close(fig)
@@ -1036,9 +1045,10 @@ def chart_dechambeau(df: pd.DataFrame, path: str):
     defect_actual = pd.Timestamp("2022-06-30")
     ax.axvline(defect_actual, color="black", ls="--", alpha=0.5)
     ax.text(defect_actual, ax.get_ylim()[1] * 0.95, "  signs with LIV",
-            fontsize=9, va="top")
+            fontsize=9, va="top", bbox=dict(facecolor=BG, edgecolor="none",
+                                            pad=2, alpha=0.85))
     ax.invert_yaxis()  # lower scores = better, so flip so up = better
-    ax.set_ylabel("Strokes vs. field (R1+R2)\n← worse   |   better →", fontsize=10)
+    ax.set_ylabel("Strokes vs. field (R1+R2)\n(lower is better)", fontsize=10)
     ax.set_xlabel("Major date")
     ax.set_title("Bryson DeChambeau: the headline counterexample\n"
                  "(each dot = his average R1+R2 score relative to the field)",

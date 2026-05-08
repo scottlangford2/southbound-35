@@ -54,9 +54,8 @@ def fig_population():
     ax.set_xlim(1988, 2027)
     ax.set_ylim(0, 350)
     ax.legend(loc="upper left")
-    ax.text(0, -0.10,
-            "Sources: U.S. Census Bureau (1990–2020 decennial), ACS 2023, author estimate 2025.",
-            transform=ax.transAxes, fontsize=7, color=GRAY)
+    source_line(ax,
+                "Sources: U.S. Census Bureau (1990–2020 decennial), ACS 2023, author estimate 2025.")
 
     fig.savefig(OUT / "hays_population.png", dpi=DPI, bbox_inches="tight")
     plt.close(fig)
@@ -90,8 +89,8 @@ def fig_cities():
     ax.set_title("Hays County Cities: 2010 vs. 2025")
     ax.legend()
     ax.set_ylim(0, 110)
-    ax.text(0, -0.10, "Sources: U.S. Census Bureau, city estimates, ACS 2023.",
-            transform=ax.transAxes, fontsize=7, color=GRAY)
+    source_line(ax, "Sources: U.S. Census Bureau, city estimates, ACS 2023.",
+                y=-0.16)
 
     fig.savefig(OUT / "hays_cities.png", dpi=DPI, bbox_inches="tight")
     plt.close(fig)
@@ -120,8 +119,8 @@ def fig_affordability():
     ax.set_ylabel("Median Home Price ($K)")
     ax.set_title("The Growth Engine: Median Home Prices, 2025")
     ax.set_ylim(0, 560)
-    ax.text(0, -0.10, "Sources: Redfin, ABoR/CBA Realtors, February 2026.",
-            transform=ax.transAxes, fontsize=7, color=GRAY)
+    source_line(ax, "Sources: Redfin, ABoR/CBA Realtors, February 2026.",
+                y=-0.18)
 
     fig.savefig(OUT / "hays_affordability.png", dpi=DPI, bbox_inches="tight")
     plt.close(fig)

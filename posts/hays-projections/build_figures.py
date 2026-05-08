@@ -32,7 +32,7 @@ from scipy.optimize import curve_fit
 import json
 import urllib.request
 
-from econ_style import apply as apply_econ_style, COLORS, redbar, BG
+from econ_style import apply as apply_econ_style, COLORS, redbar, source_line, BG
 
 apply_econ_style()
 
@@ -42,7 +42,9 @@ ORANGE = COLORS["yellow"]
 GRAY   = COLORS["darkgray"]
 GREEN  = COLORS["green"]
 PURPLE = COLORS["purple"]
-BROWN  = COLORS["tan"]
+# Tan was too pale on the cream background; use a saturated cyan
+# instead so the Linear fit line is legible.
+BROWN  = COLORS["cyan"]
 DPI    = 150
 
 OUT = Path(__file__).parent / "figures"
@@ -180,11 +182,11 @@ def fig_projection():
     all_years = np.concatenate([hist_years, PROJ_YEARS[1:]])
     all_t = all_years - hist_years[0]
 
-    h_exp = ax.plot(all_years, exp_func(all_t, *popt_exp), color=GREEN, lw=1.5, ls=":",
+    h_exp = ax.plot(all_years, exp_func(all_t, *popt_exp), color=GREEN, lw=2.0, ls=":",
                     zorder=5)[0]
-    h_lin = ax.plot(all_years, np.polyval(coeffs_lin, all_years), color=PURPLE, lw=1.5,
+    h_lin = ax.plot(all_years, np.polyval(coeffs_lin, all_years), color=PURPLE, lw=2.0,
                     ls=":", zorder=5)[0]
-    h_log = ax.plot(all_years, logistic(all_t, *popt_log), color=BROWN, lw=1.5, ls=":",
+    h_log = ax.plot(all_years, logistic(all_t, *popt_log), color=BROWN, lw=2.0, ls=":",
                     zorder=5)[0]
 
     # Build legend with section headers
@@ -226,11 +228,12 @@ def fig_projection():
     ax.set_title("Hays County: Six Projection Strategies Compared")
     ax.set_xlim(1998, 2068)
     ax.set_ylim(0, max(tdc_high[-1], exp_proj[-1], campo_interp[-1]) * 1.1)
-    ax.text(0, -0.12,
-            "TDC: Texas Demographic Center Vintage 2024. CAMPO: 2045 Regional Transportation Plan.\n"
-            f"Statistical fits estimated from {n_obs} annual Census/ACS estimates (2000–2025). "
-            "Logistic K estimated via NLS.",
-            transform=ax.transAxes, fontsize=6.5, color=GRAY)
+    source_line(ax,
+                "TDC: Texas Demographic Center Vintage 2024. "
+                "CAMPO: 2045 Regional Transportation Plan.\n"
+                f"Statistical fits estimated from {n_obs} annual Census/ACS estimates "
+                "(2000–2025). Logistic K estimated via NLS.",
+                y=-0.16, fontsize=6.5)
 
     fig.savefig(OUT / "hays_projection.png", dpi=DPI, bbox_inches="tight")
     plt.close(fig)
@@ -267,10 +270,11 @@ def fig_comparison():
     ax.set_ylabel("Population (thousands)")
     ax.set_title("What 612,000 Looks Like: Hays County in Context")
     ax.set_ylim(0, 1000)
-    ax.text(0, -0.10,
-            "Hays County at projected 2060 population would be roughly the size of "
-            "Williamson County today.\nSources: Census Bureau, Texas Demographic Center.",
-            transform=ax.transAxes, fontsize=7, color=GRAY)
+    source_line(ax,
+                "Hays County at projected 2060 population would be roughly the "
+                "size of Williamson County today.\n"
+                "Sources: Census Bureau, Texas Demographic Center.",
+                y=-0.22)
 
     fig.savefig(OUT / "hays_comparison.png", dpi=DPI, bbox_inches="tight")
     plt.close(fig)
