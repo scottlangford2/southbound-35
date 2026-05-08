@@ -2,27 +2,20 @@
 Replication code for "Where the Water Will Come From"
 https://scottlangford2.github.io/scott_langford/posts/2026/05/hays-county-water/
 
-All numerical values come from CSV inputs in `inputs/`. To update a
-figure, update the corresponding CSV and re-run this script. No values
-are hardcoded in this file.
-
-Inputs:
-    inputs/twdb_water_use_hays.csv     # historical + projected demand
-    inputs/aquifer_assignments.csv     # cities by source aquifer
-    inputs/arwa_phases.csv             # ARWA imported-supply ramp
-
-Outputs (PNG):
-    figures/hays_water_demand.png
-    figures/hays_aquifer_split.png
-    figures/hays_arwa_ramp.png
+All numerical values come from CSV inputs in `inputs/`. Map polygons
+come from public shapefiles fetched by `fetch_shapefiles.py` and
+cached under `inputs/shapefiles/`. The script is purely a renderer.
 
 Usage:
     pip install -r requirements.txt
+    python fetch_shapefiles.py    # one-time, idempotent
     python build_figures.py
 """
 
 import matplotlib.pyplot as plt
 import matplotlib as mpl
+import matplotlib.patches as mpatches
+import geopandas as gpd
 import pandas as pd
 from pathlib import Path
 
@@ -33,6 +26,10 @@ ORANGE = "#FF7F0E"
 GREEN  = "#2CA02C"
 GRAY   = "#999999"
 DPI    = 150
+
+# Texas projected CRS for accurate area / shape rendering. EPSG:3083
+# is the NAD83 Texas Centric Albers Equal Area projection.
+TEXAS_CRS = "EPSG:3083"
 
 mpl.rcParams.update({
     "figure.dpi": DPI, "figure.facecolor": "white", "axes.facecolor": "white",
@@ -48,14 +45,45 @@ mpl.rcParams.update({
 
 ROOT   = Path(__file__).parent
 INPUT  = ROOT / "inputs"
+SHAPES = INPUT / "shapefiles"
 OUT    = ROOT / "figures"
 OUT.mkdir(exist_ok=True)
 
 
 def _read_csv(name):
     """Read a CSV from inputs/, treating # lines as comments."""
-    path = INPUT / name
-    return pd.read_csv(path, comment="#")
+    return pd.read_csv(INPUT / name, comment="#")
+
+
+def _hays_polygon():
+    """Return Hays County polygon, projected to Texas CRS."""
+    counties = gpd.read_file(SHAPES / "county" / "cb_2023_us_county_5m.shp")
+    hays = counties[(counties["STATEFP"] == "48") &
+                    (counties["NAME"] == "Hays")]
+    return hays.to_crs(TEXAS_CRS)
+
+
+def _city_points():
+    """Return city locations as a GeoDataFrame in the Texas CRS."""
+    cities = _read_csv("city_locations.csv")
+    gdf = gpd.GeoDataFrame(
+        cities,
+        geometry=gpd.points_from_xy(cities["lon"], cities["lat"]),
+        crs="EPSG:4326",
+    )
+    return gdf.to_crs(TEXAS_CRS)
+
+
+def _label_cities(ax, cities_gdf, fontsize=8, dy=8):
+    """Add city labels next to point markers on a projected map."""
+    for _, row in cities_gdf.iterrows():
+        ax.annotate(
+            row["city"],
+            xy=(row.geometry.x, row.geometry.y),
+            xytext=(0, dy), textcoords="offset points",
+            ha="center", fontsize=fontsize, fontweight="bold",
+            color="#222",
+        )
 
 
 def fig_demand():
@@ -70,8 +98,6 @@ def fig_demand():
         colors=[BLUE, GREEN, ORANGE, GRAY], alpha=0.85,
     )
 
-    # Mark the historical/projection boundary at the last historical
-    # year present in the CSV. We treat anything <= 2025 as historical.
     historical = df[df["year"] <= 2025]
     if not historical.empty:
         boundary = historical["year"].max()
@@ -94,55 +120,99 @@ def fig_demand():
     print(f"  saved → {OUT / 'hays_water_demand.png'}")
 
 
-def fig_aquifer_split():
-    """Hays cities arrayed east–west by source aquifer (schematic)."""
-    df = _read_csv("aquifer_assignments.csv")
-    color_map = {"Trinity": ORANGE, "Edwards": BLUE}
+def fig_aquifer_map():
+    """Hays County aquifer map: Edwards and Trinity polygons clipped to
+    the county boundary, with cities as labeled points.
 
-    fig, ax = plt.subplots(figsize=(7.0, 3.6))
+    Trinity covers most of Hays. The Edwards Balcones Fault Zone
+    aquifer overlies Trinity along the eastern edge near I-35 and is
+    drawn on top so the recharge zone is visible.
+    """
+    hays = _hays_polygon()
+    cities = _city_points()
 
-    # Stylized recharge-zone band: the Edwards recharge zone is a thin
-    # diagonal along I-35; here we draw it between the easternmost
-    # Trinity city and the westernmost Edwards city for legibility.
-    trinity = df[df["aquifer"] == "Trinity"]["schematic_longitude"]
-    edwards = df[df["aquifer"] == "Edwards"]["schematic_longitude"]
-    if not trinity.empty and not edwards.empty:
-        band_left = trinity.max() + 0.01
-        band_right = edwards.min() - 0.01
-        ax.axvspan(band_left, band_right, color="#FFE4B5", alpha=0.7,
-                   label="Edwards recharge zone (schematic)")
+    aquifers = gpd.read_file(SHAPES / "major_aquifers" /
+                             "NEW_major_aquifers_dd.shp").to_crs(TEXAS_CRS)
+    in_hays = gpd.overlay(aquifers, hays[["geometry"]], how="intersection")
 
-    for _, row in df.iterrows():
-        color = color_map.get(row["aquifer"], GRAY)
-        ax.scatter(row["schematic_longitude"], 1, s=160, color=color,
-                   zorder=5, edgecolor="white", linewidth=1.2)
-        ax.annotate(row["city"].replace(" ", "\n", 1) if " " in row["city"]
-                    and len(row["city"]) > 9 else row["city"],
-                    (row["schematic_longitude"], 1), xytext=(0, 14),
-                    textcoords="offset points", ha="center",
-                    fontsize=9, fontweight="bold")
-        ax.annotate(row["aquifer"], (row["schematic_longitude"], 1),
-                    xytext=(0, -22), textcoords="offset points",
-                    ha="center", fontsize=8, color=color, style="italic")
+    # Distinct, full-opacity fills so the layers read clearly.
+    colors = {"TRINITY": "#F4A460", "EDWARDS": "#4A90D9"}
 
-    pad = 0.06
-    ax.set_xlim(df["schematic_longitude"].min() - pad,
-                df["schematic_longitude"].max() + pad)
-    ax.set_ylim(0.6, 1.5)
-    ax.set_yticks([])
-    ax.set_xlabel("Longitude (West)")
-    ax.set_title("The Aquifer Split: Hays Cities by Source")
-    ax.legend(loc="upper right", frameon=False)
-    ax.spines["left"].set_visible(False)
-    ax.grid(False)
-    ax.text(0, -0.18,
-            "Schematic. Aquifer assignments based on city utility "
-            "service areas, not parcel-level mapping.",
+    fig, ax = plt.subplots(figsize=(6.5, 6.5))
+    hays.plot(ax=ax, color="white", edgecolor="black", linewidth=1.4, zorder=1)
+
+    # Trinity first (covers most of the county), then Edwards drawn on
+    # top so the eastern recharge band is visible.
+    for name in ("TRINITY", "EDWARDS"):
+        slab = in_hays[in_hays["AQ_NAME"] == name]
+        if slab.empty:
+            continue
+        slab.plot(ax=ax, color=colors[name],
+                  edgecolor="white", linewidth=0.4, zorder=2)
+
+    cities.plot(ax=ax, color="black", markersize=22, zorder=5)
+    _label_cities(ax, cities)
+
+    ax.set_axis_off()
+    ax.set_title("Hays County: Aquifer Coverage")
+    handles = [mpatches.Patch(color=colors["TRINITY"], label="Trinity aquifer"),
+               mpatches.Patch(color=colors["EDWARDS"], label="Edwards aquifer")]
+    ax.legend(handles=handles, loc="lower left",
+              frameon=True, framealpha=0.95, fontsize=9)
+    ax.text(0.0, -0.04,
+            "Sources: TWDB Major Aquifers; Census TIGER 2023 county boundary.",
             transform=ax.transAxes, fontsize=7, color=GRAY)
 
-    fig.savefig(OUT / "hays_aquifer_split.png", dpi=DPI, bbox_inches="tight")
+    fig.savefig(OUT / "hays_aquifer_map.png", dpi=DPI, bbox_inches="tight")
     plt.close(fig)
-    print(f"  saved → {OUT / 'hays_aquifer_split.png'}")
+    print(f"  saved → {OUT / 'hays_aquifer_map.png'}")
+
+
+def fig_gcd_map():
+    """Hays County groundwater conservation district boundaries.
+
+    BSEACD (eastern Edwards), HTGCD (most of the county, Trinity), and
+    EAA (southern Edwards corridor). The unshaded sliver near central
+    Hays reflects the gap between EAA's northern boundary and BSEACD's
+    southern extent.
+    """
+    hays = _hays_polygon()
+    cities = _city_points()
+    gcd_all = gpd.read_file(SHAPES / "gcd" / "TWDB_GCD_NOV2019.shp").to_crs(TEXAS_CRS)
+
+    targets = [
+        ("HAYS TRINITY GROUNDWATER CONSERVATION DISTRICT",     "HTGCD",  "#F4A460"),
+        ("BARTON SPRINGS/EDWARDS AQUIFER CONSERVATION DISTRICT", "BSEACD", "#4A90D9"),
+        ("EDWARDS AQUIFER AUTHORITY",                          "EAA",    "#7BB37B"),
+    ]
+
+    fig, ax = plt.subplots(figsize=(6.5, 6.5))
+    hays.plot(ax=ax, color="white", edgecolor="black", linewidth=1.4, zorder=1)
+
+    legend_handles = []
+    for full_name, short, color in targets:
+        sel = gcd_all[gcd_all["DISTNAME"] == full_name]
+        if sel.empty:
+            continue
+        clipped = gpd.overlay(sel, hays[["geometry"]], how="intersection")
+        clipped.plot(ax=ax, color=color,
+                     edgecolor="white", linewidth=0.5, zorder=2)
+        legend_handles.append(mpatches.Patch(color=color, label=short))
+
+    cities.plot(ax=ax, color="black", markersize=22, zorder=5)
+    _label_cities(ax, cities)
+
+    ax.set_axis_off()
+    ax.set_title("Hays County: Groundwater Conservation Districts")
+    ax.legend(handles=legend_handles, loc="lower left",
+              frameon=True, framealpha=0.95, fontsize=9)
+    ax.text(0.0, -0.04,
+            "Sources: TWDB GCD Boundaries (Nov 2019); Census TIGER 2023.",
+            transform=ax.transAxes, fontsize=7, color=GRAY)
+
+    fig.savefig(OUT / "hays_gcd_map.png", dpi=DPI, bbox_inches="tight")
+    plt.close(fig)
+    print(f"  saved → {OUT / 'hays_gcd_map.png'}")
 
 
 def fig_arwa_ramp():
@@ -165,7 +235,6 @@ def fig_arwa_ramp():
                         xytext=(6, 8), textcoords="offset points",
                         fontsize=8.5, fontweight="bold")
 
-    # "today" line at 2025 (boundary between completed and planned)
     today = 2025
     ax.axvline(today, color="#555", lw=1, ls="--", alpha=0.6)
     ax.text(today + 0.5, ax.get_ylim()[1] * 0.05, "today",
@@ -187,8 +256,12 @@ def fig_arwa_ramp():
 
 if __name__ == "__main__":
     print("Building figures for 'Where the Water Will Come From'…")
+    if not (SHAPES / "county" / "cb_2023_us_county_5m.shp").exists():
+        print("Shapefiles not cached. Run: python fetch_shapefiles.py")
+        raise SystemExit(1)
     fig_demand()
-    fig_aquifer_split()
+    fig_aquifer_map()
+    fig_gcd_map()
     fig_arwa_ramp()
     print("Done.")
     print()

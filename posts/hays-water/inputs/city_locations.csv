@@ -1,0 +1,12 @@
+# Approximate centroids for Hays County cities used as map markers.
+# Coordinates are decimal degrees, WGS84.
+# Aquifer is the city utility's primary potable supply aquifer
+# (informational; map polygons come from TWDB shapefiles, not this).
+# Verify against city utility service-area maps before publication.
+city,lat,lon,aquifer
+Wimberley,29.9974,-98.0987,Trinity
+Dripping Springs,30.1902,-98.0867,Trinity
+Buda,30.0855,-97.8403,Edwards
+Kyle,29.9893,-97.8772,Edwards
+San Marcos,29.8833,-97.9414,Edwards
+Niederwald,29.9999,-97.7444,Edwards

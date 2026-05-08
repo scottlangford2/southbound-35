@@ -15,4 +15,7 @@ posts/*/graphics/*.png
 !posts/*/figures/.gitkeep
 !posts/*/graphics/.gitkeep
 
+# Shapefiles (refetched on demand)
+posts/*/inputs/shapefiles/
+
 .DS_Store
