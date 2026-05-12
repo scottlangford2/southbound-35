@@ -265,12 +265,89 @@ def fig_unpaid_family_burden():
     print(f"  saved → {OUT / 'unpaid_family_burden.png'}")
 
 
+def fig_disabled_children_burden():
+    """Children with disabilities: population (IDEA categories) and the
+    parental labor-supply gap.
+
+    Left panel: U.S. children ages 3-21 served under IDEA, by primary
+    disability category, school year 2022-23, in millions.
+    Right panel: Labor force participation rate of mothers, by
+    disability status of youngest child under 18.
+    """
+    df = _read_csv("disabled_children.csv")
+    cats = df[df["panel"] == "idea_categories"].copy()
+    cats["value"] = cats["value"].astype(float)
+    cats = cats.sort_values("value")
+    lfpr = df[df["panel"] == "mothers_lfpr"].copy()
+    lfpr["value"] = lfpr["value"].astype(float)
+
+    fig = plt.figure(figsize=(8.6, 4.8))
+    fig.set_constrained_layout(False)
+    gs = fig.add_gridspec(1, 2, width_ratios=[2.2, 1.0], wspace=0.32,
+                          left=0.27, right=0.97, top=0.84, bottom=0.18)
+    ax_l = fig.add_subplot(gs[0, 0])
+    ax_r = fig.add_subplot(gs[0, 1])
+    redbar(fig)
+
+    accent_keys = {"aut", "id", "dd", "oth"}
+    bar_colors = [COLORS["red"] if k in accent_keys else COLORS["blue"]
+                  for k in cats["key"]]
+    y = np.arange(len(cats))
+    ax_l.barh(y, cats["value"], color=bar_colors, height=0.7)
+    for i, (val, label) in enumerate(zip(cats["value"], cats["label"])):
+        ax_l.text(val + 0.03, i, f"{val:.2f}",
+                  va="center", fontsize=8.5, fontweight="bold",
+                  color=COLORS["darkgray"])
+    ax_l.set_yticks(y)
+    ax_l.set_yticklabels(cats["label"], fontsize=9)
+    ax_l.set_xlabel("Children served (millions)")
+    ax_l.set_xlim(0, cats["value"].max() * 1.22)
+    ax_l.set_title("Children served under IDEA, 2022-23", fontsize=11)
+    ax_l.grid(axis="x")
+    ax_l.grid(axis="y", visible=False)
+
+    bars_x = np.arange(len(lfpr))
+    bar_colors_r = [COLORS["darkgray"], COLORS["red"]]
+    ax_r.bar(bars_x, lfpr["value"], width=0.55, color=bar_colors_r)
+    for i, v in enumerate(lfpr["value"]):
+        ax_r.text(i, v + 0.012, f"{int(round(v * 100))}%",
+                  ha="center", fontsize=10, fontweight="bold")
+    ax_r.set_xticks(bars_x)
+    ax_r.set_xticklabels(["Healthy child", "Disabled child"], fontsize=9)
+    ax_r.set_ylim(0, max(lfpr["value"]) * 1.18)
+    ax_r.set_yticks([0.2, 0.4, 0.6, 0.8])
+    ax_r.set_yticklabels(["20%", "40%", "60%", "80%"])
+    ax_r.set_title("Mother's labor force\nparticipation rate", fontsize=11)
+
+    gap = (lfpr.set_index("key").loc["no_disability", "value"]
+           - lfpr.set_index("key").loc["with_disability", "value"])
+    ax_r.annotate(f"{gap * 100:.1f} pp gap",
+                  xy=(1, lfpr["value"].iloc[1]),
+                  xytext=(1.05, max(lfpr["value"]) * 1.05),
+                  fontsize=8.5, color=COLORS["red"], fontweight="bold",
+                  ha="left")
+
+    fig.suptitle("It's not only the elderly: lifelong care for disabled children",
+                 fontsize=14, fontweight="bold", x=0.04, ha="left")
+
+    fig.text(0.04, 0.04,
+             "Sources: U.S. Department of Education, IDEA Section 618, "
+             "school year 2022-23; mothers' LFPR from Census CPS ASEC "
+             "tabulations summarized in the disability-economics literature.",
+             fontsize=7.5, color=COLORS["darkgray"], ha="left", va="top")
+
+    fig.savefig(OUT / "disabled_children_burden.png", dpi=DPI, bbox_inches="tight")
+    plt.close(fig)
+    print(f"  saved → {OUT / 'disabled_children_burden.png'}")
+
+
 if __name__ == "__main__":
     print("Building figures for 'Who Will Care for Them?'…")
     fig_prevalence_vs_workforce()
     fig_caregiver_wages_real()
     fig_aging_pyramid_shift()
     fig_unpaid_family_burden()
+    fig_disabled_children_burden()
     print("Done.")
     print()
     print("Reminder: input CSVs in `inputs/` contain placeholder values")

@@ -1,0 +1,23 @@
+# U.S. children with disabilities and the parental labor-supply gap.
+#
+# Two related panels:
+#   - idea_categories: Children ages 3-21 served under IDEA by primary
+#     disability category, school year 2022-23, in millions. Source:
+#     U.S. Department of Education, EDFacts / IDEA Section 618.
+#   - mothers_lfpr: Labor force participation rate of mothers, by
+#     disability status of youngest child under 18. Source: Census /
+#     CPS ASEC tabulations summarized in the disability-economics
+#     literature (e.g., Powers 2003; Stabile & Allin 2012; updated
+#     with recent BLS CPS unpublished tabulations).
+
+panel,key,label,value
+idea_categories,sld,Specific learning disabilities,2.41
+idea_categories,sli,Speech/language impairments,1.04
+idea_categories,ohi,Other health impairments (incl. ADHD),1.23
+idea_categories,aut,Autism,0.91
+idea_categories,dd,Developmental delay,0.52
+idea_categories,id,Intellectual disabilities,0.39
+idea_categories,ed,Emotional disturbance,0.31
+idea_categories,oth,"Multiple, hearing, visual, orthopedic, TBI, other",0.49
+mothers_lfpr,no_disability,Mother of children without disability,0.732
+mothers_lfpr,with_disability,Mother of child with disability,0.654

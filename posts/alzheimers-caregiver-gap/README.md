@@ -1,4 +1,4 @@
-# Who Will Care for Them? America's Coming Alzheimer's Caregiver Shortage
+# Who Will Care for Them? America's Coming Caregiver Shortage
 
 Replication code for the [blog post](https://scottlangford2.github.io/scott_langford/posts/2026/05/alzheimers-caregiver-gap/).
 
@@ -6,7 +6,7 @@ All numerical values come from CSVs in `inputs/`. The build script is purely a r
 
 ## The problem in one sentence
 
-The number of Americans living with Alzheimer's is on track to roughly double by 2050, while the paid workforce that cares for them is growing slowly and at wages that already trail competing low-credential jobs — so an even larger share of care will fall on unpaid family.
+The number of Americans living with Alzheimer's is on track to roughly double by 2050, and roughly four million U.S. children live with a disability that demands ongoing parental care — yet the paid workforce that supports both populations is growing slowly and at wages that already trail competing low-credential jobs, so an even larger share of care will fall on unpaid family.
 
 ## The demographic wave
 
@@ -50,6 +50,18 @@ In 2024, about 19 billion hours of unpaid care went to people with Alzheimer's a
 
 The incidence is also concentrated. About 46% of dementia caregivers are adult children (mostly daughters); about 30% are spouses; the remaining quarter are other relatives and friends. Adult-child caregivers are usually still in the labor force themselves, and a substantial literature documents the wage and retirement-savings hit they take. The "shortage" of paid caregivers is, in part, just a redistribution: hours that would have been paid at $15 are instead unpaid at $0, drawn from a household's own earnings capacity.
 
+## It's not only the elderly: lifelong care for disabled children
+
+Aging is the most visible driver of the care shortage, but it isn't the only one. In school year 2022–23, U.S. public schools served 7.3 million children ages 3–21 under the Individuals with Disabilities Education Act — about 15 percent of K–12 enrollment. Within that population, roughly 2.3 million children have conditions that typically require significant lifelong care: autism (0.9M), developmental delay (0.5M), intellectual disability (0.4M), and the combined orthopedic / multiple / hearing / visual / TBI categories (0.5M).
+
+![Disabled children burden](figures/disabled_children_burden.png)
+
+The care arc for these populations differs from Alzheimer's in one important way: it doesn't end. Dementia care is intense but usually runs four to eight years from diagnosis. A child diagnosed with severe autism at age three will, in many cases, need substantial daily support for sixty years or more. The lifetime hours add up to something on the order of magnitude of the unpaid dementia caregiving total — and the bulk of those hours fall on parents, overwhelmingly mothers.
+
+The labor-market signature is sharp. Mothers of children without disabilities participate in the labor force at about 73%. Mothers of children with disabilities participate at about 65% — an eight percentage point gap that has been roughly stable for two decades. Translated into headcount, that gap represents around 300,000 mothers who would otherwise be working, with all the cumulative wage, tenure, and retirement consequences that come with leaving or scaling back. As with the Alzheimer's story, the "shortage" of paid caregivers shows up downstream as unpaid family labor and forgone earnings.
+
+The paid workforce for this population — Direct Support Professionals (DSPs) who staff group homes, day programs, and in-home services for people with intellectual and developmental disabilities — has its own shortage of the same character. About 1.4 million DSPs nationally, a median wage around $14–15/hr, and annual turnover above 40 percent. Medicaid sets the rates here too, which means the same monopsony-style wage suppression applies. When the workforce thins, families absorb the difference.
+
 ## What it would take to close the gap
 
 Two rough calibrations are useful for thinking about the size of the policy lever.
@@ -59,6 +71,8 @@ First, the demand side. If the dementia population grows from ~6.9 million today
 Second, the wage side. Estimates of labor-supply elasticity in low-credential service occupations cluster around 1–2 — meaning a 10% real wage increase pulls in 10–20% more workers. Closing a 15% workforce gap, at a midpoint elasticity, takes something like a 10% real wage increase across the three occupations. At today's wage levels and headcounts, that is on the order of $15–20 billion a year in additional compensation — which, given Medicaid's payer share, lands largely on federal and state budgets.
 
 Neither of those calibrations is a forecast. They are bounds. The point is that the order of magnitude is tractable, and the policy levers (Medicaid rate floors, training subsidies, immigration of care workers) are well-known. The labor problem is real, and it is also solvable in the same boring way most labor problems are solvable: pay enough to attract the workers.
+
+The same arithmetic applies, with a few adjustments, to the Direct Support Professional workforce that serves people with intellectual and developmental disabilities. The workforce is smaller, the wage gap relative to retail and warehouse work is wider, and the turnover rate is dramatically higher — but the policy levers are the same Medicaid rate floors. A combined approach is more efficient than treating elderly care and disability care as separate problems with separate solutions: they draw from the same labor pool, are paid by the same payer, and lose workers to the same competing low-credential jobs.
 
 ## Data and methods
 
@@ -87,7 +101,8 @@ posts/alzheimers-caregiver-gap/
 │   ├── direct_care_workforce.csv  # year × occupation → employment (thousands)
 │   ├── wages_real.csv             # year × occupation → median wage (2024 USD/hr)
 │   ├── pop_projections.csv        # year → 65-74 / 75-84 / 85+ (millions)
-│   └── unpaid_caregiver_hours.csv # year → hours, imputed value, relationship shares
+│   ├── unpaid_caregiver_hours.csv # year → hours, imputed value, relationship shares
+│   └── disabled_children.csv      # IDEA categories + mothers' LFPR by child disability
 └── figures/                       # build output (gitignored)
 ```
 
@@ -99,6 +114,7 @@ posts/alzheimers-caregiver-gap/
 | 2 | `caregiver_wages_real.png` | Real median hourly wage by occupation, 2014–2024, in 2024 USD |
 | 3 | `aging_pyramid_shift.png` | U.S. population by age band, 2020 vs. 2040 |
 | 4 | `unpaid_family_burden.png` | Unpaid dementia-caregiving hours and imputed value, with caregiver-relationship breakdown |
+| 5 | `disabled_children_burden.png` | Children served under IDEA by category; mothers' labor force participation gap |
 
 ## Data sources
 
@@ -128,6 +144,12 @@ Unpaid family caregiving for people with Alzheimer's and other dementias.
 
 - **Hours and imputed value:** Alzheimer's Association *Facts & Figures* (annual editions), unpaid caregiving tables; opportunity-cost wage assumption restated in 2024 USD.
 - **Caregiver-relationship shares:** AARP / National Alliance for Caregiving, *Caregiving in the U.S.* surveys. <https://www.aarp.org/caregiving/research/caregiving-in-the-united-states.html>.
+
+### `inputs/disabled_children.csv`
+Two related panels: U.S. children served under IDEA by primary disability category (school year 2022–23) and labor force participation of mothers by disability status of youngest child.
+
+- **IDEA categories:** U.S. Department of Education, EDFacts / IDEA Section 618 state-reported data. <https://sites.ed.gov/idea/data/>.
+- **Mothers' LFPR:** Census Bureau CPS ASEC tabulations summarized in the disability-economics literature (e.g., Powers 2003, *J. Health Economics*; Stabile & Allin 2012, *Future of Children*); updated using recent BLS CPS unpublished tabulations.
 
 ## Schemas
 
@@ -161,6 +183,12 @@ year, hours_billions, imputed_value_billions_usd_2024,
 share_spouse, share_adult_child, share_other
 ```
 Shares are proportions summing to 1.0 within rounding.
+
+### `disabled_children.csv`
+```
+panel, key, label, value
+```
+`panel` ∈ {`idea_categories`, `mothers_lfpr`}. For `idea_categories`, `value` is millions of children. For `mothers_lfpr`, `value` is a proportion (0–1).
 
 ## Notes
 
