@@ -1,0 +1,29 @@
+# U.S. Alzheimer's prevalence projections, millions of people.
+#
+# Two scenarios:
+#   - alz_assoc: All-ages clinical diagnosis (Alzheimer's Association
+#     2024 Facts & Figures; under-65 cases are <5% of total so this
+#     is effectively a 65+ series).
+#   - cms_medicare_ffs: Diagnosed dementia among Medicare fee-for-
+#     service beneficiaries 65+ (CMS Chronic Conditions Warehouse).
+#     Lower bound: counts only people with a billed diagnosis on a
+#     Medicare FFS claim, so excludes Medicare Advantage and any
+#     undiagnosed cases.
+#
+# Projections beyond 2024 follow the Alz Assoc / Hebert et al. (2013)
+# midrange trajectory, anchored to Census 65+ population growth.
+# CMS scenario is approximately 45-50% of the Alz Assoc total in
+# overlapping years.
+year,scenario,cases_millions
+2020,alz_assoc,6.1
+2025,alz_assoc,7.2
+2030,alz_assoc,8.5
+2035,alz_assoc,9.8
+2040,alz_assoc,11.2
+2045,alz_assoc,12.7
+2050,alz_assoc,13.8
+2020,cms_medicare_ffs,3.0
+2025,cms_medicare_ffs,3.5
+2030,cms_medicare_ffs,4.2
+2035,cms_medicare_ffs,4.9
+2040,cms_medicare_ffs,5.6

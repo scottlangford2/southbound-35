@@ -1,0 +1,23 @@
+# Unpaid family caregiving for people with Alzheimer's and other
+# dementias in the United States.
+#
+# - hours_billions: Total annual unpaid caregiving hours.
+# - imputed_value_billions_usd_2024: Economic value of those hours
+#   at the Alz Assoc opportunity-cost wage (approximately $16.59/hr
+#   in 2023; values shown here are restated in 2024 USD).
+# - share_spouse / share_adult_child / share_other: Distribution of
+#   caregivers by relationship to the care recipient (proportions
+#   sum to 1.0 within rounding).
+#
+# Source: Alzheimer's Association Facts & Figures (annual), unpaid
+# caregiving tables; relationship shares from the AARP / National
+# Alliance for Caregiving "Caregiving in the U.S." surveys.
+year,hours_billions,imputed_value_billions_usd_2024,share_spouse,share_adult_child,share_other
+2015,18.1,261,0.31,0.45,0.24
+2017,18.4,277,0.30,0.46,0.24
+2019,18.6,302,0.30,0.46,0.24
+2020,15.3,275,0.32,0.44,0.24
+2021,16.0,310,0.31,0.45,0.24
+2022,18.0,357,0.30,0.46,0.24
+2023,18.4,388,0.30,0.46,0.24
+2024,19.2,413,0.30,0.46,0.24

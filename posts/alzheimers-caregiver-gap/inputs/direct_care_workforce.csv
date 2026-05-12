@@ -1,0 +1,30 @@
+# U.S. direct-care workforce employment, thousands of workers.
+#
+# Three SOCs (matches PHI / Alz Assoc workforce framing):
+#   - hha_pca: Home Health & Personal Care Aides (SOC 31-1120,
+#     merged 31-1011 + 31-1021 prior to 2018).
+#   - cna:     Nursing Assistants (SOC 31-1131; previously 31-1014).
+#
+# History: BLS OES May employment estimates (national, all industries).
+# Projections: BLS Employment Projections 2023-2033 occupation table,
+# linearly extrapolated at the 2023-2033 CAGR through 2040 (dashed
+# segment in the figure).
+year,occupation,employment_thousands
+2014,hha_pca,2780
+2014,cna,1417
+2018,hha_pca,3280
+2018,cna,1450
+2020,hha_pca,3470
+2020,cna,1410
+2022,hha_pca,3590
+2022,cna,1350
+2024,hha_pca,3690
+2024,cna,1360
+2025,hha_pca,3820
+2025,cna,1380
+2030,hha_pca,4420
+2030,cna,1450
+2033,hha_pca,4810
+2033,cna,1490
+2040,hha_pca,5830
+2040,cna,1590

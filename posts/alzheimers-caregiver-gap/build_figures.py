@@ -1,0 +1,278 @@
+"""
+Replication code for "Who Will Care for Them?
+America's Coming Alzheimer's Caregiver Shortage".
+
+All numerical values come from CSV inputs under `inputs/`. The script
+is purely a renderer.
+
+Usage:
+    pip install -r requirements.txt
+    python build_figures.py
+"""
+
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+from econ_style import apply as apply_econ_style, COLORS, redbar, source_line, BG
+
+apply_econ_style()
+
+DPI = 150
+ROOT = Path(__file__).parent
+INPUT = ROOT / "inputs"
+OUT = ROOT / "figures"
+OUT.mkdir(exist_ok=True)
+
+
+def _read_csv(name):
+    """Read a CSV from inputs/, treating # lines as comments."""
+    return pd.read_csv(INPUT / name, comment="#")
+
+
+def fig_prevalence_vs_workforce():
+    """Alzheimer's cases vs. direct-care workforce, 2020-2040.
+
+    Two demand scenarios (Alz Assoc all-ages clinical, CMS Medicare FFS
+    diagnosed) drawn as a shaded band against the projected paid
+    direct-care workforce. The 2033 dividing line marks where the BLS
+    Employment Projections horizon ends; the post-2033 segment is the
+    2023-2033 CAGR extrapolated forward.
+    """
+    prev = _read_csv("alz_prevalence.csv")
+    work = _read_csv("direct_care_workforce.csv")
+
+    upper = prev[prev["scenario"] == "alz_assoc"].sort_values("year")
+    lower = prev[prev["scenario"] == "cms_medicare_ffs"].sort_values("year")
+
+    workforce = (work.groupby("year")["employment_thousands"].sum() / 1000.0
+                 ).reset_index().sort_values("year")
+    workforce = workforce.rename(columns={"employment_thousands": "millions"})
+
+    fig, ax = plt.subplots(figsize=(7.2, 4.6))
+    redbar(fig)
+
+    common_lower = lower["year"].max()
+    upper_in_range = upper[upper["year"] <= 2040]
+    lower_in_range = lower[lower["year"] <= common_lower]
+    band_years = upper_in_range["year"].values
+    band_top = upper_in_range["cases_millions"].values
+    band_bottom = np.interp(band_years, lower_in_range["year"],
+                            lower_in_range["cases_millions"])
+    ax.fill_between(band_years, band_bottom, band_top,
+                    color=COLORS["red"], alpha=0.16,
+                    label="Alzheimer's cases (range across data sources)")
+    ax.plot(upper_in_range["year"], upper_in_range["cases_millions"],
+            color=COLORS["red"], lw=2.0)
+    ax.plot(lower_in_range["year"], lower_in_range["cases_millions"],
+            color=COLORS["red"], lw=2.0, alpha=0.55)
+
+    history = workforce[workforce["year"] <= 2033]
+    future = workforce[workforce["year"] >= 2033]
+    ax.plot(history["year"], history["millions"],
+            color=COLORS["blue"], lw=2.4,
+            label="Direct-care workforce (HHA, PCA, CNA)")
+    ax.plot(future["year"], future["millions"],
+            color=COLORS["blue"], lw=2.4, ls="--",
+            label="Workforce (CAGR extrapolation, 2034-2040)")
+
+    ax.axvline(2024, color=COLORS["darkgray"], lw=0.8, ls=":", alpha=0.7)
+    ax.text(2024.2, ax.get_ylim()[1] * 0.94, "today",
+            fontsize=8.5, color=COLORS["darkgray"], style="italic")
+    ax.axvline(2033, color=COLORS["darkgray"], lw=0.8, ls=":", alpha=0.7)
+    ax.text(2033.2, ax.get_ylim()[1] * 0.94, "BLS projection horizon",
+            fontsize=8.5, color=COLORS["darkgray"], style="italic")
+
+    ax.set_xlabel("Year")
+    ax.set_ylabel("People (millions)")
+    ax.set_title("Demand is climbing faster than supply")
+    ax.set_xlim(2020, 2040)
+    ax.set_ylim(bottom=0)
+    ax.legend(loc="upper left", fontsize=8.5)
+    source_line(ax,
+                "Sources: Alzheimer's Association 2024 Facts & Figures; "
+                "CMS Chronic Conditions Warehouse; "
+                "BLS Employment Projections 2023-2033.")
+
+    fig.savefig(OUT / "prevalence_vs_workforce.png", dpi=DPI, bbox_inches="tight")
+    plt.close(fig)
+    print(f"  saved → {OUT / 'prevalence_vs_workforce.png'}")
+
+
+def fig_caregiver_wages_real():
+    """Real median hourly wage, 2014-2024, in 2024 dollars."""
+    df = _read_csv("wages_real.csv")
+
+    series = {
+        "all_occ": ("All occupations", COLORS["darkgray"], 2.2, "-"),
+        "cna":     ("Nursing assistants", COLORS["green"], 2.0, "-"),
+        "hha":     ("Home health aides", COLORS["blue"], 2.0, "-"),
+        "pca":     ("Personal care aides", COLORS["red"], 2.0, "-"),
+    }
+
+    fig, ax = plt.subplots(figsize=(7.2, 4.4))
+    redbar(fig)
+
+    for occ, (label, color, lw, ls) in series.items():
+        sub = df[df["occupation"] == occ].sort_values("year")
+        ax.plot(sub["year"], sub["median_wage_real_2024"],
+                color=color, lw=lw, ls=ls, label=label, marker="o",
+                markersize=4, markeredgecolor=BG, markeredgewidth=0.8)
+
+    ax.set_xlabel("Year")
+    ax.set_ylabel("Median hourly wage (2024 USD)")
+    ax.set_title("Caregiver pay has barely moved in real terms")
+    ax.set_xlim(2013.5, 2024.5)
+    ax.set_ylim(10, 26)
+    ax.legend(loc="center left", bbox_to_anchor=(1.01, 0.5), fontsize=9)
+    source_line(ax,
+                "Sources: BLS Occupational Employment and Wage Statistics, "
+                "May national estimates; deflated by CPI-U All Urban "
+                "Consumers (annual, 2024 = 313.7).")
+
+    fig.savefig(OUT / "caregiver_wages_real.png", dpi=DPI, bbox_inches="tight")
+    plt.close(fig)
+    print(f"  saved → {OUT / 'caregiver_wages_real.png'}")
+
+
+def fig_aging_pyramid_shift():
+    """Paired horizontal bars: U.S. population by age band, 2020 vs. 2040."""
+    pop = _read_csv("pop_projections.csv")
+    snapshots = pop[pop["year"].isin([2020, 2040])].set_index("year")
+
+    bands = [("85+", "age_85plus"),
+             ("75-84", "age_75_84"),
+             ("65-74", "age_65_74")]
+
+    fig, ax = plt.subplots(figsize=(7.2, 4.4))
+    redbar(fig)
+
+    y = np.arange(len(bands))
+    height = 0.36
+    vals_2020 = [snapshots.loc[2020, col] for _, col in bands]
+    vals_2040 = [snapshots.loc[2040, col] for _, col in bands]
+
+    ax.barh(y + height / 2, vals_2020, height=height,
+            color=COLORS["darkgray"], label="2020")
+    ax.barh(y - height / 2, vals_2040, height=height,
+            color=COLORS["red"], label="2040")
+
+    for i, (v20, v40) in enumerate(zip(vals_2020, vals_2040)):
+        ax.text(v20 + 0.4, i + height / 2, f"{v20:.1f}",
+                va="center", fontsize=8.5, color=COLORS["darkgray"])
+        ax.text(v40 + 0.4, i - height / 2, f"{v40:.1f}",
+                va="center", fontsize=8.5, color=COLORS["red"],
+                fontweight="bold")
+
+    ax.set_yticks(y)
+    ax.set_yticklabels([b[0] for b in bands])
+    ax.set_xlabel("Population (millions)")
+    ax.set_title("The 85+ population doubles by 2040")
+    ax.set_xlim(0, max(vals_2020 + vals_2040) * 1.18)
+    ax.legend(loc="lower right", fontsize=9)
+    ax.grid(axis="x")
+    ax.grid(axis="y", visible=False)
+    source_line(ax,
+                "Source: Census Bureau 2023 National Population Projections "
+                "(main series, NP2023_D1).")
+
+    fig.savefig(OUT / "aging_pyramid_shift.png", dpi=DPI, bbox_inches="tight")
+    plt.close(fig)
+    print(f"  saved → {OUT / 'aging_pyramid_shift.png'}")
+
+
+def fig_unpaid_family_burden():
+    """Unpaid family dementia caregiving: hours, value, and incidence.
+
+    Dual-axis charts confuse `constrained_layout`, so this figure
+    disables it for the local figure and uses an explicit two-panel
+    layout: time series on the left, single stacked relationship bar
+    on the right.
+    """
+    df = _read_csv("unpaid_caregiver_hours.csv").sort_values("year")
+
+    fig = plt.figure(figsize=(8.2, 4.6))
+    fig.set_constrained_layout(False)
+    gs = fig.add_gridspec(2, 2, width_ratios=[2.4, 1.0],
+                          height_ratios=[6, 1], hspace=0.55, wspace=0.35,
+                          left=0.08, right=0.92, top=0.86, bottom=0.18)
+    ax_l = fig.add_subplot(gs[0, 0])
+    ax_r = fig.add_subplot(gs[0, 1])
+    redbar(fig)
+
+    ax_l.bar(df["year"], df["hours_billions"],
+             width=0.7, color=COLORS["blue"], alpha=0.85,
+             label="Unpaid hours (billions/yr)")
+    ax_l.set_ylabel("Hours (billions/yr)", color=COLORS["blue"])
+    ax_l.tick_params(axis="y", colors=COLORS["blue"])
+    ax_l.set_ylim(0, df["hours_billions"].max() * 1.25)
+    ax_l.set_xlim(df["year"].min() - 0.7, df["year"].max() + 0.7)
+
+    ax_l_r = ax_l.twinx()
+    ax_l_r.plot(df["year"], df["imputed_value_billions_usd_2024"],
+                color=COLORS["red"], lw=2.4, marker="o", markersize=5,
+                markeredgecolor=BG, markeredgewidth=0.8,
+                label="Imputed value ($B, 2024 USD)")
+    ax_l_r.set_ylabel("Imputed value ($B, 2024 USD)", color=COLORS["red"])
+    ax_l_r.tick_params(axis="y", colors=COLORS["red"])
+    ax_l_r.set_ylim(0, df["imputed_value_billions_usd_2024"].max() * 1.18)
+    ax_l_r.spines["right"].set_visible(True)
+    ax_l_r.spines["right"].set_color(COLORS["red"])
+    ax_l_r.grid(False)
+
+    ax_l.set_xlabel("Year")
+    ax_l.set_title("Hours and imputed value", fontsize=11)
+
+    latest = df.iloc[-1]
+    segments = [("Adult children", latest["share_adult_child"], COLORS["blue"]),
+                ("Spouses",        latest["share_spouse"],      COLORS["red"]),
+                ("Other",          latest["share_other"],       COLORS["darkgray"])]
+
+    left = 0.0
+    for name, share, color in segments:
+        ax_r.barh([0], [share], left=left, height=0.55, color=color)
+        ax_r.text(left + share / 2, 0,
+                  f"{name}\n{int(round(share * 100))}%",
+                  ha="center", va="center",
+                  color="white", fontsize=9, fontweight="bold")
+        left += share
+
+    ax_r.set_xlim(0, 1.0)
+    ax_r.set_ylim(-0.6, 0.6)
+    ax_r.set_xticks([])
+    ax_r.set_yticks([])
+    ax_r.set_title(f"Who provides it ({int(latest['year'])})", fontsize=11)
+    ax_r.grid(False)
+    ax_r.spines["bottom"].set_visible(False)
+
+    fig.suptitle("Unpaid dementia caregiving keeps growing",
+                 fontsize=14, fontweight="bold", x=0.08, ha="left")
+
+    fig.text(0.08, 0.04,
+             "Sources: Alzheimer's Association Facts & Figures (unpaid "
+             "caregiving tables); relationship shares from AARP / NAC "
+             "'Caregiving in the U.S.' survey.\nHours valued at the Alz "
+             "Assoc opportunity-cost wage (~$16.59/hr), restated in 2024 USD.",
+             fontsize=7.5, color=COLORS["darkgray"], ha="left", va="top")
+
+    fig.savefig(OUT / "unpaid_family_burden.png", dpi=DPI, bbox_inches="tight")
+    plt.close(fig)
+    print(f"  saved → {OUT / 'unpaid_family_burden.png'}")
+
+
+if __name__ == "__main__":
+    print("Building figures for 'Who Will Care for Them?'…")
+    fig_prevalence_vs_workforce()
+    fig_caregiver_wages_real()
+    fig_aging_pyramid_shift()
+    fig_unpaid_family_burden()
+    print("Done.")
+    print()
+    print("Reminder: input CSVs in `inputs/` contain placeholder values")
+    print("transcribed from the cited public sources. Refresh from the")
+    print("latest BLS, Census, CMS, and Alz Assoc releases before press.")

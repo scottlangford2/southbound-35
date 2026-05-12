@@ -1,0 +1,11 @@
+# U.S. population projections by age band, millions of people.
+#
+# Source: Census Bureau 2023 National Population Projections, main
+# series (NP2023_D1), filtered to single-year-of-age detail and
+# aggregated into 65-74, 75-84, 85+ bands.
+year,age_65_74,age_75_84,age_85plus
+2020,31.5,16.2,6.7
+2025,36.0,19.6,7.1
+2030,38.6,24.1,9.0
+2035,38.9,28.3,11.1
+2040,38.4,30.1,13.7
