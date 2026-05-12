@@ -174,11 +174,36 @@ The framing and the empirical anchors in the post draw on:
 
 ```bash
 pip install -r requirements.txt
-python fetch_data.py        # optional; documents sources and caches raw downloads
-python build_figures.py
+python fetch_data.py           # live data pull (idempotent; cached under inputs/raw/)
+python fetch_data.py --refresh # force re-download of cached raw files
+python build_figures.py        # render figures from inputs/*.csv
 ```
 
-Figures are written to `figures/` (gitignored — regenerate from code).
+Figures are written to `figures/` (gitignored — regenerate from code). `fetch_data.py` is safe to run repeatedly: it caches raw downloads under `inputs/raw/`, and any source that fails to fetch leaves the corresponding committed CSV unchanged.
+
+### What `fetch_data.py` actually does
+
+Fetches programmatically (live HTTP):
+
+| Source | Endpoint | Feeds |
+|---|---|---|
+| BLS CPI-U All Urban Consumers (annual) | BLS public API (`api.bls.gov/publicAPI/v2`) | `wages_real.csv` deflator |
+| BLS OEWS national May 2024 | `bls.gov/oes/special-requests/oesm24nat.zip` | `wages_real.csv`, `direct_care_workforce.csv` (2024 employment) |
+| BLS OEWS state May 2024 | `bls.gov/oes/special-requests/oesm24st.zip` | `texas_zoom.csv`, `state_medicaid_workforce.csv` (workforce side) |
+| BLS Employment Projections 2023-2033 | `bls.gov/emp/tables/…xlsx` | `direct_care_workforce.csv` (2025-2040) |
+| Census 2023 National Population Projections | `www2.census.gov/programs-surveys/popproj/…/np2023-d1.csv` | `pop_projections.csv` |
+| Census ACS 1-year state 65+ population | `api.census.gov/data/2023/acs/acs1` | `state_medicaid_workforce.csv` (denominator) |
+| IDEA Section 618 SY2022-23 child counts | `sites.ed.gov/idea/files/…xlsx` | `disabled_children.csv` (IDEA categories panel) |
+| CMS Chronic Conditions Warehouse (ADRD) | `data.cms.gov/…csv` | `alz_prevalence.csv` (CMS scenario) |
+
+Manual sources (publisher offers no stable machine-readable feed; `fetch_data.py` reports the hub URL and table reference):
+
+- **Alzheimer's Association *Facts & Figures*** (PDF tables): `alz_prevalence.csv` (`alz_assoc` scenario), `unpaid_caregiver_hours.csv` (hours and imputed value).
+- **AARP / National Alliance for Caregiving, *Caregiving in the U.S. 2020***: `unpaid_caregiver_hours.csv` (relationship shares).
+- **KFF state Medicaid HCBS spending**: `state_medicaid_workforce.csv` (`hcbs_per_capita_usd` column). KFF does not expose a stable download URL; use the indicator page's Export-to-CSV.
+- **ANCOR DSP workforce report**: `texas_zoom.csv` DSP row.
+
+Implementation details: pure stdlib HTTP (`urllib.request`) with a documented User-Agent; exponential-backoff retry (3 attempts, 2x backoff); JSON parsing of the BLS API response (period code `M13` for annual averages); openpyxl for OEWS / EP / IDEA XLSX parsing; CMS CSV consumed directly. Header-comment audit trails on the committed CSVs are preserved across refreshes.
 
 ## Files
 
