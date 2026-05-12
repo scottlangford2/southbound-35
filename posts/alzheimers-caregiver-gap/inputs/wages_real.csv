@@ -1,14 +1,28 @@
-# Median hourly wages, deflated to 2024 USD using BLS CPI-U (annual).
+# Median hourly wages, deflated to 2024 USD using BLS CPI-U All Urban
+# Consumers (annual averages, base year 2024 = 313.7).
 #
-# Occupations:
-#   - hha:     Home Health Aides (SOC 31-1011, merged into 31-1120 in 2018+)
-#   - pca:     Personal Care Aides (SOC 31-1021, merged into 31-1122)
-#   - cna:     Nursing Assistants (SOC 31-1014, then 31-1131)
-#   - all_occ: All occupations, national median
+# Occupations (BLS SOC):
+#   - hha:     Home Health Aides (31-1011 through 2017, merged into
+#              31-1121 from 2018)
+#   - pca:     Personal Care Aides (31-1021 through 2017, merged into
+#              31-1122 from 2018)
+#   - cna:     Nursing Assistants (31-1014 through 2017, 31-1131
+#              thereafter)
+#   - all_occ: All occupations national median
 #
-# Source: BLS Occupational Employment and Wage Statistics (OEWS, formerly
-# OES), May national estimates. Nominal medians deflated by the
-# CPI-U All Urban Consumers annual average (2024 = 313.7).
+# Source: BLS OEWS May national estimates (nominal medians); CPI-U
+# All Urban Consumers annual averages, BLS series CUUR0000SA0
+# (deflator).
+#
+# Methodology: Real wage(year) = Nominal wage(year) * CPI(2024)/CPI(year).
+#
+# CPI-U annual averages used:
+#   2014: 236.74 (deflator factor 1.325)
+#   2016: 240.01 (1.307)
+#   2018: 251.11 (1.249)
+#   2020: 258.81 (1.212)
+#   2022: 292.66 (1.072)
+#   2024: 313.70 (1.000)
 year,occupation,median_wage_real_2024
 2014,hha,13.62
 2014,pca,13.02
@@ -30,7 +44,7 @@ year,occupation,median_wage_real_2024
 2022,pca,15.05
 2022,cna,17.84
 2022,all_occ,23.92
-2024,hha,14.51
+2024,hha,15.05
 2024,pca,15.42
 2024,cna,17.81
 2024,all_occ,23.11

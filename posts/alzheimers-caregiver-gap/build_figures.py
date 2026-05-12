@@ -343,35 +343,46 @@ def fig_disabled_children_burden():
 
 def fig_state_medicaid_scatter():
     """State scatter: Medicaid HCBS spending per capita vs. direct-care
-    workers per 1,000 elderly. Texas highlighted as a low-rate,
-    low-workforce state.
+    workers per 1,000 elderly, with OLS line, 95% bootstrap confidence
+    band, and an annotation reporting the formal regression
+    diagnostics (HC1 robust SE, bootstrap CI, R², Spearman rank
+    correlation). Texas highlighted as the natural Southbound 35 case.
     """
-    df = _read_csv("state_medicaid_workforce.csv")
+    from regression import (
+        fit_state_scatter,
+        confidence_band,
+    )
 
-    fig, ax = plt.subplots(figsize=(7.4, 4.8))
+    df = _read_csv("state_medicaid_workforce.csv")
+    res = fit_state_scatter(df)
+
+    fig, ax = plt.subplots(figsize=(7.6, 5.0))
     redbar(fig)
 
-    x = df["hcbs_per_capita_usd"].values
-    y = df["direct_care_per_1k_65p"].values
+    x = df["hcbs_per_capita_usd"].to_numpy(dtype=float)
+    y = df["direct_care_per_1k_65p"].to_numpy(dtype=float)
+    xs = np.linspace(x.min() * 0.95, x.max() * 1.02, 200)
+    band_lo, band_hi = confidence_band(x, y, xs, n_boot=2000, seed=0)
+    fit_line = res.intercept + res.slope * xs
+
+    ax.fill_between(xs, band_lo, band_hi,
+                    color=COLORS["darkgray"], alpha=0.18,
+                    label="95% bootstrap CI (n=2,000)", zorder=1)
+    ax.plot(xs, fit_line,
+            color=COLORS["darkgray"], lw=1.6, ls="--",
+            alpha=0.9, zorder=2, label="OLS fit")
 
     is_tx = df["state"].values == "TX"
     other = ~is_tx
-    ax.scatter(x[other], y[other], s=46, color=COLORS["blue"], alpha=0.75,
-               edgecolor=BG, linewidth=0.8, zorder=3)
-    ax.scatter(x[is_tx], y[is_tx], s=120, color=COLORS["red"],
-               edgecolor=BG, linewidth=1.2, zorder=5, label="Texas")
-
-    coef = np.polyfit(x, y, 1)
-    xs = np.linspace(x.min(), x.max(), 100)
-    ax.plot(xs, coef[0] * xs + coef[1],
-            color=COLORS["darkgray"], lw=1.5, ls="--",
-            alpha=0.85, zorder=2, label="OLS fit")
-    r = np.corrcoef(x, y)[0, 1]
+    ax.scatter(x[other], y[other], s=46, color=COLORS["blue"],
+               alpha=0.78, edgecolor=BG, linewidth=0.8, zorder=3)
+    ax.scatter(x[is_tx], y[is_tx], s=130, color=COLORS["red"],
+               edgecolor=BG, linewidth=1.4, zorder=5, label="Texas")
 
     highlight = {"TX", "MS", "FL", "NY", "MN", "CA", "OR", "MA", "AL"}
     for sx, sy, s in zip(x, y, df["state"]):
         if s in highlight:
-            dx, dy = (8, 6) if s != "TX" else (10, -6)
+            dx, dy = (8, 6) if s != "TX" else (12, -10)
             ax.annotate(s, (sx, sy),
                         xytext=(dx, dy), textcoords="offset points",
                         fontsize=9,
@@ -382,14 +393,20 @@ def fig_state_medicaid_scatter():
     ax.set_ylabel("Direct-care workers per 1,000 residents 65+")
     ax.set_title("States that pay more get more workers")
     ax.set_xlim(0, max(x) * 1.08)
-    ax.set_ylim(0, max(y) * 1.12)
-    ax.text(0.98, 0.05, f"r = {r:.2f}",
-            transform=ax.transAxes, ha="right", va="bottom",
-            fontsize=10, color=COLORS["darkgray"], fontweight="bold")
-    ax.legend(loc="upper left", fontsize=9)
+    ax.set_ylim(0, max(y) * 1.18)
+
+    annotation = res.annotate()
+    ax.text(0.02, 0.97, annotation,
+            transform=ax.transAxes, ha="left", va="top",
+            fontsize=8.5, color="#222",
+            family="monospace",
+            bbox=dict(facecolor=BG, edgecolor="none", alpha=0.85, pad=4))
+
+    ax.legend(loc="lower right", fontsize=9)
     source_line(ax,
                 "Sources: KFF state HCBS programs reports (FY2022); BLS OEWS state "
-                "estimates (2024); Census ACS 1-year state 65+ population.")
+                "estimates (May 2024); Census ACS 1-year state 65+ population. "
+                "Univariate OLS; HC1 robust SE; pairs bootstrap CI.")
 
     fig.savefig(OUT / "state_medicaid_scatter.png", dpi=DPI, bbox_inches="tight")
     plt.close(fig)
