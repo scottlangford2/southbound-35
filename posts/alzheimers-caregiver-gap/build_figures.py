@@ -341,6 +341,198 @@ def fig_disabled_children_burden():
     print(f"  saved → {OUT / 'disabled_children_burden.png'}")
 
 
+def fig_state_medicaid_scatter():
+    """State scatter: Medicaid HCBS spending per capita vs. direct-care
+    workers per 1,000 elderly. Texas highlighted as a low-rate,
+    low-workforce state.
+    """
+    df = _read_csv("state_medicaid_workforce.csv")
+
+    fig, ax = plt.subplots(figsize=(7.4, 4.8))
+    redbar(fig)
+
+    x = df["hcbs_per_capita_usd"].values
+    y = df["direct_care_per_1k_65p"].values
+
+    is_tx = df["state"].values == "TX"
+    other = ~is_tx
+    ax.scatter(x[other], y[other], s=46, color=COLORS["blue"], alpha=0.75,
+               edgecolor=BG, linewidth=0.8, zorder=3)
+    ax.scatter(x[is_tx], y[is_tx], s=120, color=COLORS["red"],
+               edgecolor=BG, linewidth=1.2, zorder=5, label="Texas")
+
+    coef = np.polyfit(x, y, 1)
+    xs = np.linspace(x.min(), x.max(), 100)
+    ax.plot(xs, coef[0] * xs + coef[1],
+            color=COLORS["darkgray"], lw=1.5, ls="--",
+            alpha=0.85, zorder=2, label="OLS fit")
+    r = np.corrcoef(x, y)[0, 1]
+
+    highlight = {"TX", "MS", "FL", "NY", "MN", "CA", "OR", "MA", "AL"}
+    for sx, sy, s in zip(x, y, df["state"]):
+        if s in highlight:
+            dx, dy = (8, 6) if s != "TX" else (10, -6)
+            ax.annotate(s, (sx, sy),
+                        xytext=(dx, dy), textcoords="offset points",
+                        fontsize=9,
+                        fontweight=("bold" if s == "TX" else "normal"),
+                        color=(COLORS["red"] if s == "TX" else "#222"))
+
+    ax.set_xlabel("State Medicaid HCBS spending per capita ($/yr)")
+    ax.set_ylabel("Direct-care workers per 1,000 residents 65+")
+    ax.set_title("States that pay more get more workers")
+    ax.set_xlim(0, max(x) * 1.08)
+    ax.set_ylim(0, max(y) * 1.12)
+    ax.text(0.98, 0.05, f"r = {r:.2f}",
+            transform=ax.transAxes, ha="right", va="bottom",
+            fontsize=10, color=COLORS["darkgray"], fontweight="bold")
+    ax.legend(loc="upper left", fontsize=9)
+    source_line(ax,
+                "Sources: KFF state HCBS programs reports (FY2022); BLS OEWS state "
+                "estimates (2024); Census ACS 1-year state 65+ population.")
+
+    fig.savefig(OUT / "state_medicaid_scatter.png", dpi=DPI, bbox_inches="tight")
+    plt.close(fig)
+    print(f"  saved → {OUT / 'state_medicaid_scatter.png'}")
+
+
+def fig_texas_wages_competitors():
+    """Texas zoom: direct-care wages vs. competing low-credential jobs."""
+    df = _read_csv("texas_zoom.csv").copy()
+    label_map = {
+        "hha":       "Home health aides",
+        "pca":       "Personal care aides",
+        "cna":       "Nursing assistants",
+        "dsp":       "DSPs (IDD)",
+        "warehouse": "Warehouse stockers",
+        "retail":    "Retail salespersons",
+        "fastfood":  "Fast food workers",
+        "amazon":    "Amazon FC (start)",
+    }
+    df["display"] = df["occupation"].map(label_map)
+    df = df.sort_values(["group", "median_wage_2024"])
+    df_care = df[df["group"] == "care"]
+    df_comp = df[df["group"] == "competitor"]
+
+    fig, ax = plt.subplots(figsize=(7.6, 4.8))
+    redbar(fig)
+
+    import matplotlib.patches as mpatches
+    care_y = np.arange(len(df_care))
+    comp_y = np.arange(len(df_comp)) + len(df_care) + 1
+    ax.barh(care_y, df_care["median_wage_2024"], height=0.7,
+            color=COLORS["red"])
+    ax.barh(comp_y, df_comp["median_wage_2024"], height=0.7,
+            color=COLORS["blue"])
+    legend_handles = [
+        mpatches.Patch(color=COLORS["red"], label="Direct care"),
+        mpatches.Patch(color=COLORS["blue"], label="Competing low-credential jobs"),
+    ]
+
+    for yy, val in zip(care_y, df_care["median_wage_2024"]):
+        ax.text(val + 0.15, yy, f"${val:.2f}",
+                va="center", fontsize=9, fontweight="bold",
+                color=COLORS["red"])
+    for yy, val in zip(comp_y, df_comp["median_wage_2024"]):
+        ax.text(val + 0.15, yy, f"${val:.2f}",
+                va="center", fontsize=9, fontweight="bold",
+                color=COLORS["blue"])
+
+    ax.set_yticks(np.concatenate([care_y, comp_y]))
+    ax.set_yticklabels(
+        list(df_care["display"]) + list(df_comp["display"]),
+        fontsize=9,
+    )
+    care_median = df_care["median_wage_2024"].median()
+    gap_y = len(df_care) + 0.0
+    ax.axvline(care_median, color=COLORS["darkgray"], lw=0.8, ls=":", alpha=0.7)
+    ax.text(care_median + 0.2, gap_y, f"care median ${care_median:.2f}",
+            fontsize=8.5, color=COLORS["darkgray"], style="italic",
+            ha="left", va="center")
+
+    ax.set_xlabel("Median hourly wage (nominal USD), Texas, May 2024")
+    ax.set_title("Texas direct-care wages trail competing jobs")
+    ax.set_xlim(0, df["median_wage_2024"].max() * 1.22)
+    ax.set_ylim(-0.7, len(df) + 0.6)
+    gap_label_y = len(df_care) + 0.55
+    ax.text(0.5, gap_label_y, "Direct care",
+            ha="left", va="center", fontsize=9, fontweight="bold",
+            color=COLORS["red"])
+    ax.text(7.0, gap_label_y, "Competing low-credential jobs",
+            ha="left", va="center", fontsize=9, fontweight="bold",
+            color=COLORS["blue"])
+    ax.grid(axis="x")
+    ax.grid(axis="y", visible=False)
+    source_line(ax,
+                "Sources: BLS OEWS Texas state estimates, May 2024; ANCOR State of "
+                "America's Direct Support Workforce Crisis (DSPs); company-posted "
+                "starting wages (Amazon FC).")
+
+    fig.savefig(OUT / "texas_wages_competitors.png", dpi=DPI, bbox_inches="tight")
+    plt.close(fig)
+    print(f"  saved → {OUT / 'texas_wages_competitors.png'}")
+
+
+def fig_combined_populations():
+    """The unified care demand picture: populations served by the same
+    Medicaid-funded direct-care + DSP workforce. Paid workforce shown
+    as a dashed reference line for scale.
+    """
+    df = _read_csv("combined_populations.csv")
+    demand = df[df["population"] != "paid_workforce"].copy()
+    supply = df[df["population"] == "paid_workforce"]
+    demand = demand.sort_values("millions")
+
+    fig, ax = plt.subplots(figsize=(7.6, 4.4))
+    redbar(fig)
+
+    palette = {
+        "alz_dementia":  COLORS["red"],
+        "elderly_adl":   COLORS["yellow"],
+        "idd_adults":    COLORS["blue"],
+        "disabled_kids": COLORS["green"],
+    }
+    colors = [palette[k] for k in demand["population"]]
+    y = np.arange(len(demand))
+    ax.barh(y, demand["millions"], height=0.62, color=colors)
+    for yy, val in zip(y, demand["millions"]):
+        ax.text(val + 0.12, yy, f"{val:.1f}M",
+                va="center", fontsize=9, fontweight="bold")
+    ax.set_yticks(y)
+    ax.set_yticklabels(demand["label"], fontsize=9)
+
+    total = demand["millions"].sum()
+    workforce = float(supply["millions"].iloc[0])
+    ax.axvline(workforce, color=COLORS["darkgray"], lw=1.4, ls="--",
+               alpha=0.85)
+    top_y = len(demand) - 0.4
+    ax.text(workforce + 0.15, top_y,
+            f"paid workforce  {workforce:.1f}M",
+            fontsize=8.5, color=COLORS["darkgray"], style="italic",
+            ha="left", va="top")
+
+    ax.set_xlabel("People needing intensive ongoing care (millions)")
+    ax.set_title("One labor market, four populations")
+    ax.set_xlim(0, max(demand["millions"].max(), workforce) * 1.30)
+    ax.grid(axis="x")
+    ax.grid(axis="y", visible=False)
+
+    ax.text(0.98, 0.05,
+            f"total demand: {total:.1f}M\n"
+            f"ratio of care recipients per paid worker: "
+            f"{total / workforce:.1f}",
+            transform=ax.transAxes, ha="right", va="bottom",
+            fontsize=8.5, color=COLORS["darkgray"], fontweight="bold")
+
+    source_line(ax,
+                "Sources: Alz Assoc 2024 F&F; Census ACS / HRS; CDC NHIS; Larson "
+                "et al. (2023, U Minn); BLS OEWS 2024 + ANCOR.")
+
+    fig.savefig(OUT / "combined_populations.png", dpi=DPI, bbox_inches="tight")
+    plt.close(fig)
+    print(f"  saved → {OUT / 'combined_populations.png'}")
+
+
 if __name__ == "__main__":
     print("Building figures for 'Who Will Care for Them?'…")
     fig_prevalence_vs_workforce()
@@ -348,6 +540,9 @@ if __name__ == "__main__":
     fig_aging_pyramid_shift()
     fig_unpaid_family_burden()
     fig_disabled_children_burden()
+    fig_state_medicaid_scatter()
+    fig_texas_wages_competitors()
+    fig_combined_populations()
     print("Done.")
     print()
     print("Reminder: input CSVs in `inputs/` contain placeholder values")

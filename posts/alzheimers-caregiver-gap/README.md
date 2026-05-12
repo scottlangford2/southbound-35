@@ -62,6 +62,48 @@ The labor-market signature is sharp. Mothers of children without disabilities pa
 
 The paid workforce for this population — Direct Support Professionals (DSPs) who staff group homes, day programs, and in-home services for people with intellectual and developmental disabilities — has its own shortage of the same character. About 1.4 million DSPs nationally, a median wage around $14–15/hr, and annual turnover above 40 percent. Medicaid sets the rates here too, which means the same monopsony-style wage suppression applies. When the workforce thins, families absorb the difference.
 
+## One labor market, four populations
+
+The most useful way to think about this is as a single care labor market with four populations on the demand side and one workforce on the supply side.
+
+![Combined populations](figures/combined_populations.png)
+
+About 6.9 million Americans with Alzheimer's. About 6.1 million other elderly with at least one activity-of-daily-living limitation who aren't captured in the dementia figure. About 6.5 million adults with intellectual or developmental disabilities. About 3.5 million children with significant disabilities affecting daily care. Twenty-three million people who need substantial ongoing help with basic functioning.
+
+On the supply side, all four populations are served by essentially the same labor pool — home health aides, personal care aides, certified nursing assistants, and direct support professionals. About 6.5 million paid workers in total. The math is uncomfortable: roughly three-and-a-half care recipients for every paid worker. The slack has to come from somewhere, and the somewhere is overwhelmingly unpaid family labor.
+
+Treating elderly care and disability care as separate problems with separate budgets, separate workforces, and separate policy levers obscures a structural reality. The wages compete in the same local labor market against warehouse and retail. The reimbursement comes from the same Medicaid line. The training pipelines overlap. A wage floor that lifts CNAs out of the lowest tier also lifts DSPs. A Medicaid rate freeze that pushes home health aides out of the field also pushes DSPs out. It is one market.
+
+## States that pay more get more workers
+
+If the workforce problem really is a wage problem, then states that pay more — through higher Medicaid HCBS reimbursement rates — should have more direct-care workers per elderly resident. They do.
+
+![State Medicaid scatter](figures/state_medicaid_scatter.png)
+
+The cross-state correlation is striking. Across the 50 states plus DC, Medicaid HCBS spending per capita explains the bulk of the variation in how many direct-care workers a state has relative to its 65-plus population. New York spends roughly $1,240 per resident and has 128 direct-care workers per 1,000 elderly. Mississippi spends $250 and has 38. Texas, which is the natural Southbound 35 case, sits in the low-spend, low-workforce corner: $310 in HCBS spending per capita, 46 workers per 1,000 elderly. About a third of New York's intensity, on both axes.
+
+A causal interpretation needs care. States that spend more on HCBS tend to have higher costs of living, higher taxes, and different demographics. But the correlation is what we would expect from a labor market where the marginal worker chooses between care and competing low-wage employers, and where the wage in care is set by Medicaid. The cleaner causal evidence — Matsudaira's nurse-staffing identification, Ruffini's minimum-wage natural experiments, Hackmann's Medicaid-reform estimates — points the same direction.
+
+The implication is concrete: states that want more caregivers can have them, at a price. The price shows up in state and federal Medicaid budgets, and the elasticity is real but not infinite.
+
+## A Texas zoom
+
+The cross-state pattern is most useful when it forces a comparison with the local case. Texas direct-care wages, in the May 2024 BLS Texas state estimates, run several dollars below the competing low-credential jobs that draw from the same labor pool.
+
+![Texas wages vs competitors](figures/texas_wages_competitors.png)
+
+A home health aide in Texas earns about $13.20/hr at the median. A Texas DSP earns about $13.60. A personal care aide, about $13.95. A CNA, about $15.80 — the highest of the four, and still below retail. Meanwhile a stocker at a Texas warehouse earns $17.40. An Amazon fulfillment-center associate starts around $19.50 with benefits and a predictable schedule. Retail salespersons clear $14.85 with less physical and emotional toll. Even Texas fast-food work, at $11.95, lands within a dollar or two of the lower end of direct care.
+
+The math for an individual Texas worker choosing between, say, an HHA position at a home health agency and a starting role at an Amazon FC is not subtle. There is roughly a $6/hr gap, before counting benefits, schedule predictability, and the difference in physical and emotional labor. Multiply that across the 380,000 direct-care workers Texas employs and the gap is on the order of $5 billion per year in foregone wages relative to comparable jobs — money that, under a different Medicaid rate structure, could be the difference between the workforce growing or shrinking. Texas is the case where the state-rate scatter sits at its lower extreme, and the local wage comparison shows the mechanism.
+
+## After COVID: a temporary spike, then the snap-back
+
+One thing the 2014–2024 real-wage figure obscures by smoothing is what happened during and after the pandemic. Direct-care wages actually spiked sharply in 2020 and 2021, in both nominal and real terms, as employers competed for scarce workers, signing bonuses appeared in classifieds, and federal emergency funding flowed to Medicaid HCBS programs through the American Rescue Plan Act. For a brief window, home health aide median wages rose faster than the all-occupations median for the first time in a decade.
+
+Then inflation caught up. Real wages for caregivers in 2024 are back near where they were in 2020 — the nominal gains were almost entirely eroded by 2022-2023 inflation. Federal ARPA HCBS funding has wound down. The wage gap with warehouse and retail has reopened. The pandemic was a natural experiment in what wages it would take to attract caregivers in a tight labor market; the result was about $2–3/hr in real wages for a few years, which gives a rough revealed-preference measure of the elasticity the labor market is operating at.
+
+The other lasting post-COVID change is on the supply side. Immigration of care workers — historically a major source of growth in the U.S. direct-care workforce, particularly in personal care and DSP roles — has been disrupted by visa backlogs and policy uncertainty since 2020. About a quarter of the U.S. direct-care workforce is foreign-born, and the share is higher in HCBS-rich states like California and New York. If immigration policy remains restrictive, the elasticity that closes the workforce gap is lower than the pre-2020 literature assumes, and the wage required to attract domestic workers in sufficient numbers is correspondingly higher.
+
 ## What it would take to close the gap
 
 Two rough calibrations are useful for thinking about the size of the policy lever.
@@ -101,9 +143,12 @@ posts/alzheimers-caregiver-gap/
 │   ├── direct_care_workforce.csv  # year × occupation → employment (thousands)
 │   ├── wages_real.csv             # year × occupation → median wage (2024 USD/hr)
 │   ├── pop_projections.csv        # year → 65-74 / 75-84 / 85+ (millions)
-│   ├── unpaid_caregiver_hours.csv # year → hours, imputed value, relationship shares
-│   └── disabled_children.csv      # IDEA categories + mothers' LFPR by child disability
-└── figures/                       # build output (gitignored)
+│   ├── unpaid_caregiver_hours.csv  # year → hours, imputed value, relationship shares
+│   ├── disabled_children.csv       # IDEA categories + mothers' LFPR by child disability
+│   ├── combined_populations.csv    # populations needing intensive care + paid workforce
+│   ├── state_medicaid_workforce.csv# state HCBS spend × direct-care workers per 1k 65+
+│   └── texas_zoom.csv              # Texas wages: direct care vs. competing jobs
+└── figures/                        # build output (gitignored)
 ```
 
 ## Figures
@@ -115,6 +160,9 @@ posts/alzheimers-caregiver-gap/
 | 3 | `aging_pyramid_shift.png` | U.S. population by age band, 2020 vs. 2040 |
 | 4 | `unpaid_family_burden.png` | Unpaid dementia-caregiving hours and imputed value, with caregiver-relationship breakdown |
 | 5 | `disabled_children_burden.png` | Children served under IDEA by category; mothers' labor force participation gap |
+| 6 | `combined_populations.png` | Four populations needing intensive ongoing care, with the paid workforce as a reference line |
+| 7 | `state_medicaid_scatter.png` | State Medicaid HCBS spending per capita vs. direct-care workers per 1,000 elderly |
+| 8 | `texas_wages_competitors.png` | Texas direct-care wages vs. competing low-credential jobs, May 2024 |
 
 ## Data sources
 
@@ -150,6 +198,28 @@ Two related panels: U.S. children served under IDEA by primary disability catego
 
 - **IDEA categories:** U.S. Department of Education, EDFacts / IDEA Section 618 state-reported data. <https://sites.ed.gov/idea/data/>.
 - **Mothers' LFPR:** Census Bureau CPS ASEC tabulations summarized in the disability-economics literature (e.g., Powers 2003, *J. Health Economics*; Stabile & Allin 2012, *Future of Children*); updated using recent BLS CPS unpublished tabulations.
+
+### `inputs/combined_populations.csv`
+Four U.S. populations needing intensive ongoing care (2024) plus the paid direct-care + DSP workforce serving them, in millions of people.
+
+- **Alzheimer's & other dementias (65+):** Alzheimer's Association *2024 Facts & Figures*.
+- **Other elderly with ADL limitations:** Census ACS and Health and Retirement Study (HRS) estimates of 65+ Americans with at least one ADL limitation, net of those already counted under dementia.
+- **Adults with IDD:** CDC NHIS combined with Larson et al. (2023), *Status and Trends Through 2022*, U Minn Research and Training Center on Community Living.
+- **Children with significant disabilities:** CDC NHIS and Census ACS combined estimate of children under 18 with a disability affecting daily functioning.
+- **Paid workforce:** BLS OEWS 2024 plus ANCOR State of America's Direct Support Workforce Crisis (for the DSP component).
+
+### `inputs/state_medicaid_workforce.csv`
+State-level cross-section, 50 states plus DC. Two columns: Medicaid HCBS spending per capita (FY2022) and direct-care workers per 1,000 residents age 65+ (2024).
+
+- **HCBS spending:** Kaiser Family Foundation state HCBS programs reports, FY2022. <https://www.kff.org/medicaid/state-indicator/total-medicaid-hcbs-spending/>.
+- **Workforce per 1,000 elderly:** BLS OEWS state estimates (HHA + PCA + CNA, 2024) divided by Census ACS 1-year state 65+ population estimates.
+
+### `inputs/texas_zoom.csv`
+Texas state median hourly wages, May 2024, for direct-care occupations and competing low-credential jobs.
+
+- **Direct care (HHA, PCA, CNA):** BLS OEWS Texas state estimates. <https://www.bls.gov/oes/current/oes_tx.htm>.
+- **DSP:** ANCOR *State of America's Direct Support Workforce Crisis* annual report, Texas state cut.
+- **Competitors:** BLS OEWS Texas state estimates for stockers (SOC 53-7065), retail salespersons (SOC 41-2031), and fast food workers (SOC 35-3023); Amazon FC starting wage from company-posted Texas-metro job listings.
 
 ## Schemas
 
@@ -189,6 +259,24 @@ Shares are proportions summing to 1.0 within rounding.
 panel, key, label, value
 ```
 `panel` ∈ {`idea_categories`, `mothers_lfpr`}. For `idea_categories`, `value` is millions of children. For `mothers_lfpr`, `value` is a proportion (0–1).
+
+### `combined_populations.csv`
+```
+population, label, millions
+```
+`population` ∈ {`alz_dementia`, `elderly_adl`, `idd_adults`, `disabled_kids`, `paid_workforce`}.
+
+### `state_medicaid_workforce.csv`
+```
+state, hcbs_per_capita_usd, direct_care_per_1k_65p
+```
+`state` is USPS abbreviation (50 states + DC).
+
+### `texas_zoom.csv`
+```
+occupation, group, median_wage_2024
+```
+`group` ∈ {`care`, `competitor`}.
 
 ## Notes
 
