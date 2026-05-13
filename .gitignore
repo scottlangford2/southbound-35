@@ -19,3 +19,7 @@ posts/*/graphics/*.png
 posts/*/inputs/shapefiles/
 
 .DS_Store
+
+# Mailer secrets and subscriber list (NEVER commit)
+mailer/.env
+mailer/subscribers.csv

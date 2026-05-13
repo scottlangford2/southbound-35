@@ -1,0 +1,4 @@
+email,name,status,subscribed_on
+jane@example.com,Jane Doe,active,2026-05-01
+john@example.com,,active,2026-05-03
+former@example.com,Former Subscriber,unsubscribed,2026-04-15
