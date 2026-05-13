@@ -11,11 +11,31 @@ Self-hosted, hand-managed mailing list for the Southbound 35 blog. Sends each po
 
 Suitable up to a few hundred subscribers. Past that, migrate to a hosted service.
 
-## One-time setup
+## One-time setup (on the machine that will actually send)
+
+The recommended setup is your desktop — the machine you use for blog work. Once configured, sending a post is one command.
+
+### Quick setup
+
+```bash
+# Clone the repo (if you don't already have it)
+git clone https://github.com/scottlangford2/southbound-35.git
+cd southbound-35/mailer
+
+# Run the setup script — creates a virtualenv, installs deps,
+# and copies the .env and subscribers.csv templates.
+bash setup.sh
+```
+
+The script prints next-step instructions at the end.
+
+### Manual setup (if you skip setup.sh)
 
 1. **Install dependencies**
    ```bash
    cd mailer
+   python3 -m venv .venv
+   source .venv/bin/activate
    pip install -r requirements.txt
    ```
 
