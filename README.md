@@ -15,6 +15,7 @@ Each post with figures or data analysis has its own folder under `posts/`. Every
 | 2026-04-30 | [Did LIV Golfers Get Worse After They Defected?](https://scottlangford2.github.io/scott_langford/posts/2026/04/liv-defectors-majors/) | [`posts/liv-defectors-majors/`](posts/liv-defectors-majors/) |
 | 2026-05-11 | [Where the Water Will Come From](https://scottlangford2.github.io/scott_langford/posts/2026/05/hays-county-water/) | [`posts/hays-water/`](posts/hays-water/) |
 | 2026-05-18 | [How Do You Pay for the Schools?](https://scottlangford2.github.io/scott_langford/posts/2026/05/hays-county-schools/) | [`posts/hays-schools/`](posts/hays-schools/) |
+| 2026-05-25 | [Who Governs Hays County?](https://scottlangford2.github.io/scott_langford/posts/2026/05/hays-county-governance/) | [`posts/hays-governance/`](posts/hays-governance/) |
 
 ## Quickstart
 
