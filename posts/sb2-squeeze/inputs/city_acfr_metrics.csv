@@ -1,0 +1,49 @@
+# City-level ACFR fiscal metrics, by city and fiscal year.
+# Source: Scott's mf_scraper ACFR pipeline (Census ASLGF + Texas COG +
+#   50-state ACFR via Playwright). Annual Comprehensive Financial Reports
+#   filed by each city with the Texas State Comptroller and published on
+#   city websites.
+#
+# Columns:
+#   year                          - fiscal year (integer; Texas cities Oct–Sep)
+#   city                          - city name
+#   total_levy                    - total property tax levy adopted ($thousands)
+#   mo_levy                       - M&O (maintenance-and-operations) levy ($thousands)
+#   debt_service_levy             - I&S (interest-and-sinking) levy ($thousands)
+#   certified_value_existing      - certified appraised value of existing property ($millions)
+#   certified_value_new_construction - certified appraised value of new construction ($millions)
+#   population                    - city population estimate (persons)
+#
+# Units: levy columns in $thousands; certified value columns in $millions; population in persons.
+# certified_value_existing + certified_value_new_construction ≈ total certified value (may
+# differ slightly due to other adjustments such as partial-year annexations).
+#
+# NOTE: Rows below are SYNTHETIC PLACEHOLDER values (6 years × 4 cities = 24 rows).
+# Replace with real values from Scott's mf_scraper pipeline before publication.
+# Real certified values come from: Hays Central Appraisal District (hayscad.com)
+# certified-roll summaries by taxing entity, filed annually after ARB review.
+year,city,total_levy,mo_levy,debt_service_levy,certified_value_existing,certified_value_new_construction,population
+2019,Kyle,28500.0,24200.0,4300.0,6800.0,1200.0,48000
+2020,Kyle,33000.0,27800.0,5200.0,8500.0,1650.0,55000
+2021,Kyle,38500.0,32100.0,6400.0,10200.0,2000.0,60000
+2022,Kyle,44000.0,36200.0,7800.0,11500.0,2350.0,65000
+2023,Kyle,48500.0,39700.0,8800.0,13700.0,2600.0,68500
+2024,Kyle,54000.0,43500.0,10500.0,15600.0,2850.0,72000
+2019,Buda,10200.0,8300.0,1900.0,2300.0,520.0,19000
+2020,Buda,11800.0,9500.0,2300.0,2900.0,640.0,22000
+2021,Buda,13200.0,10600.0,2600.0,3500.0,750.0,24500
+2022,Buda,15700.0,12800.0,2900.0,3900.0,870.0,26500
+2023,Buda,17600.0,14100.0,3500.0,4700.0,980.0,28500
+2024,Buda,20000.0,15900.0,4100.0,5400.0,1050.0,30500
+2019,San Marcos,22000.0,18500.0,3500.0,3800.0,450.0,66000
+2020,San Marcos,24500.0,20400.0,4100.0,4400.0,490.0,72000
+2021,San Marcos,26800.0,22000.0,4800.0,5000.0,540.0,80000
+2022,San Marcos,30000.0,24500.0,5500.0,5200.0,600.0,87000
+2023,San Marcos,33500.0,27200.0,6300.0,5900.0,660.0,90000
+2024,San Marcos,37500.0,30200.0,7300.0,6700.0,720.0,92000
+2019,Dripping Springs,1800.0,1500.0,300.0,700.0,200.0,2800
+2020,Dripping Springs,2200.0,1830.0,370.0,950.0,270.0,3400
+2021,Dripping Springs,2750.0,2250.0,500.0,1200.0,310.0,4000
+2022,Dripping Springs,3650.0,2980.0,670.0,1450.0,380.0,5000
+2023,Dripping Springs,4250.0,3420.0,830.0,1750.0,430.0,5700
+2024,Dripping Springs,5000.0,3950.0,1050.0,2050.0,480.0,6400
