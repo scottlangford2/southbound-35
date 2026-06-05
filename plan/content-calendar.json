@@ -1,0 +1,234 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "_comment": "Content calendar for Southbound 35. Each entry is one Monday-morning slot at 5 AM CT. status: 'live' | 'review' | 'drafted' | 'planned' | 'open'. Review-rule: no entry moves to 'live' without W. Scott Langford's explicit review of the PDF.",
+  "last_updated": "2026-06-05",
+  "review_rule": "No post goes live without Scott's review of the PDF",
+  "build_order": "concentric from San Marcos: Ring 0 (deeper Hays) -> Ring 1 (Comal first, then Caldwell/Guadalupe/S-Travis/E-Blanco) -> Ring 2 (Williamson, Bexar Northside, Bastrop)",
+  "calendar": [
+    {
+      "date": "2026-06-08",
+      "title": "How a Texas Property Tax Bill is Built",
+      "slug": "property-tax-101",
+      "pillar": "mechanics",
+      "series": "property-tax-mechanics",
+      "kind": "explainer",
+      "status": "review",
+      "notes": "PDF in ~/Dropbox/southbound-35-drafts/01_*.pdf"
+    },
+    {
+      "date": "2026-06-15",
+      "title": "Eanes ISD and Robin Hood: How Recapture Actually Works",
+      "slug": "eanes-recapture",
+      "pillar": "mechanics",
+      "series": "property-tax-mechanics",
+      "kind": "explainer",
+      "status": "review",
+      "notes": "PDF in ~/Dropbox/southbound-35-drafts/02_*.pdf. Eanes is in Travis (Ring 1 by some measures) but the post is a pillar mechanics piece, not a corridor case study."
+    },
+    {
+      "date": "2026-06-22",
+      "title": "Eighty Miles: A Short History of the I-35 Corridor",
+      "slug": "i35-austin-sa",
+      "pillar": "corridor",
+      "series": "i35-corridor",
+      "kind": "case-study",
+      "status": "review",
+      "notes": "PDF in ~/Dropbox/southbound-35-drafts/03_*.pdf. Covers the corridor Hays sits in the middle of — frames the next several posts."
+    },
+    {
+      "date": "2026-06-29",
+      "title": "DETOUR — TBD (golf / sports)",
+      "slug": "tbd-detour-summer-1",
+      "pillar": "detour",
+      "kind": "original-analysis",
+      "status": "open",
+      "notes": "Detour slot to break up the public-finance run. US Open is 6/18-21 so a post-tournament strokes-gained analysis would land well here."
+    },
+    {
+      "date": "2026-07-06",
+      "title": "San Marcos and Texas State: an enrollment-finance feedback loop",
+      "slug": "san-marcos-txst-feedback",
+      "pillar": "corridor",
+      "series": "hays-county",
+      "kind": "case-study",
+      "status": "planned",
+      "ring": 0,
+      "notes": "Post A1 in next-series-outline.md. Ring 0. The most distinctive Hays story the macro series didn't tell. Touches author's employer — A2 question in outline asks about heads-up procedure before this one ships."
+    },
+    {
+      "date": "2026-07-13",
+      "title": "Kyle and Buda: the corridor's fastest-growing pair",
+      "slug": "kyle-buda-paired",
+      "pillar": "corridor",
+      "series": "hays-county",
+      "kind": "case-study",
+      "status": "planned",
+      "ring": 0,
+      "notes": "Post A2 in outline. Ring 0. Pairs nicely with the I-35 corridor history post just before."
+    },
+    {
+      "date": "2026-07-20",
+      "title": "DETOUR — TBD",
+      "slug": "tbd-detour-summer-2",
+      "pillar": "detour",
+      "status": "open",
+      "notes": "Pacing — break up the Hays follow-on run. Open Championship is 7/16-19, so a golf analytics piece is natural."
+    },
+    {
+      "date": "2026-07-27",
+      "title": "Three districts, three school-finance worlds",
+      "slug": "three-isd-comparison",
+      "pillar": "corridor",
+      "series": "hays-county",
+      "kind": "case-study",
+      "status": "planned",
+      "ring": 0,
+      "notes": "Post A3 in outline. Hays CISD / San Marcos CISD / Dripping Springs ISD. Ring 0. Makes the abstract recapture mechanics concrete with three districts within fifteen miles."
+    },
+    {
+      "date": "2026-08-03",
+      "title": "The western Hays Hill-Country edge",
+      "slug": "western-hays-edge",
+      "pillar": "corridor",
+      "series": "hays-county",
+      "kind": "case-study",
+      "status": "planned",
+      "ring": 0,
+      "notes": "Post A4 in outline. Ring 0. Companion to Kyle/Buda — same county, opposite end."
+    },
+    {
+      "date": "2026-08-10",
+      "title": "Truth-in-Taxation 101: reading the worksheets",
+      "slug": "truth-in-taxation-101",
+      "pillar": "mechanics",
+      "series": "property-tax-mechanics",
+      "kind": "explainer",
+      "status": "planned",
+      "notes": "Property-tax mechanics series post 3 of 3. Timing matches statewide TIT hearings (Aug-Sep). Walks through a real TIT worksheet line by line — uses a San Marcos / Hays CISD worksheet."
+    },
+    {
+      "date": "2026-08-17",
+      "title": "The Comal growth story",
+      "slug": "comal-county-growth",
+      "pillar": "corridor",
+      "series": "comal-county",
+      "kind": "case-study",
+      "status": "planned",
+      "ring": 1,
+      "notes": "Comal series post 1 of 5. Ring 1. First step out from Hays."
+    },
+    {
+      "date": "2026-08-24",
+      "title": "DETOUR — politics: bond-election turnout patterns",
+      "slug": "bond-election-turnout",
+      "pillar": "detour",
+      "kind": "original-analysis",
+      "status": "planned",
+      "notes": "Texas SOS turnout files. Bond elections have notoriously low + idiosyncratic turnout. 'Politics' lane detour."
+    },
+    {
+      "date": "2026-08-31",
+      "title": "Comal projections, with the aquifer caveat",
+      "slug": "comal-county-projections",
+      "pillar": "corridor",
+      "series": "comal-county",
+      "kind": "case-study",
+      "status": "planned",
+      "ring": 1,
+      "notes": "Comal series post 2 of 5."
+    },
+    {
+      "date": "2026-09-07",
+      "title": "Comal water and the Edwards Aquifer Authority",
+      "slug": "comal-county-water",
+      "pillar": "corridor",
+      "series": "comal-county",
+      "kind": "case-study",
+      "status": "planned",
+      "ring": 1,
+      "notes": "Comal series post 3 of 5. The single richest piece of the series. EAA permit system, J17 well, drought rules, HCP."
+    },
+    {
+      "date": "2026-09-14",
+      "title": "MUDs explained: the special-district mechanics",
+      "slug": "muds-explained",
+      "pillar": "mechanics",
+      "series": "special-districts",
+      "kind": "explainer",
+      "status": "planned",
+      "notes": "First post in the special-districts pillar series. Why they exist, how they're created, how they finance, the lifecycle. Uses corridor MUDs (Hays + Comal) as examples — concrete from the start."
+    },
+    {
+      "date": "2026-09-21",
+      "title": "Comal schools and Comal ISD's bond posture",
+      "slug": "comal-county-schools",
+      "pillar": "corridor",
+      "series": "comal-county",
+      "kind": "case-study",
+      "status": "planned",
+      "ring": 1,
+      "notes": "Comal series post 4 of 5."
+    },
+    {
+      "date": "2026-09-28",
+      "title": "DETOUR — religion: vocation and the work-as-worship tradition",
+      "slug": "vocation-essay",
+      "pillar": "detour",
+      "kind": "commentary",
+      "status": "open",
+      "notes": "Religion-lane detour. Reads as a personal essay; careful, not preachy."
+    },
+    {
+      "date": "2026-10-05",
+      "title": "Who governs Comal County?",
+      "slug": "comal-county-governance",
+      "pillar": "corridor",
+      "series": "comal-county",
+      "kind": "case-study",
+      "status": "planned",
+      "ring": 1,
+      "notes": "Comal series post 5 of 5. Closes the Ring-1 first county."
+    },
+    {
+      "date": "2026-10-12",
+      "title": "Bond election preview: corridor edition",
+      "slug": "bond-election-preview-2026",
+      "pillar": "original-analysis",
+      "kind": "original-analysis",
+      "status": "planned",
+      "notes": "Annual cycle: preview the major bond elections in the corridor counties before the Nov uniform election date. Cover school, county, and city bonds; show historical pass rates."
+    },
+    {
+      "date": "2026-10-19",
+      "title": "Caldwell County: the slow-growth neighbor",
+      "slug": "caldwell-county-intro",
+      "pillar": "corridor",
+      "series": "caldwell-county",
+      "kind": "case-study",
+      "status": "planned",
+      "ring": 1,
+      "notes": "Begin the next Ring-1 series. Caldwell is directly east of Hays — closer than Comal — but smaller and slower-growing. Open question (in outline) whether Caldwell goes before or after Comal."
+    }
+  ],
+  "summary_by_status": {
+    "_note": "Refresh manually as items change status; not auto-computed.",
+    "live": 0,
+    "review": 3,
+    "planned": 14,
+    "open": 3,
+    "total": 20
+  },
+  "summary_by_ring": {
+    "ring_0_hays_deepening": 4,
+    "ring_1_directly_adjacent": 6,
+    "pillar_mechanics": 3,
+    "corridor_framing": 1,
+    "detours": 4,
+    "original_analysis_nonseries": 2
+  },
+  "annual_anchors_used": {
+    "TIT_hearings_aug_sep": "truth-in-taxation-101 (8/10), MUDs (9/14)",
+    "bond_election_preview_oct": "bond-election-preview-2026 (10/12)",
+    "leg_session_jan_may": "not in this 20-week window; calendar to be extended"
+  }
+}
