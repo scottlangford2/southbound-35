@@ -382,6 +382,51 @@ versus tax-exempt issuance, the legal opinions and what they
 mean.
 \end{itemize}
 
+\subsection{The operational calendar}
+
+The strategic architecture in this section is implemented as a
+generator-backed weekly calendar with a three-year (156-week)
+horizon:
+
+\begin{itemize}
+\item \texttt{plan/build\_calendar.py} --- editable Python
+generator. Edit the \texttt{CORRIDOR\_BACKLOG},
+\texttt{PILLAR\_1\_BACKLOG}, \texttt{PILLAR\_3\_BACKLOG}, and
+\texttt{PILLAR\_4\_BACKLOG} lists to shift topics; re-run to
+regenerate the calendar.
+\item \texttt{plan/content-calendar.json} --- generated weekly
+schedule. Each entry tagged with \texttt{certainty}: high (next
+$\sim$20 weeks, concrete), medium (weeks 21--52, series-paced),
+low (weeks 53+, placeholder).
+\item \texttt{plan/multi-year-backlog.md} --- topic universe
+organized by series, with Year-3 candidates for the trailing
+\texttt{tbd} slots.
+\item \texttt{plan/pillar3-sports-music-topics.md} --- pillar-3
+topic backlog covering NBA, PGA Tour, college football and
+basketball, and Texas country music. Six top picks pinned to
+seasonally-appropriate Mondays via \texttt{FIXED\_PILLAR\_3\_SLOTS}
+in the generator.
+\end{itemize}
+
+The current 156-week pillar mix:
+\begin{center}
+\small
+\begin{tabular}{lr}
+\toprule
+Pillar & Slots \\
+\midrule
+Economic development (corridor)      & 49 \\
+Public finance (mechanics)           & 29 \\
+Econometric / statistical analysis   & 22 \\
+Program evaluation                   & 16 \\
+Annual anchors (bond, year-in-review) &  9 \\
+\textit{tbd} (Year-3 tail)           & 31 \\
+\midrule
+Total                                & 156 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
 % ============================================================
 \section{Quality standards and sourcing}
 % ============================================================
@@ -694,41 +739,64 @@ practitioners who run the places.}
 \section{Implementation checklist}
 % ============================================================
 
-The concrete near-term to-do list, in priority order:
+\subsection{Done as of June 2026}
 
-\begin{enumerate}
-\item Normalize front matter on the nine existing posts
-(\texttt{series}, \texttt{kind} fields) per the
-table in \S 7.2. This is the immediate next action and is
-metadata-only.
+The following items are complete and live in the repository:
 
-\item Draft the three queued posts to publication-ready and review
-them on iPad before pushing live:
 \begin{itemize}
-\item Property tax mechanics 101
-\item Eanes ISD recapture
-\item I-35 Austin--SA corridor history
+\item Front-matter normalized on the nine existing posts
+(\texttt{series}, \texttt{kind} fields per \S 7.2). [done 2026-06-05]
+
+\item Three pillar posts drafted to publication-ready and sent for
+PDF review (property-tax mechanics, Eanes recapture, I-35
+Austin--SA corridor history). [in review 2026-06-05]
+
+\item One-page editorial policy derived from \S 6 and \S 9 of this
+plan: \texttt{plan/editorial-policy.md}. [done 2026-06-05]
+
+\item Programmatic content calendar with a three-year (156-week)
+horizon: \texttt{plan/build\_calendar.py} +
+\texttt{plan/content-calendar.json}. Each Monday is tagged with
+certainty (high $/$ medium $/$ low) so concrete and placeholder
+slots are visible at a glance. [done 2026-06-05]
+
+\item Multi-year backlog organized by series with Year-3 candidate
+topics: \texttt{plan/multi-year-backlog.md}. [done 2026-06-05]
+
+\item Pillar-3 topic backlog covering NBA, PGA Tour, college
+football, college basketball, and Texas country music
+(\texttt{plan/pillar3-sports-music-topics.md}); six top picks
+pinned to specific seasonally-appropriate Mondays via
+\texttt{FIXED\_PILLAR\_3\_SLOTS} in the generator. [done 2026-06-05]
 \end{itemize}
 
-\item Add a series-spine widget to the post layout that
-renders ``Post 3 of 5: Hays County series'' when \texttt{series}
-is present. This is theme work and should be scoped before
-implementation.
+\subsection{Open}
 
-\item Draft the next Hays follow-on posts (San Marcos and the
-Texas State enrollment-finance feedback; Kyle/Buda as a paired
-case study; a three-ISD school-finance comparison across Hays
-CISD, San Marcos CISD, and Dripping Springs ISD), and the first
-two Comal County series posts. Review each PDF before the
-cadence date.
+\begin{enumerate}
+\item Series-spine widget on the post layout that renders ``Post 3
+of 5: Hays County series'' when the \texttt{series} field is
+present. Theme work; needs scoping before implementation.
 
-\item Build a manual content-calendar tracker (a small JSON file
-under \texttt{plan/} listing the next twenty Mondays and their
-slotted topic) and review it monthly.
+\item Draft the next Hays follow-on posts (San Marcos and Texas
+State enrollment-finance feedback, Kyle/Buda paired case study,
+three-ISD school-finance comparison, western Hays Hill-Country
+edge) per the calendar slots in summer 2026. Review each PDF
+before its scheduled date.
 
-\item Develop a one-page editorial policy document derived from
-\S 6 and \S 9 of this plan, suitable for sharing with collaborators
-and coauthors.
+\item Begin the Comal County series (5 posts, Aug--Oct 2026 per
+calendar) using the Hays template documented in \S 5.
+
+\item Quarterly: review the rolling 52-week horizon, populate the
+Year-3 \texttt{tbd} tail by editing the backlogs in
+\texttt{build\_calendar.py}, and re-run the generator.
+
+\item Monthly: spot-check upcoming three Mondays for status
+transitions (\texttt{planned} $\to$ \texttt{drafted} $\to$
+\texttt{review} $\to$ \texttt{live}).
+
+\item Year 1 (by May 2027): hit 200 email subscribers; first
+practitioner citation by a state agency; first press mention by a
+corridor newspaper.
 \end{enumerate}
 
 % ============================================================
