@@ -258,6 +258,65 @@ def annual_anchors():
 
 
 # ---------------------------------------------------------------------------
+# Fixed pillar-3 slots — named topics from pillar3-sports-music-topics.md,
+# pinned to seasonally-appropriate Mondays. Each date below was verified
+# to be a pillar-3 slot under the rotation pattern, so the overall pillar
+# mix is unchanged. Add to or edit this list to lock more specific topics.
+# ---------------------------------------------------------------------------
+FIXED_PILLAR_3_SLOTS = [
+    # (date, title, slug, certainty, notes)
+    (date(2026, 11, 23),
+     "Texas State and the FBS pyramid: a G5 → P5 mobility analysis",
+     "txst-g5-to-p5-mobility",
+     "high",
+     "CFB rivalry / conference-championship week. TXST-specific; "
+     "uses FBS program transitions 2010-2026 as the mobility sample."),
+
+    (date(2027, 4, 12),
+     "Two Step Inn and the corridor's festival economy",
+     "two-step-inn-festival-economy",
+     "high",
+     "Two Step Inn weekend in Georgetown (Williamson Co.). Uses "
+     "Williamson HOT receipts and city sales-tax data. Bridges "
+     "pillar-3 (descriptive economic-impact analysis) and pillar-4 "
+     "(program evaluation of the festival incentive package)."),
+
+    (date(2027, 5, 31),
+     "Strokes-gained, explained: decomposing a noisy outcome",
+     "strokes-gained-explained",
+     "high",
+     "Memorial Day weekend, just after the Charles Schwab Challenge "
+     "(Fort Worth). Pedagogical decomposition piece using PGA Tour "
+     "and Data Golf strokes-gained outputs."),
+
+    (date(2027, 10, 18),
+     "The Texas country crossover wave: an event study",
+     "tx-country-crossover-event-study",
+     "medium",
+     "ACL Festival window. Event study around Spotify monthly "
+     "listener growth for Cody Johnson, Parker McCollum, Koe Wetzel, "
+     "Turnpike Troubadours, Randy Rogers at their first major-label "
+     "/ Billboard-chart entry dates."),
+
+    (date(2028, 3, 6),
+     "Houston Cougars: a synthetic control of program ascent",
+     "houston-cougars-synthetic-control",
+     "medium",
+     "NCAA tournament week (Selection Sunday is typically the day "
+     "prior). Synthetic-control case study using kenpom historical "
+     "data, AAC → Big 12 → present trajectory."),
+
+    (date(2028, 6, 5),
+     "The Wemby effect on the Spurs",
+     "wemby-effect-spurs",
+     "medium",
+     "End of Wembanyama's fifth NBA season; Finals week-of. "
+     "Synthetic-control comparison of Spurs trajectory pre- vs. "
+     "post-Wembanyama with a multi-team donor pool."),
+]
+
+
+# ---------------------------------------------------------------------------
 # Calendar build
 # ---------------------------------------------------------------------------
 
@@ -321,6 +380,16 @@ def build_calendar() -> list[Slot]:
             date=d.isoformat(), title=title, slug=slug, pillar=pillar,
             kind=kind, status="review", certainty="high",
             series=series, notes=note
+        )
+
+    # 2b) Seed the named pillar-3 sports/music slots at their pinned dates.
+    for d, title, slug, certainty, notes in FIXED_PILLAR_3_SLOTS:
+        if d < mondays[0] or d > mondays[-1]:
+            continue
+        slots[d] = Slot(
+            date=d.isoformat(), title=title, slug=slug,
+            pillar="econometric-analysis", kind="original-analysis",
+            status="planned", certainty=certainty, notes=notes
         )
 
     # 3) Pillar-2 queue (corridor) — fill p2 slots in order.

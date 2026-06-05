@@ -13,16 +13,16 @@
   "summary_by_pillar": {
     "public-finance": 29,
     "economic-development": 49,
-    "econometric-analysis": 16,
+    "econometric-analysis": 22,
     "program-evaluation": 16,
     "original-analysis": 6,
     "framing": 3,
-    "tbd": 37
+    "tbd": 31
   },
   "summary_by_certainty": {
-    "high": 19,
+    "high": 22,
     "medium": 42,
-    "low": 95
+    "low": 92
   },
   "calendar": [
     {
@@ -297,13 +297,13 @@
     },
     {
       "date": "2026-11-23",
-      "title": "Synthetic control: a county after a major plant closure",
-      "slug": "synthetic-control-a-county-after-a-major-plant-closure",
+      "title": "Texas State and the FBS pyramid: a G5 \u2192 P5 mobility analysis",
+      "slug": "txst-g5-to-p5-mobility",
       "pillar": "econometric-analysis",
       "kind": "original-analysis",
       "status": "planned",
-      "certainty": "medium",
-      "notes": "Pillar-3 stats / methods."
+      "certainty": "high",
+      "notes": "CFB rivalry / conference-championship week. TXST-specific; uses FBS program transitions 2010-2026 as the mobility sample."
     },
     {
       "date": "2026-11-30",
@@ -373,8 +373,8 @@
     },
     {
       "date": "2027-01-11",
-      "title": "Replication of a published Texas-focused finding",
-      "slug": "replication-of-a-published-texas-focused-finding",
+      "title": "Synthetic control: a county after a major plant closure",
+      "slug": "synthetic-control-a-county-after-a-major-plant-closure",
       "pillar": "econometric-analysis",
       "kind": "original-analysis",
       "status": "planned",
@@ -517,13 +517,13 @@
     },
     {
       "date": "2027-04-12",
-      "title": "Spatial econometrics on corridor employment outcomes",
-      "slug": "spatial-econometrics-on-corridor-employment-outcomes",
+      "title": "Two Step Inn and the corridor's festival economy",
+      "slug": "two-step-inn-festival-economy",
       "pillar": "econometric-analysis",
       "kind": "original-analysis",
       "status": "planned",
-      "certainty": "medium",
-      "notes": "Pillar-3 stats / methods."
+      "certainty": "high",
+      "notes": "Two Step Inn weekend in Georgetown (Williamson Co.). Uses Williamson HOT receipts and city sales-tax data. Bridges pillar-3 (descriptive economic-impact analysis) and pillar-4 (program evaluation of the festival incentive package)."
     },
     {
       "date": "2027-04-19",
@@ -594,13 +594,13 @@
     },
     {
       "date": "2027-05-31",
-      "title": "Bond-election turnout: what the Texas data show",
-      "slug": "bond-election-turnout-what-the-texas-data-show",
+      "title": "Strokes-gained, explained: decomposing a noisy outcome",
+      "slug": "strokes-gained-explained",
       "pillar": "econometric-analysis",
       "kind": "original-analysis",
       "status": "planned",
-      "certainty": "medium",
-      "notes": "Pillar-3 stats / methods."
+      "certainty": "high",
+      "notes": "Memorial Day weekend, just after the Charles Schwab Challenge (Fort Worth). Pedagogical decomposition piece using PGA Tour and Data Golf strokes-gained outputs."
     },
     {
       "date": "2027-06-07",
@@ -743,8 +743,8 @@
     },
     {
       "date": "2027-08-30",
-      "title": "Power analysis for evaluation designs (using a TX program)",
-      "slug": "power-analysis-for-evaluation-designs-using-a-tx-program",
+      "title": "Replication of a published Texas-focused finding",
+      "slug": "replication-of-a-published-texas-focused-finding",
       "pillar": "econometric-analysis",
       "kind": "original-analysis",
       "status": "backlog",
@@ -820,13 +820,13 @@
     },
     {
       "date": "2027-10-18",
-      "title": "How to read a coefficient table \u2014 a TX paper, line by line",
-      "slug": "how-to-read-a-coefficient-table-a-tx-paper-line-by-line",
+      "title": "The Texas country crossover wave: an event study",
+      "slug": "tx-country-crossover-event-study",
       "pillar": "econometric-analysis",
       "kind": "original-analysis",
-      "status": "backlog",
-      "certainty": "low",
-      "notes": "Pillar-3 stats / methods."
+      "status": "planned",
+      "certainty": "medium",
+      "notes": "ACL Festival window. Event study around Spotify monthly listener growth for Cody Johnson, Parker McCollum, Koe Wetzel, Turnpike Troubadours, Randy Rogers at their first major-label / Billboard-chart entry dates."
     },
     {
       "date": "2027-10-25",
@@ -964,8 +964,8 @@
     },
     {
       "date": "2028-01-17",
-      "title": "Event study: the February 2021 winter storm",
-      "slug": "event-study-the-february-2021-winter-storm",
+      "title": "Spatial econometrics on corridor employment outcomes",
+      "slug": "spatial-econometrics-on-corridor-employment-outcomes",
       "pillar": "econometric-analysis",
       "kind": "original-analysis",
       "status": "backlog",
@@ -1038,13 +1038,13 @@
     },
     {
       "date": "2028-03-06",
-      "title": "Fixed effects vs random effects with TX panel data",
-      "slug": "fixed-effects-vs-random-effects-with-tx-panel-data",
+      "title": "Houston Cougars: a synthetic control of program ascent",
+      "slug": "houston-cougars-synthetic-control",
       "pillar": "econometric-analysis",
       "kind": "original-analysis",
-      "status": "backlog",
-      "certainty": "low",
-      "notes": "Pillar-3 stats / methods."
+      "status": "planned",
+      "certainty": "medium",
+      "notes": "NCAA tournament week (Selection Sunday is typically the day prior). Synthetic-control case study using kenpom historical data, AAC \u2192 Big 12 \u2192 present trajectory."
     },
     {
       "date": "2028-03-13",
@@ -1177,13 +1177,13 @@
     },
     {
       "date": "2028-06-05",
-      "title": "Standard error clustering choices for county-level analysis",
-      "slug": "standard-error-clustering-choices-for-county-level-analysis",
+      "title": "The Wemby effect on the Spurs",
+      "slug": "wemby-effect-spurs",
       "pillar": "econometric-analysis",
       "kind": "original-analysis",
-      "status": "backlog",
-      "certainty": "low",
-      "notes": "Pillar-3 stats / methods."
+      "status": "planned",
+      "certainty": "medium",
+      "notes": "End of Wembanyama's fifth NBA season; Finals week-of. Synthetic-control comparison of Spurs trajectory pre- vs. post-Wembanyama with a multi-team donor pool."
     },
     {
       "date": "2028-06-12",
@@ -1227,6 +1227,66 @@
     },
     {
       "date": "2028-07-10",
+      "title": "Bond-election turnout: what the Texas data show",
+      "slug": "bond-election-turnout-what-the-texas-data-show",
+      "pillar": "econometric-analysis",
+      "kind": "original-analysis",
+      "status": "backlog",
+      "certainty": "low",
+      "notes": "Filler from p3 backlog"
+    },
+    {
+      "date": "2028-07-17",
+      "title": "Power analysis for evaluation designs (using a TX program)",
+      "slug": "power-analysis-for-evaluation-designs-using-a-tx-program",
+      "pillar": "econometric-analysis",
+      "kind": "original-analysis",
+      "status": "backlog",
+      "certainty": "low",
+      "notes": "Filler from p3 backlog"
+    },
+    {
+      "date": "2028-07-24",
+      "title": "How to read a coefficient table \u2014 a TX paper, line by line",
+      "slug": "how-to-read-a-coefficient-table-a-tx-paper-line-by-line",
+      "pillar": "econometric-analysis",
+      "kind": "original-analysis",
+      "status": "backlog",
+      "certainty": "low",
+      "notes": "Pillar-3 stats / methods."
+    },
+    {
+      "date": "2028-07-31",
+      "title": "Event study: the February 2021 winter storm",
+      "slug": "event-study-the-february-2021-winter-storm",
+      "pillar": "econometric-analysis",
+      "kind": "original-analysis",
+      "status": "backlog",
+      "certainty": "low",
+      "notes": "Filler from p3 backlog"
+    },
+    {
+      "date": "2028-08-07",
+      "title": "Fixed effects vs random effects with TX panel data",
+      "slug": "fixed-effects-vs-random-effects-with-tx-panel-data",
+      "pillar": "econometric-analysis",
+      "kind": "original-analysis",
+      "status": "backlog",
+      "certainty": "low",
+      "notes": "Filler from p3 backlog"
+    },
+    {
+      "date": "2028-08-14",
+      "title": "Standard error clustering choices for county-level analysis",
+      "slug": "standard-error-clustering-choices-for-county-level-analysis",
+      "pillar": "econometric-analysis",
+      "kind": "original-analysis",
+      "status": "backlog",
+      "certainty": "low",
+      "notes": "Filler from p3 backlog"
+    },
+    {
+      "date": "2028-08-21",
       "title": "Instrumental variables: what's plausibly exogenous in Texas",
       "slug": "instrumental-variables-what-s-plausibly-exogenous-in-texas",
       "pillar": "econometric-analysis",
@@ -1236,7 +1296,7 @@
       "notes": "Filler from p3 backlog"
     },
     {
-      "date": "2028-07-17",
+      "date": "2028-08-28",
       "title": "Difference-in-differences with staggered adoption (HB 3)",
       "slug": "difference-in-differences-with-staggered-adoption-hb-3",
       "pillar": "econometric-analysis",
@@ -1246,17 +1306,17 @@
       "notes": "Filler from p3 backlog"
     },
     {
-      "date": "2028-07-24",
+      "date": "2028-09-04",
       "title": "Heterogeneous treatment effects: who actually benefits?",
       "slug": "heterogeneous-treatment-effects-who-actually-benefits",
       "pillar": "econometric-analysis",
       "kind": "original-analysis",
       "status": "backlog",
       "certainty": "low",
-      "notes": "Pillar-3 stats / methods."
+      "notes": "Filler from p3 backlog"
     },
     {
-      "date": "2028-07-31",
+      "date": "2028-09-11",
       "title": "Pre-trend testing and the parallel-trends assumption",
       "slug": "pre-trend-testing-and-the-parallel-trends-assumption",
       "pillar": "econometric-analysis",
@@ -1266,7 +1326,7 @@
       "notes": "Filler from p3 backlog"
     },
     {
-      "date": "2028-08-07",
+      "date": "2028-09-18",
       "title": "Causal inference from observational TX program data",
       "slug": "causal-inference-from-observational-tx-program-data",
       "pillar": "econometric-analysis",
@@ -1274,66 +1334,6 @@
       "status": "backlog",
       "certainty": "low",
       "notes": "Filler from p3 backlog"
-    },
-    {
-      "date": "2028-08-14",
-      "title": "UNASSIGNED \u2014 populate from backlog",
-      "slug": "unassigned-2028-08-14",
-      "pillar": "tbd",
-      "kind": "tbd",
-      "status": "backlog",
-      "certainty": "low",
-      "notes": "All pillar backlogs exhausted at this point \u2014 add new topics."
-    },
-    {
-      "date": "2028-08-21",
-      "title": "UNASSIGNED \u2014 populate from backlog",
-      "slug": "unassigned-2028-08-21",
-      "pillar": "tbd",
-      "kind": "tbd",
-      "status": "backlog",
-      "certainty": "low",
-      "notes": "All pillar backlogs exhausted at this point \u2014 add new topics."
-    },
-    {
-      "date": "2028-08-28",
-      "title": "UNASSIGNED \u2014 populate from backlog",
-      "slug": "unassigned-2028-08-28",
-      "pillar": "tbd",
-      "kind": "tbd",
-      "status": "backlog",
-      "certainty": "low",
-      "notes": "All pillar backlogs exhausted at this point \u2014 add new topics."
-    },
-    {
-      "date": "2028-09-04",
-      "title": "UNASSIGNED \u2014 populate from backlog",
-      "slug": "unassigned-2028-09-04",
-      "pillar": "tbd",
-      "kind": "tbd",
-      "status": "backlog",
-      "certainty": "low",
-      "notes": "All pillar backlogs exhausted at this point \u2014 add new topics."
-    },
-    {
-      "date": "2028-09-11",
-      "title": "UNASSIGNED \u2014 populate from backlog",
-      "slug": "unassigned-2028-09-11",
-      "pillar": "tbd",
-      "kind": "tbd",
-      "status": "backlog",
-      "certainty": "low",
-      "notes": "All pillar backlogs exhausted at this point \u2014 add new topics."
-    },
-    {
-      "date": "2028-09-18",
-      "title": "UNASSIGNED \u2014 populate from backlog",
-      "slug": "unassigned-2028-09-18",
-      "pillar": "tbd",
-      "kind": "tbd",
-      "status": "backlog",
-      "certainty": "low",
-      "notes": "All pillar backlogs exhausted at this point \u2014 add new topics."
     },
     {
       "date": "2028-09-25",
