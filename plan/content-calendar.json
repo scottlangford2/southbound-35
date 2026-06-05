@@ -3,7 +3,8 @@
   "_comment": "Content calendar for Southbound 35. Each entry is one Monday-morning slot at 5 AM CT. status: 'live' | 'review' | 'drafted' | 'planned' | 'open'. Review-rule: no entry moves to 'live' without W. Scott Langford's explicit review of the PDF.",
   "last_updated": "2026-06-05",
   "review_rule": "No post goes live without Scott's review of the PDF",
-  "build_order": "concentric from San Marcos: Ring 0 (deeper Hays) -> Ring 1 (Comal first, then Caldwell/Guadalupe/S-Travis/E-Blanco) -> Ring 2 (Williamson, Bexar Northside, Bastrop)",
+  "scope": "Four pillars only: public-finance, economic-development, econometric-analysis, program-evaluation. Detour track (sports/religion/off-topic politics) retired June 2026.",
+  "build_order": "Concentric from San Marcos for pillar-2 corridor work: Ring 0 (deeper Hays) -> Ring 1 (Comal first, then Caldwell/Guadalupe/S-Travis/E-Blanco) -> Ring 2 (Williamson, Bexar Northside, Bastrop). Pillar-1 mechanics, pillar-3 stats, and pillar-4 evaluations interleaved.",
   "calendar": [
     {
       "date": "2026-06-08",
@@ -37,12 +38,13 @@
     },
     {
       "date": "2026-06-29",
-      "title": "DETOUR — TBD (golf / sports)",
-      "slug": "tbd-detour-summer-1",
-      "pillar": "detour",
-      "kind": "original-analysis",
-      "status": "open",
-      "notes": "Detour slot to break up the public-finance run. US Open is 6/18-21 so a post-tournament strokes-gained analysis would land well here."
+      "title": "Sales tax 101: the second-biggest local revenue line",
+      "slug": "sales-tax-101",
+      "pillar": "public-finance",
+      "series": "sales-tax-mechanics",
+      "kind": "explainer",
+      "status": "planned",
+      "notes": "Replaces a former detour slot. Pillar-1 sales-tax mechanics post: state 6.25, local-option 2.0 cap (1.0 city + various), Type A/B EDC slices, MTA/ATD slices, the SPD designation. Sets up later program-evaluation work on Type A/B EDCs."
     },
     {
       "date": "2026-07-06",
@@ -68,11 +70,12 @@
     },
     {
       "date": "2026-07-20",
-      "title": "DETOUR — TBD",
-      "slug": "tbd-detour-summer-2",
-      "pillar": "detour",
-      "status": "open",
-      "notes": "Pacing — break up the Hays follow-on run. Open Championship is 7/16-19, so a golf analytics piece is natural."
+      "title": "Type A and Type B EDCs: what the audits show",
+      "slug": "type-ab-edc-evaluation",
+      "pillar": "program-evaluation",
+      "kind": "evaluation",
+      "status": "planned",
+      "notes": "Replaces a former detour slot. Pillar-4 evaluation. Local-option sales-tax-funded economic development corporations (Chapters 504/505 Local Gov Code). Read the published audits and required project reports; ask what they say about effectiveness on their own terms."
     },
     {
       "date": "2026-07-27",
@@ -119,12 +122,12 @@
     },
     {
       "date": "2026-08-24",
-      "title": "DETOUR — politics: bond-election turnout patterns",
+      "title": "Bond-election turnout: what the Texas data show",
       "slug": "bond-election-turnout",
-      "pillar": "detour",
+      "pillar": "econometric-analysis",
       "kind": "original-analysis",
       "status": "planned",
-      "notes": "Texas SOS turnout files. Bond elections have notoriously low + idiosyncratic turnout. 'Politics' lane detour."
+      "notes": "Pillar-3 statistical analysis. Texas SOS turnout files. Bond elections have notoriously low + idiosyncratic turnout. Originally framed as a 'politics' detour; now framed as an applied analysis of turnout in low-information elections."
     },
     {
       "date": "2026-08-31",
@@ -171,12 +174,12 @@
     },
     {
       "date": "2026-09-28",
-      "title": "DETOUR — religion: vocation and the work-as-worship tradition",
-      "slug": "vocation-essay",
-      "pillar": "detour",
-      "kind": "commentary",
-      "status": "open",
-      "notes": "Religion-lane detour. Reads as a personal essay; careful, not preachy."
+      "title": "HB 3 compression: what changed for school M&O",
+      "slug": "hb3-compression-evaluation",
+      "pillar": "program-evaluation",
+      "kind": "evaluation",
+      "status": "planned",
+      "notes": "Replaces a former detour slot. Pillar-4 evaluation. HB 3 (86R, 2019) compressed school M&O rates via increased state funding. What did the rate path actually look like? What did per-pupil revenue do? Identification limits noted explicitly."
     },
     {
       "date": "2026-10-05",
@@ -214,17 +217,16 @@
     "_note": "Refresh manually as items change status; not auto-computed.",
     "live": 0,
     "review": 3,
-    "planned": 14,
-    "open": 3,
+    "planned": 17,
+    "open": 0,
     "total": 20
   },
-  "summary_by_ring": {
-    "ring_0_hays_deepening": 4,
-    "ring_1_directly_adjacent": 6,
-    "pillar_mechanics": 3,
-    "corridor_framing": 1,
-    "detours": 4,
-    "original_analysis_nonseries": 2
+  "summary_by_pillar": {
+    "public_finance": 5,
+    "economic_development": 10,
+    "econometric_analysis": 2,
+    "program_evaluation": 2,
+    "corridor_framing": 1
   },
   "annual_anchors_used": {
     "TIT_hearings_aug_sep": "truth-in-taxation-101 (8/10), MUDs (9/14)",

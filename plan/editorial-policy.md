@@ -5,6 +5,10 @@
 **Maintainer:** W. Scott Langford, Texas State University
 **Updated:** June 2026
 
+## Scope
+
+Every post fits one of four pillars: **public finance**, **economic development**, **econometric and statistical analysis**, or **program evaluation**. Each post is grounded in Texas data and (where possible) the I-35 corridor. Sports, religion, off-topic political commentary, and other content outside these pillars are not in scope.
+
 ---
 
 ## Quality and sourcing
@@ -29,10 +33,6 @@ The blog will name elected officials, civil servants, and public figures in thei
 ## On political affiliation
 
 The blog does not endorse candidates or parties and does not publish commentary that could be mistaken for endorsement. Analytical pieces on local political economy (turnout, ballot structure, MUD board races, school-board races) are in scope. Partisan commentary is not.
-
-## On religion
-
-The religion-lane detours are written from inside a religious worldview and are explicit about this. They do not proselytize and do not assume the reader shares the worldview. A non-religious reader should be able to enjoy the post without feeling preached at.
 
 ## Corrections and disputes
 
