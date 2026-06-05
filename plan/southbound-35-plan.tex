@@ -1,0 +1,719 @@
+\documentclass[11pt]{article}
+
+% ---------- packages ----------
+\usepackage[letterpaper,margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage{parskip}
+\usepackage{enumitem}
+\setlist{itemsep=2pt,topsep=4pt}
+\usepackage[hidelinks]{hyperref}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{booktabs}
+
+% ---------- typography ----------
+\definecolor{maroon}{HTML}{501214}
+\definecolor{gold}{HTML}{D7BD8A}
+\definecolor{ink}{HTML}{1A1A1A}
+
+\titleformat{\section}
+  {\normalfont\large\bfseries\color{ink}}
+  {\thesection.}{0.6em}{}
+\titleformat{\subsection}
+  {\normalfont\normalsize\bfseries\color{ink}}
+  {\thesubsection}{0.6em}{}
+\titlespacing*{\section}{0pt}{1.6em}{0.5em}
+\titlespacing*{\subsection}{0pt}{1.2em}{0.3em}
+
+% ---------- document ----------
+\title{\vspace{-1em}\textbf{Southbound 35}\\
+\large A long-term plan for the blog\\[0.3em]
+\normalsize \textit{Public finance and economic development on the Texas corridor}}
+\author{W.\ Scott Langford\\Texas State University}
+\date{June 2026}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+\vspace{-1.5em}
+\noindent\textit{This document is an internal planning memo. It sets
+the editorial vision, audience, pillar topics, series architecture,
+cadence, standards, and growth path for the blog over a three-to-five
+year horizon. It is the document I want to be able to point at when
+the question ``what is this blog for, exactly?'' comes up --- whether
+from a reader, a coauthor, a dean, or me.}
+
+\vspace{1em}
+\hrule
+\tableofcontents
+\hrule
+
+% ============================================================
+\section{Vision and positioning}
+% ============================================================
+
+Southbound 35 exists to do three things that the existing media
+landscape around Texas public finance does not do consistently:
+
+\begin{enumerate}[label=\textbf{(\arabic*)}]
+\item Explain the \emph{mechanics} of state and local public finance
+in Texas at a level a non-specialist reader can follow, but with
+sourcing and replication code that a specialist would not be
+embarrassed by.
+
+\item Produce \emph{small-scope analyses} on questions that are too
+narrow for an academic paper but too substantive for a Twitter
+thread --- the empirical equivalent of a working note, deliberately
+addressed to practitioners as well as scholars.
+
+\item Trace the \emph{economic and institutional history of the
+I-35 corridor} between Austin and San Antonio, an eighty-mile
+strip of land that has become one of the densest growth corridors
+in North America while remaining badly under-documented in the
+public-facing literature.
+\end{enumerate}
+
+The blog's tagline --- \textit{Public finance and economic
+development on the Texas corridor, with occasional detours into
+sports, politics, and religion} --- is a deliberate framing. The
+core is the corridor. The detours exist for two reasons. First,
+they are honest: I do think about sports analytics, theology, and
+political economy, and pretending I don't would make the blog feel
+performative. Second, they keep the blog from being grim. A reader
+who arrived here to learn about recapture should be able to leave
+with a half-thought about Scottie Scheffler or the LIV defectors.
+The variety is the brand.
+
+What Southbound 35 is \emph{not}: an opinion column, a consulting
+brochure, a vehicle for academic CV-line-padding, or a substitute
+for the academic publications. It is a \emph{public-scholarship
+output}, which on the modern academic CV sits in a defined and
+defensible category between teaching and research.
+
+% ============================================================
+\section{Audience}
+% ============================================================
+
+The blog has three concentric audiences, listed from inside to
+outside.
+
+\subsection{Inner: practitioners and local officials}
+
+The intended primary reader is someone who works inside or
+adjacent to the systems the blog covers --- a school district CFO,
+a county auditor, a municipal finance director, a TML or TAC
+staffer, a TxDOT or TWDB analyst, a legislative budget board
+analyst, a Texas Comptroller staff economist, a Greater Austin
+or San Antonio Chamber staffer. These readers know the systems
+already; what they value is having the mechanics laid out
+cleanly, with the citations they can use in their own briefings,
+and the occasional original analysis on a question their
+day-to-day workload doesn't give them time to investigate.
+
+This audience is small. It is also disproportionately the audience
+that makes consulting requests, suggests new post topics, and
+forwards the blog to other practitioners. Almost every quality
+decision about the blog should be made with this reader in mind.
+
+\subsection{Middle: engaged residents of the corridor}
+
+The second audience is residents of the I-35 corridor who care
+enough about local public finance to read more than 800 words
+about it. This includes school board members, city council members,
+ISD parents during bond seasons, MUD board members, journalists
+covering Texas local government, and the long-tail of Texans who
+follow Comptroller releases and TEA reports as a civic hobby.
+
+This audience is much larger than the inner audience and is the
+group most likely to share posts on social media, sign up for the
+email list, and ask thoughtful questions. The writing voice should
+be calibrated for them: assume intelligence and curiosity, do not
+assume specialist vocabulary.
+
+\subsection{Outer: scholars and the general public}
+
+The outer ring is the academic community in public administration,
+regional economics, public health policy, and Texas studies; plus
+the broader public who arrives at the blog through a single shared
+post or a news citation. The goal for this audience is not to
+convert them to regular readers but to be a credible reference
+when they need one.
+
+\subsection{What I am not optimizing for}
+
+\textit{Virality, traffic for its own sake, partisan engagement,
+or content velocity.} A blog post that ten engaged practitioners
+read and use in their work is worth more than a post that 10{,}000
+casual readers click on. The blog's reputation will be made by the
+hundred most thoughtful posts I publish over five years, not by the
+ten that happen to go briefly viral.
+
+% ============================================================
+\section{Editorial pillars and detours}
+% ============================================================
+
+Posts fall into one of two macro-categories: \textbf{Pillars} or
+\textbf{Detours}.
+
+\subsection{The pillars}
+
+\textbf{Pillar 1 --- Mechanics.} Explainer posts on how a specific
+piece of Texas public finance actually works. The property-tax
+mechanics post, the school finance recapture post, and the
+forthcoming Truth-in-Taxation post are pillar-1 work. Each is
+designed to be a durable, citable reference, with a long shelf
+life. These posts get linked from every subsequent post that uses
+the same concepts. They are the load-bearing wall of the blog.
+
+\textbf{Pillar 2 --- Corridor series.} Deep multi-post series on
+a single county or sub-region of the corridor. The Hays County
+five-post arc (growth, projections, water, schools, governance)
+is the first; Williamson County, Comal County, Bexar northside,
+and the East Austin / Bastrop edge are the obvious next four. Each
+series follows a standard arc that lets readers move between
+counties without learning a new structure.
+
+\textbf{Pillar 3 --- Original analysis.} Posts that produce a small
+new empirical finding too narrow for a paper. Often these will
+be data-cleaning exercises, comparative descriptive statistics,
+or short event-study replications on Texas-specific events
+(annexation reversals, ETJ changes, bond-election outcomes,
+state-aid formula changes). The LIV defectors post and the
+PGA Tour clutch post are the sports-detour analogues; pillar-3
+work is the public-finance version of that.
+
+\textbf{Pillar 4 --- Public scholarship adjacent to my research.}
+Posts where the blog and my academic work touch. The minority-owned
+banks resilience paper, the extreme-weather work, and the opioid
+finance work all have natural public-scholarship spinoffs. These
+are slow-build posts and should be conservative in claims.
+
+\subsection{The detours}
+
+The detours absorb the rest of my analytical attention and keep the
+blog feeling like a place a real person writes. Roughly three
+categories:
+
+\begin{itemize}
+\item \textbf{Sports analytics.} Golf especially, but also occasional
+posts on football, tennis, or motorsports when the data is there. The
+clutch-PGA and LIV-defectors posts are the model.
+
+\item \textbf{Religion and theology.} Short essays on the
+intersection of work, vocation, faith, and the texts I read for my
+own life. The Scheffler-Ecclesiastes post is the model. These should
+be rare (maybe four per year) and never preachy.
+
+\item \textbf{Politics and political economy.} Not partisan
+commentary --- the blog is not the place for that, and my position
+makes it inappropriate. But analytical pieces on local political
+economy (turnout, ballot structure, primary-versus-general voting
+patterns, MUD board elections, school-board races) sit naturally
+inside this category.
+\end{itemize}
+
+\subsection{Pillar : detour ratio}
+
+The intended steady-state mix is roughly \textbf{three pillar posts
+per detour post}. Over a year of weekly publication (52 posts), that
+is about 39 pillar posts and 13 detours. In the blog's first six
+months, the ratio has been closer to 5:4 (5 pillar Hays posts, 4
+detours), which over-weights detours. The next nine months should
+correct this by adding pillar-1 mechanics posts and beginning the
+second corridor series.
+
+% ============================================================
+\section{Publishing cadence and the annual rhythm}
+% ============================================================
+
+\subsection{Weekly cadence}
+
+The publication slot is \textbf{Monday at 5:00 a.m.\ Central}. This
+is locked in by the scheduled rebuild workflow on the website and
+the self-hosted mailer that fires a few minutes later. The choice
+of slot is deliberate:
+
+\begin{itemize}
+\item \textbf{Monday} captures the practitioner workweek-start
+attention window. A city manager reading email at 7:30 a.m.\ on
+Monday is a better target than a city manager reading at 4:00 p.m.\
+on Friday.
+\item \textbf{5:00 a.m.\ Central} is late enough that the post is
+ready by the start of the workday on the East Coast and early
+enough not to be buried by Monday-morning newsletters.
+\end{itemize}
+
+The cadence is \emph{one post per week}, every week. Skipping weeks
+is much more costly than publishing a less-than-perfect post on
+time. The hardest discipline is preferring a B+ post that ships
+Monday to an A post that ships ``some Friday.''
+
+\subsection{Annual rhythm}
+
+The Texas public finance calendar has a strong seasonal rhythm,
+and the blog should ride it:
+
+\begin{itemize}
+\item \textbf{January--May (odd years).} Legislative session. Daily
+news flow is heavy; the blog's contribution is structural
+explainers (what each finance-relevant bill actually does) rather
+than play-by-play.
+
+\item \textbf{June--July.} Comptroller's biennial revenue estimate
+and the certified estimate refresh. Sales tax monthly data start
+showing the post-spring picture. Good window for state-revenue
+posts.
+
+\item \textbf{August--September.} School district budget adoption
+and tax rate setting. Truth-in-Taxation hearings statewide. The
+single best season of the year for explainer posts on local property
+taxation.
+
+\item \textbf{October--November.} Bond elections (uniform election
+date is the first Tuesday after the first Monday in November). One
+post per cycle on the largest corridor bond elections, with results
+follow-ups.
+
+\item \textbf{December.} Census ACS five-year estimates released.
+Annual ``year in review'' post drafted in the last week of December.
+\end{itemize}
+
+A good content calendar is not a list of fifty-two specific topics
+locked a year in advance. It is a list of the seasonally-anchored
+slots (about fifteen per year) plus a backlog of pillar topics that
+can be slotted into the open weeks.
+
+% ============================================================
+\section{Series architecture}
+% ============================================================
+
+The blog's distinctive intellectual structure --- the thing that
+separates it from a column or a newsletter --- is the
+\textbf{multi-post series}. Each series follows a standard arc that
+lets a reader build a coherent picture of a place or a topic over
+four to six posts.
+
+\subsection{The county series template}
+
+The Hays County series established the template. Five posts:
+
+\begin{enumerate}
+\item \textbf{Growth.} The demographic and economic story. Why has
+this county been growing? Where are the new residents coming from?
+What is the labor-market base?
+\item \textbf{Projections.} What do credible forecasts say about the
+next ten and twenty-five years? Where do they disagree, and on what?
+\item \textbf{Water.} The single binding resource constraint in
+most fast-growing Texas counties. Sources, providers, regulatory
+geography, and what the next twenty years require.
+\item \textbf{Schools.} The largest line on the property tax bill
+and the most politically charged piece of local governance.
+Enrollment, finance, recapture status, bond capacity.
+\item \textbf{Governance.} Who actually governs this place? County,
+cities, ISDs, special districts, ETJs. The institutional plumbing.
+\end{enumerate}
+
+This template will be applied, with light adaptation, to at least
+four more counties over the next three years:
+Williamson (the closest analogue to Hays in growth dynamics);
+Comal (water-constrained, Edwards Aquifer dependence);
+the Bexar Northside (a different governance pattern --- a single
+large city extending into a fragmented exurban edge);
+and the Bastrop / Caldwell / Eastern Travis edge (the most
+under-studied piece of the corridor).
+
+\subsection{The pillar series template}
+
+A pillar series is a sequence of mechanics posts on a single
+finance system, building up the reader's vocabulary cumulatively.
+The currently-drafted three-post sequence on property taxation
+(mechanics, recapture, Truth-in-Taxation) is the first. Future
+pillar series will cover, in order:
+
+\begin{itemize}
+\item Sales tax mechanics: state, local-option, Type A/B
+economic development corporations, MTA/ATD slices.
+\item Special districts: MUDs, ESDs, hospital districts,
+groundwater conservation districts. The least-understood layer of
+Texas government.
+\item State-aid formulas: school FSP, county road \& bridge
+distributions, the various sales-tax holdback mechanisms.
+\item Bond mechanics: voter-approval, debt service, taxable
+versus tax-exempt issuance, the legal opinions and what they
+mean.
+\end{itemize}
+
+% ============================================================
+\section{Quality standards and sourcing}
+% ============================================================
+
+The blog's credibility is its most valuable asset. Six rules:
+
+\begin{enumerate}
+\item \textbf{Every chart cites its source in the chart footer.}
+Not in a paragraph below, not in a parenthetical, not in the
+replication code. In the chart itself.
+
+\item \textbf{Every post that uses non-trivial data points to a
+replication package} under \texttt{southbound-35/posts/}. The
+package is committed to a public repo on the same calendar day as
+publication.
+
+\item \textbf{Illustrative figures are labeled as such.} When a
+chart uses approximate values or transcribed summary statistics
+because a clean machine-readable source is unavailable, the
+chart's source line says so.
+
+\item \textbf{Claims about specific districts, officials, or
+firms are checked against named primary sources.} TEA, Comptroller,
+Census, BEA, FDIC, the agency's own adopted budget. Press
+coverage of a finance event is a starting point, not a citation.
+
+\item \textbf{Errors are corrected in-line with a dated note.}
+Not silently. The note says what was wrong, when it was changed,
+and (when relevant) who flagged it.
+
+\item \textbf{Posts that touch active academic work go through the
+same coauthor review as the academic work.} If a paper is in
+review at a journal and the blog post repeats or anticipates its
+finding, the coauthors see the post before it publishes.
+\end{enumerate}
+
+% ============================================================
+\section{Restructuring the existing posts}
+% ============================================================
+
+A blog written week by week without a planning document
+accumulates inconsistencies in its metadata. The first six months
+of Southbound 35 are no exception. The restructuring proposed
+here is metadata-only --- it does not change post content or
+visual rendering --- and is intended to make the next two years
+of content navigable, both for readers and for the site's own
+indexing and series widgets.
+
+\subsection{Front-matter conventions}
+
+Every post should declare four pieces of front matter, beyond
+title and date:
+
+\begin{itemize}
+\item \texttt{categories} --- one of three macro-buckets:
+\texttt{public-finance}, \texttt{economic-development}, or
+\texttt{detours}. (A post may carry more than one category, but
+not more than two.)
+
+\item \texttt{series} --- a slug identifying any multi-post series
+the post belongs to (\texttt{hays-county},
+\texttt{property-tax-mechanics}, \texttt{i35-corridor}, etc.).
+Posts that do not belong to a series omit the field.
+
+\item \texttt{kind} --- one of: \texttt{explainer},
+\texttt{original-analysis}, \texttt{case-study},
+\texttt{commentary}, or \texttt{detour}.
+
+\item \texttt{tags} --- free-form topic labels (Texas, water,
+schools, golf, theology, etc.).
+\end{itemize}
+
+The point of separating \texttt{categories}, \texttt{series},
+\texttt{kind}, and \texttt{tags} is to make different navigation
+widgets cheap to add later: a series-spine widget that shows
+``you are reading post 3 of 5 in the Hays County series'';
+a kind-based filter on the blog landing page; a
+related-by-tag panel at post foot.
+
+\subsection{Existing posts: corrected metadata}
+
+The following table shows the proposed metadata for the nine
+existing live posts. Changes are minor and reversible.
+
+\begin{center}
+\small
+\begin{tabular}{p{1.6in}p{0.9in}p{1.0in}p{1.0in}}
+\toprule
+Title & Categories & Series & Kind \\
+\midrule
+Hays Growth        & econ-dev, pub-fin & hays-county    & case-study \\
+Hays Projections   & econ-dev, pub-fin & hays-county    & case-study \\
+Hays Water         & econ-dev, pub-fin & hays-county    & case-study \\
+Hays Schools       & econ-dev, pub-fin & hays-county    & case-study \\
+Hays Governance    & econ-dev, pub-fin & hays-county    & case-study \\
+\midrule
+Spring Break Mortality & detours       & ---            & original-analysis \\
+LIV Defectors          & detours       & ---            & original-analysis \\
+Golf Clutch            & detours       & ---            & original-analysis \\
+Scheffler / Ecclesiastes & detours     & ---            & commentary \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Series-aware permalinks}
+
+Permalinks should not be changed retroactively (that breaks
+backlinks). Going forward, however, series posts should use a
+permalink template like
+\texttt{/series/hays-county/water/} rather than
+\texttt{/posts/2026/05/hays-county-water/}, with redirects from
+the dated path. This makes the series structure visible in URLs.
+
+% ============================================================
+\section{Distribution, audience-building, and email}
+% ============================================================
+
+The blog has three distribution channels: the website itself, an
+email list, and social-media reposting.
+
+\subsection{Email is the only one that compounds}
+
+Of the three, only the email list is owned and durable. Twitter /
+X audiences are subject to platform decisions outside the blog's
+control; Bluesky is more aligned but still small; LinkedIn is
+useful for practitioner distribution but the algorithm rewards
+content patterns the blog should not adopt.
+
+The self-hosted mailer (companion repo \texttt{southbound-35},
+directory \texttt{mailer/}) sends each subscriber an individual
+email Monday morning. No BCC, no shared header, no third-party
+provider. Subscribers are stored in a flat file on the desktop
+machine. The list is not shared, sold, or analyzed beyond the
+delivery confirmations.
+
+\textbf{Year-one goal: 200 subscribers, all opt-in.} Two-thirds
+of these will come from practitioner networks (TML, TAC, GFOA,
+ASPA, NASPAA, the Texas Public Policy Foundation and Center for
+Public Policy Priorities, the Texas state agencies). One-third
+will come from the broader social-media surface.
+
+\textbf{Year-three goal: 1{,}000 subscribers}, with a stable
+weekly open rate above 50\%. At 1{,}000 practitioner-heavy
+subscribers, the blog has reached its natural audience ceiling
+for Texas-only content. Further growth would require either
+national-scope content (something I do not currently plan to
+write) or a successor product.
+
+\subsection{Social channels}
+
+The blog's primary social-media presence is Bluesky
+(\texttt{@scottlangford2.bsky.social}) for academic-adjacent
+distribution and LinkedIn for practitioner reach. Twitter / X is
+posted to but not relied on. The accounts repost the blog's
+weekly post once, with the post's pull quote and the headline
+chart. They do not engage in unrelated commentary, threads, or
+political conversation under the same handle. This is a
+deliberate restraint.
+
+\subsection{Cross-posting and syndication}
+
+The blog will not be syndicated to Substack, Medium, or other
+third-party platforms. The reason is partly editorial control
+and partly the principle that the canonical version is at the
+canonical URL.
+
+It will, however, be excerpted and reprinted with permission by
+Texas-focused outlets that want to. The first such relationship
+to develop is with the Texas State University Hobby School (or
+analogue), the LBJ School at UT, and the SA Express-News
+Editorial Board, all of which have institutional interests in
+publishing finance-explainer pieces aimed at engaged residents.
+
+% ============================================================
+\section{Risks, boundaries, and ethics}
+% ============================================================
+
+The blog has several risk surfaces. None is fatal; all need to
+be managed deliberately.
+
+\subsection{Conflict of interest with consulting}
+
+I do small-scope consulting work for local governments and
+development organizations. The risk is that a blog post praises
+or criticizes a client in a way that creates the appearance of
+quid pro quo. The rule: \textbf{no post on a current consulting
+client's jurisdiction or work product during the engagement, and
+for six months after.} Disclose past engagements in any post that
+discusses the relevant jurisdiction.
+
+\subsection{Conflict of interest with research}
+
+The blog should not be used to scoop my own academic papers. It
+also should not be used to puff them. The rule: \textbf{academic
+work appears on the blog only after the underlying paper is in
+working-paper form or beyond}, and a blog post about it is
+explicit that it is a public-facing summary.
+
+\subsection{Defamation and named-individual claims}
+
+The blog will name elected officials, civil servants, and public
+figures in their official capacities, and will critique
+\emph{decisions} freely. It will not critique individuals'
+character or motivations. The rule: \textbf{disagree with the
+decision, not the person who made it.}
+
+\subsection{Political affiliation}
+
+The blog does not endorse candidates or parties and does not
+publish commentary that could be mistaken for endorsement. This
+is a professional-norm restriction, not a personal one.
+
+\subsection{Religion}
+
+The religion detours are written from inside a religious
+worldview. They are explicit about this. They do not proselytize
+and do not assume the reader shares the worldview. The rule: a
+non-religious reader should be able to enjoy the post without
+feeling preached at.
+
+\subsection{Texas State University and academic position}
+
+The site footer makes clear that the blog is a personal
+publication. University communications are not consulted on
+content. The university's name and brand are not used as
+endorsement. Standard academic-freedom protections apply, and so
+do the standard academic-norm restrictions on partisan activity.
+
+% ============================================================
+\section{Measurement and evaluation}
+% ============================================================
+
+The blog is measured on four axes, listed in order of importance.
+
+\subsection{Substance reach (most important)}
+
+Are practitioners citing or forwarding the blog? Concretely:
+\begin{itemize}
+\item Citations of specific posts in TEA, Comptroller, TML, TAC
+publications.
+\item Inclusions in regional planning documents.
+\item Practitioner referrals (someone says ``I came here from
+[a colleague's] forward'').
+\item Press coverage that links to the blog by name.
+\end{itemize}
+
+This is the metric I actually care about. It is hard to
+instrument, but the qualitative signal is clear when present.
+
+\subsection{Email list (next most important)}
+
+Subscriber count, weekly open rate, click-through to source
+material. The mailer logs these.
+
+\subsection{Site traffic (least important)}
+
+Plausible Analytics provides cookieless aggregate counts. The
+metric is monitored for diagnostic purposes (a 90\% week-over-week
+drop indicates a broken deploy; a 10x spike indicates the post
+was shared somewhere) but is not optimized for.
+
+\subsection{Personal: am I learning?}
+
+The deepest justification for the blog, beyond reach and audience,
+is that writing it teaches me things about Texas public finance
+that I would not otherwise know. The honest measure is whether,
+six months from now, I can answer questions about MUD finance,
+recapture, or corridor traffic that I could not have answered
+today. If yes, the blog is doing its work even if the audience
+metrics are flat.
+
+% ============================================================
+\section{Long-horizon outputs}
+% ============================================================
+
+\subsection{Year 1 (June 2026 -- May 2027)}
+
+Steady weekly cadence. Two completed pillar series
+(property-tax mechanics, special districts). Two completed
+corridor series (Williamson, Comal). Reach 200 email subscribers.
+First practitioner citation by a state agency. First press
+mention by a corridor newspaper.
+
+\subsection{Year 2 (June 2027 -- May 2028)}
+
+One pillar series and one corridor series per quarter. Reach
+500 email subscribers. First non-Texas reader base (regional
+economists, scholars of state-and-local finance more broadly).
+Begin compiling the explainer posts into a structured
+reference, with the working title \emph{Texas Public Finance:
+A Practitioner's Guide}, distributed as a free PDF.
+
+\subsection{Year 3--5 (June 2028 onward)}
+
+Reach 1{,}000 email subscribers and approach the natural ceiling
+for Texas-only content. Publish the practitioner's guide as a
+formal open-access book through Texas State University Press or
+an analogue. Begin a second blog product (open question whether
+this is national in scope or a separate Texas-focused publication
+with a different editorial voice).
+
+\textbf{Five-year vision in one sentence:} \emph{Southbound 35 is
+the canonical public-facing reference on the institutional plumbing
+of fast-growing Texas, written from inside the academy, for the
+practitioners who run the places.}
+
+% ============================================================
+\section{Implementation checklist}
+% ============================================================
+
+The concrete near-term to-do list, in priority order:
+
+\begin{enumerate}
+\item Normalize front matter on the nine existing posts
+(\texttt{series}, \texttt{kind} fields) per the
+table in \S 7.2. This is the immediate next action and is
+metadata-only.
+
+\item Draft the three queued posts to publication-ready and review
+them on iPad before pushing live:
+\begin{itemize}
+\item Property tax mechanics 101
+\item Eanes ISD recapture
+\item I-35 Austin--SA corridor history
+\end{itemize}
+
+\item Add a series-spine widget to the post layout that
+renders ``Post 3 of 5: Hays County series'' when \texttt{series}
+is present. This is theme work and should be scoped before
+implementation.
+
+\item Draft the first three Williamson County series posts and
+review before the cadence date.
+
+\item Build a manual content-calendar tracker (a small JSON file
+under \texttt{plan/} listing the next twenty Mondays and their
+slotted topic) and review it monthly.
+
+\item Develop a one-page editorial policy document derived from
+\S 6 and \S 9 of this plan, suitable for sharing with collaborators
+and coauthors.
+\end{enumerate}
+
+% ============================================================
+\appendix
+\section{Appendix: front-matter template}
+% ============================================================
+
+The canonical front-matter for new posts is:
+
+\begin{verbatim}
+---
+title: 'Post title in title case'
+date: YYYY-MM-DD
+permalink: /posts/YYYY/MM/slug/   # legacy form; series posts
+                                  # also get /series/slug/post-slug/
+related: false
+categories:
+  - public-finance               # one of three: public-finance,
+                                 # economic-development, detours
+series: hays-county              # slug; omit if no series
+kind: case-study                 # explainer | original-analysis |
+                                 # case-study | commentary | detour
+tags:
+  - Texas
+  - Hays County
+  - public finance
+excerpt: 'One- or two-sentence summary suitable for use as
+  the post deck in print and the social-share description.'
+---
+\end{verbatim}
+
+\end{document}
