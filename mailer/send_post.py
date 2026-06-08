@@ -45,6 +45,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
 import os
 import smtplib
 import sys
@@ -133,11 +134,27 @@ def parse_post(post_slug: str) -> dict:
 
 
 def load_subscribers(csv_path: Path) -> list[dict]:
-    """Read subscribers.csv and return active rows."""
+    """Load active subscribers.
+
+    Preference order:
+      1) If SB35_WORKER_URL and SB35_ADMIN_TOKEN are set in the
+         environment, pull confirmed subscribers from the Cloudflare
+         Worker. This is the production path.
+      2) Otherwise fall back to reading the local subscribers.csv
+         (legacy / offline mode).
+    """
+    worker_url = os.environ.get("SB35_WORKER_URL")
+    admin_token = os.environ.get("SB35_ADMIN_TOKEN")
+
+    if worker_url and admin_token:
+        return _load_from_worker(worker_url, admin_token)
+
     if not csv_path.exists():
         raise FileNotFoundError(
-            f"Subscribers file not found at {csv_path}. "
-            f"Copy subscribers.csv.example and add real entries.")
+            f"Subscribers file not found at {csv_path}, and no "
+            f"SB35_WORKER_URL / SB35_ADMIN_TOKEN set in the environment "
+            f"to pull from the Cloudflare Worker. Either set those, or "
+            f"copy subscribers.csv.example and add real entries.")
     subs: list[dict] = []
     with csv_path.open(encoding="utf-8") as f:
         reader = csv.DictReader(f)
@@ -147,6 +164,35 @@ def load_subscribers(csv_path: Path) -> list[dict]:
                     "email": row["email"].strip(),
                     "name":  (row.get("name") or "").strip(),
                 })
+    return subs
+
+
+def _load_from_worker(worker_url: str, admin_token: str) -> list[dict]:
+    """Pull confirmed subscribers from the Cloudflare Worker /subscribers
+    endpoint. Returns the list in the same shape the CSV loader returns."""
+    import urllib.request
+    import urllib.error
+    url = worker_url.rstrip("/") + "/subscribers"
+    req = urllib.request.Request(url, headers={"X-Admin-Token": admin_token})
+    try:
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            payload = json.loads(resp.read().decode("utf-8"))
+    except urllib.error.HTTPError as e:
+        raise RuntimeError(
+            f"Worker returned HTTP {e.code} when listing subscribers. "
+            f"Check SB35_WORKER_URL and SB35_ADMIN_TOKEN.")
+    except urllib.error.URLError as e:
+        raise RuntimeError(
+            f"Could not reach Worker at {url}: {e.reason}")
+
+    subs: list[dict] = []
+    for rec in payload.get("subscribers", []):
+        if rec.get("status") != "confirmed":
+            continue
+        subs.append({
+            "email": rec.get("email", "").strip(),
+            "name":  (rec.get("name") or "").strip(),
+        })
     return subs
 
 
