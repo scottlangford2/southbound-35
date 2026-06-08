@@ -286,6 +286,235 @@ specific question or moment makes them relevant.
 
 ---
 
+## Women's sports
+
+Women's sports get covered the same way men's sports do — when the
+data supports a clean empirical question. Coverage is not
+afterthought-style or "and also for women" tacked-on; it's parallel
+treatment with its own candidate topics. The blog should not look
+like it covers men's sports six times and women's sports once.
+
+### Women's college basketball
+
+#### 1. The South Carolina dynasty as synthetic control ★
+- **Method:** synthetic control of SC women's basketball under
+  Dawn Staley vs. matched donor pool of peer programs
+- **Setting:** SC WBB 2008–2026 (Staley arrival → present)
+- **Texas hook:** —
+- **Window:** post-tournament (April)
+- **Data path:** Her Hoop Stats; Sports-Reference; kenpom WBB
+- **Notes:** Textbook synthetic-control case. Multiple national
+  titles, sustained #1 KenPom-equivalent ranking, clear coaching
+  treatment date.
+
+#### 2. The Caitlin Clark viewership shock
+- **Method:** event study of WBB regular-season and tournament
+  viewership around Clark's arrival, career, and post-Iowa
+  professional move
+- **Setting:** WBB viewership data, 2021–2026
+- **Texas hook:** —
+- **Window:** anytime
+- **Data path:** Nielsen WBB ratings (where publicly summarized);
+  ESPN public-facing viewership reports
+- **Notes:** A genuine viewership inflection point. Methodologically
+  clean treatment date; data availability is the constraint.
+
+#### 3. UNC women's basketball under Banghart
+- **Method:** descriptive trajectory + matched-program comparison
+  through coaching transitions in the ACC women's basketball era
+- **Setting:** UNC WBB 2019–2026 (Banghart arrival → present)
+- **Texas hook:** — (personal affiliation)
+- **Window:** mid- or post-tournament
+- **Data path:** Her Hoop Stats; Sports-Reference
+- **Notes:** Personal-affiliation topic. Banghart inherited a
+  program with a recent rough stretch; the rebuild is a credible
+  analytical case.
+
+#### 4. UNCW women's basketball and the CAA
+- **Method:** mid-major program analysis; CAA bid economics for
+  women's tournament
+- **Setting:** UNCW WBB + CAA, 2010–2026
+- **Texas hook:** — (personal affiliation)
+- **Window:** mid-tournament or off-season
+- **Data path:** Her Hoop Stats; CAA records
+- **Notes:** Personal-affiliation topic. Mid-major WBB programs
+  are a thin slice of analytical coverage; this is a place where
+  Southbound 35 could be one of very few outlets doing the work.
+
+#### 5. Texas State women's basketball in the Sun Belt
+- **Method:** comparative analysis of Sun Belt women's programs,
+  with TXST as the case
+- **Setting:** TXST WBB + Sun Belt, 2015–2026
+- **Texas hook:** ★★
+- **Window:** mid-season or post-tournament
+- **Data path:** Her Hoop Stats; Sun Belt records
+- **Notes:** Companion to the men's TXST CBB analysis.
+
+#### 6. Transfer portal effects in women's basketball
+- **Method:** within-team year-over-year retention vs. team-strength
+  delta, women's edition
+- **Setting:** D-I women's basketball, 2018–2026
+- **Texas hook:** ★ — Baylor, UT, A&M, TCU all active in the WBB
+  transfer portal
+- **Window:** mid-season or post-tournament
+- **Data path:** Verbal Commits WBB / Her Hoop Stats
+- **Notes:** WBB portal dynamics differ meaningfully from men's;
+  the post can illustrate the gendered patterns directly.
+
+### LPGA
+
+#### 1. Strokes-gained for the LPGA: a partial reconstruction
+- **Method:** strokes-gained decomposition using publicly available
+  LPGA stats (less granular than PGA ShotLink, but workable)
+- **Setting:** LPGA Tour 2019–2026
+- **Texas hook:** ★ — events at Pelican (FL), but check current
+  TX-area events on the LPGA schedule
+- **Window:** mid-season
+- **Data path:** LPGA stats pages; Data Golf LPGA where available
+- **Notes:** Less data than PGA, but the gap is itself interesting.
+  Companion to the PGA strokes-gained explainer.
+
+#### 2. LPGA Hall of Fame points: a unique formula
+- **Method:** descriptive + counterfactual analysis of the points-
+  based HOF formula
+- **Setting:** LPGA HOF data, full archive
+- **Texas hook:** —
+- **Window:** anytime
+- **Data path:** LPGA HOF criteria; player career histories
+- **Notes:** The LPGA HOF formula is genuinely unusual (formal
+  points-based admission, not voted). Pedagogically rich; clean
+  data; distinctive subject.
+
+#### 3. Solheim Cup performance vs individual tournament
+- **Method:** within-player comparison of stroke-play averages vs.
+  match-play performance
+- **Setting:** Solheim Cup history + individual LPGA tournament data
+- **Texas hook:** —
+- **Window:** Solheim Cup year (every 2 years)
+- **Data path:** LPGA stats; Solheim Cup historical
+- **Notes:** Format-effect question that the LPGA setting answers
+  more cleanly than the PGA Ryder Cup analog (smaller fields,
+  more crossover).
+
+### WNBA
+
+#### 1. The Caitlin Clark / Paige Bueckers viewership economics ★
+- **Method:** event study of WNBA viewership around college-to-pro
+  transitions of marquee players
+- **Setting:** WNBA viewership data 2022–2026
+- **Texas hook:** ★ — Dallas Wings are the corridor's WNBA
+  representative
+- **Window:** mid-season or post-Finals
+- **Data path:** Nielsen WNBA ratings; ESPN viewership summaries
+- **Notes:** Sustained, real viewership inflection. Clean treatment
+  dates. High reader interest.
+
+#### 2. WNBA expansion economics
+- **Method:** descriptive + counterfactual analysis of expansion-
+  team viability using past expansion data (Atlanta, Las Vegas)
+- **Setting:** WNBA, 2008–2026
+- **Texas hook:** —
+- **Window:** anytime
+- **Data path:** WNBA financials (where public); attendance and
+  ratings data
+- **Notes:** With multiple expansion teams announced (Golden State
+  Valkyries, Toronto, Portland), the historical record is
+  instructive. Public-finance-adjacent: many WNBA arenas involve
+  public subsidies.
+
+#### 3. WNBA salary cap and labor economics
+- **Method:** comparative analysis of WNBA vs. NBA salary structures
+  and the resulting offshore-playing dynamics
+- **Setting:** WNBA + international leagues, 2010–2026
+- **Texas hook:** —
+- **Window:** off-season (winter)
+- **Data path:** WNBA CBA documents; international league salary
+  reports (less reliable)
+- **Notes:** Labor-economics topic with a sports setting.
+  Methodologically more like a public-finance piece than a sports-
+  analytics piece — fits pillar-3 well.
+
+#### 4. Dallas Wings and the corridor's WNBA team ★
+- **Method:** descriptive economic-impact analysis; attendance vs.
+  team performance; venue economics
+- **Setting:** Dallas Wings (Arlington), 2016–2026
+- **Texas hook:** ★★ — DFW corridor team
+- **Window:** mid-season or off-season
+- **Data path:** Wings public financials; Arlington venue records
+- **Notes:** The corridor angle. Wings have moved arenas; the
+  economics of that decision are publicly accessible.
+
+**Strongest women's-sports candidates:** #1 South Carolina dynasty,
+#2 Caitlin Clark WBB viewership shock, WNBA #1 Clark/Bueckers
+viewership, WNBA #4 Dallas Wings, LPGA #1 strokes-gained partial
+reconstruction.
+
+---
+
+## Olympic sports
+
+Quadrennial events with their own distinctive statistical questions.
+Coverage is event-cycle: most posts cluster in the year before and
+the year after each Summer/Winter Games.
+
+#### 1. Olympic medal-table prediction models
+- **Method:** comparative evaluation of GDP/population/host-status
+  models vs. naive prior cycles; Brier scores on multiple models
+- **Setting:** Olympic medal tables, 1996–2026 (or longer)
+- **Texas hook:** —
+- **Window:** week before opening ceremonies
+- **Data path:** Olympedia medal table archive
+- **Notes:** Annual-cycle slot (or rather, quadrennial). High
+  traffic during the Games. Pedagogically rich.
+
+#### 2. The host-nation medal bump
+- **Method:** event study of medal counts around host-status
+- **Setting:** Olympic medal tables, all hosts 1980–2024
+- **Texas hook:** ★ — LA 2028 is the relevant near-term anchor
+- **Window:** any Games year; especially relevant for LA 2028
+- **Data path:** Olympedia archive
+- **Notes:** Cleanest natural experiment in sports. The host bump
+  is well-documented; the question is whether 2028 LA shows it.
+
+#### 3. Sport additions and removals: viewership and participation
+- **Method:** event-study analysis of sports added (sport climbing,
+  surfing, breakdancing) and the effects on national-level participation
+- **Setting:** Olympic sport program 2020–2028
+- **Texas hook:** —
+- **Window:** post-Games (fall after Olympics)
+- **Data path:** IOC sport program; participation registries
+- **Notes:** Quadrennial slot. Genuinely interesting policy
+  question — does Olympic status drive grassroots adoption?
+
+#### 4. Texas Olympic athletes: the corridor's contribution ★
+- **Method:** descriptive analysis of Texas-trained Olympic athletes
+  by sport and county
+- **Setting:** US Olympic team rosters with training-location data
+- **Texas hook:** ★★★ — corridor athletes specifically
+- **Window:** during Games
+- **Data path:** USOC roster data; training-center locations
+- **Notes:** Direct corridor angle. Texas State, UT, A&M, Rice all
+  produce Olympians; the per-county distribution is empirically
+  interesting and locally relevant.
+
+#### 5. NCAA-Olympic pipeline economics
+- **Method:** comparative analysis of NCAA sports that are major
+  Olympic feeders (swimming, track, gymnastics) vs. those that are
+  not, in terms of program funding and Title IX compliance
+- **Setting:** NCAA D-I sports + Olympic team composition
+- **Texas hook:** ★ — UT swimming, A&M track
+- **Window:** anytime
+- **Data path:** NCAA financial reports; USOC roster history
+- **Notes:** Bridges pillar-3 (statistical analysis) and pillar-4
+  (program evaluation — Title IX as the program). Substantive
+  policy question with a sports empirical setting.
+
+**Strongest Olympic candidates:** #4 (Texas Olympic athletes
+corridor analysis), #1 (medal-table prediction models), #5
+(NCAA-Olympic pipeline) — all credible with currently-public data.
+
+---
+
 ## Texas country music
 
 The data here is harder to access cleanly than sports, but the topics are genuinely distinctive — almost no academic blog covers this space.
