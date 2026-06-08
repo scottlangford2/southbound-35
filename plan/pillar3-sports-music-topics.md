@@ -451,67 +451,90 @@ reconstruction.
 
 ---
 
-## Olympic sports
+## Nonrevenue (Olympic-sport) college programs
 
-Quadrennial events with their own distinctive statistical questions.
-Coverage is event-cycle: most posts cluster in the year before and
-the year after each Summer/Winter Games.
+In college-athletics usage, "Olympic sports" means the nonrevenue
+programs — track and field, swimming, gymnastics, soccer, tennis,
+cross-country, lacrosse, etc. — as distinct from football and
+men's basketball. They are the programs that produce most U.S.
+Olympic athletes; they are also the programs whose economics are
+most precarious in the conference-realignment era.
 
-#### 1. Olympic medal-table prediction models
-- **Method:** comparative evaluation of GDP/population/host-status
-  models vs. naive prior cycles; Brier scores on multiple models
-- **Setting:** Olympic medal tables, 1996–2026 (or longer)
-- **Texas hook:** —
-- **Window:** week before opening ceremonies
-- **Data path:** Olympedia medal table archive
-- **Notes:** Annual-cycle slot (or rather, quadrennial). High
-  traffic during the Games. Pedagogically rich.
+#### 1. NCAA realignment and nonrevenue-program survival ★
+- **Method:** event study of program cuts following conference
+  moves (e.g., Stanford dropping multiple sports in 2020; programs
+  cut at Big-12-to-other and Pac-12-to-Big-12 transition schools)
+- **Setting:** D-I nonrevenue programs, 2010–2026
+- **Texas hook:** ★ — Texas, A&M, TCU, Baylor, Houston all
+  affected by realignment
+- **Window:** off-season (summer)
+- **Data path:** USOPC sport sponsorship database; NCAA EADA reports
+- **Notes:** The most undercovered finance story in college
+  athletics. Conference moves cost specific programs their place
+  in conference championships; some get cut entirely.
 
-#### 2. The host-nation medal bump
-- **Method:** event study of medal counts around host-status
-- **Setting:** Olympic medal tables, all hosts 1980–2024
-- **Texas hook:** ★ — LA 2028 is the relevant near-term anchor
-- **Window:** any Games year; especially relevant for LA 2028
-- **Data path:** Olympedia archive
-- **Notes:** Cleanest natural experiment in sports. The host bump
-  is well-documented; the question is whether 2028 LA shows it.
-
-#### 3. Sport additions and removals: viewership and participation
-- **Method:** event-study analysis of sports added (sport climbing,
-  surfing, breakdancing) and the effects on national-level participation
-- **Setting:** Olympic sport program 2020–2028
-- **Texas hook:** —
-- **Window:** post-Games (fall after Olympics)
-- **Data path:** IOC sport program; participation registries
-- **Notes:** Quadrennial slot. Genuinely interesting policy
-  question — does Olympic status drive grassroots adoption?
-
-#### 4. Texas Olympic athletes: the corridor's contribution ★
-- **Method:** descriptive analysis of Texas-trained Olympic athletes
-  by sport and county
-- **Setting:** US Olympic team rosters with training-location data
-- **Texas hook:** ★★★ — corridor athletes specifically
-- **Window:** during Games
-- **Data path:** USOC roster data; training-center locations
-- **Notes:** Direct corridor angle. Texas State, UT, A&M, Rice all
-  produce Olympians; the per-county distribution is empirically
-  interesting and locally relevant.
-
-#### 5. NCAA-Olympic pipeline economics
-- **Method:** comparative analysis of NCAA sports that are major
-  Olympic feeders (swimming, track, gymnastics) vs. those that are
-  not, in terms of program funding and Title IX compliance
-- **Setting:** NCAA D-I sports + Olympic team composition
-- **Texas hook:** ★ — UT swimming, A&M track
+#### 2. Title IX as program evaluation ★
+- **Method:** longitudinal compliance analysis using participation
+  proportionality and budget-share metrics
+- **Setting:** D-I athletics departments, 2000–2026
+- **Texas hook:** ★ — Texas, A&M, TCU, Baylor, TXST relevant
 - **Window:** anytime
-- **Data path:** NCAA financial reports; USOC roster history
+- **Data path:** NCAA Equity in Athletics Disclosure Act (EADA)
+  filings — fully public
 - **Notes:** Bridges pillar-3 (statistical analysis) and pillar-4
-  (program evaluation — Title IX as the program). Substantive
-  policy question with a sports empirical setting.
+  (program evaluation). Title IX is a 50+ year program with
+  consistent reporting; the dataset is one of the cleanest in
+  sports policy.
 
-**Strongest Olympic candidates:** #4 (Texas Olympic athletes
-corridor analysis), #1 (medal-table prediction models), #5
-(NCAA-Olympic pipeline) — all credible with currently-public data.
+#### 3. Olympic athlete production by university
+- **Method:** descriptive analysis of US Olympic team rosters
+  by college affiliation
+- **Setting:** US Olympic teams, 2000–2024
+- **Texas hook:** ★★ — UT (especially swimming), A&M (track),
+  Rice (track), TXST (track and field)
+- **Window:** post-Games
+- **Data path:** Team USA roster archives; Olympedia
+- **Notes:** Corridor schools punch above their weight in specific
+  sports (UT swimming, A&M track). Per-school analysis lets the
+  blog write about TXST alongside UT and A&M.
+
+#### 4. UNC women's soccer dynasty as synthetic control
+- **Method:** synthetic control of UNC WSOC dominance against a
+  donor pool of peer programs
+- **Setting:** UNC women's soccer, 1981–2026
+- **Texas hook:** — (personal affiliation)
+- **Window:** post-season (December)
+- **Data path:** UNC athletics; College Cup historical
+- **Notes:** Personal-affiliation topic. UNC women's soccer is the
+  most dominant program in college athletics history (22+ national
+  titles). A synthetic-control case study is overdue.
+
+#### 5. The conference transfer portal in nonrevenue sports
+- **Method:** comparative analysis of transfer rates and outcomes
+  across revenue vs. nonrevenue sports
+- **Setting:** D-I athletics, 2018–2026
+- **Texas hook:** ★ — corridor schools active in track/swim portal
+- **Window:** off-season
+- **Data path:** Verbal Commits + sport-specific transfer trackers
+- **Notes:** Portal dynamics differ meaningfully by sport. Less
+  attention than the football/basketball portal; cleaner data
+  in some respects (smaller universes per sport).
+
+#### 6. TXST nonrevenue programs: a Sun Belt case study
+- **Method:** comparative program analysis within the Sun Belt;
+  TXST's Olympic-sport portfolio vs. peer institutions
+- **Setting:** TXST athletics + Sun Belt, 2015–2026
+- **Texas hook:** ★★★ — TXST itself
+- **Window:** mid-academic-year or post-season
+- **Data path:** TXST athletics financials; Sun Belt records
+- **Notes:** TXST has produced Olympic athletes; the program
+  economics relative to peers in the conference are an
+  under-covered local story.
+
+**Strongest nonrevenue-sport candidates:** #1 (realignment and
+program survival), #2 (Title IX as program evaluation), #3
+(Olympic athlete production by university), #6 (TXST nonrevenue
+case study).
 
 ---
 
