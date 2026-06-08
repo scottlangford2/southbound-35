@@ -179,7 +179,24 @@ The strongest candidates are starred at the end of each section.
 - **Data path:** Sports-Reference; NCAA realignment news
 - **Notes:** TXST-specific. Likely high engagement with the home audience.
 
-**Strongest CFB candidates:** #6 (Texas State / G5 → P5), #2 (UT/OU SEC DID), #1 (CFP retrospective annual slot).
+### 7. UNC football: the Belichick era
+- **Method:** synthetic control of program trajectory under a
+  first-time college coaching hire from the NFL
+- **Setting:** UNC football, 2024–2026
+- **Texas hook:** — (PhD-alma-mater affiliation)
+- **Window:** post-season (January)
+- **Data path:** Sports-Reference; recruiting class data from 247
+- **Notes:** Personal-affiliation topic. The Belichick hire is a
+  legitimately novel natural experiment in college coaching;
+  Texas-relevant only by the broader question of NFL coaches in
+  college football.
+
+### 8. UNCW football — never had it
+- **Method:** N/A (UNCW has no football program)
+- **Notes:** Included only to flag the absence; if a football post
+  ever references UNCW it would be by negation.
+
+**Strongest CFB candidates:** #6 (Texas State / G5 → P5), #2 (UT/OU SEC DID), #1 (CFP retrospective annual slot). Personal-affiliation candidate #7 (UNC under Belichick) flagged separately — distinctive natural experiment, but outside the corridor identity.
 
 ---
 
@@ -225,7 +242,47 @@ The strongest candidates are starred at the end of each section.
 - **Data path:** kenpom; NET rankings public
 - **Notes:** Companion to the CFB version.
 
-**Strongest CBB candidates:** #4 (Houston ascent), #1 (March Madness bracket), #5 (UT to SEC).
+### 6. UNC basketball: the post-Roy Williams transition
+- **Method:** descriptive trajectory + matched comparison with peer
+  blue-blood programs through coaching transitions (Coach K → Scheyer
+  at Duke, Boeheim → Autry at Syracuse, Roy → Hubert at UNC)
+- **Setting:** UNC men's basketball 2018–2026
+- **Texas hook:** — (PhD-alma-mater affiliation note in the byline)
+- **Window:** mid-tournament (March) or post-tournament (April)
+- **Data path:** kenpom historical; Sports-Reference
+- **Notes:** Personal-affiliation topic. The Hubert Davis era is
+  legitimately interesting empirically — a national title game
+  appearance, a missed tournament, and inconsistency thereafter.
+
+### 7. UNCW Seahawks and the CAA bid path
+- **Method:** survival analysis of mid-major NCAA tournament
+  appearances; or descriptive of how the CAA's bid pattern
+  shapes mid-major program trajectories
+- **Setting:** UNCW basketball + CAA, 2000–2026
+- **Texas hook:** — (personal affiliation)
+- **Window:** mid-tournament if UNCW is in the bracket; otherwise
+  anytime
+- **Data path:** kenpom; Sports-Reference; NCAA tournament archive
+- **Notes:** Personal-affiliation topic. UNCW has 4-5 tournament
+  appearances since 2000 — enough sample for a small-N case study
+  of a mid-major program riding the CAA's autobid.
+
+### 8. Texas State basketball: a mid-major in the Sun Belt
+- **Method:** comparative analysis of Sun Belt program trajectories,
+  with TXST as the case
+- **Setting:** TXST men's basketball + Sun Belt, 2015–2026
+- **Texas hook:** ★★ — TXST itself, plus the broader Sun Belt
+  question
+- **Window:** mid-season or post-tournament
+- **Data path:** kenpom; Sun Belt records
+- **Notes:** TXST-specific. Companion to the CFB G5→P5 piece.
+  Likely high engagement with the home audience.
+
+**Strongest CBB candidates:** #4 (Houston ascent), #1 (March Madness
+bracket), #5 (UT to SEC), #8 (TXST mid-major analysis). Personal-
+affiliation candidates (#6 UNC, #7 UNCW) flagged separately —
+out-of-scope for the Texas corridor identity, but available when a
+specific question or moment makes them relevant.
 
 ---
 
