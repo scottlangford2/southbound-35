@@ -75,12 +75,14 @@ from its markdown instead.
 Re-sending the same post is blocked unless you pass `--resend` (guards against
 double-sends). Sends are throttled (~1.5s apart) to stay under SMTP limits.
 
-## New-subscriber notifications
+## Subscriber-change notifications
 
-`notify_new_subscribers.py` emails you whenever someone new joins. It polls the
-Worker's `/export`, diffs against `notified.json`, and sends a summary over SMTP
-to `NOTIFY_TO` (defaults to your address). First run seeds a silent baseline so
-an existing list doesn't all arrive as "new".
+`notify_new_subscribers.py` emails you whenever someone joins **or leaves**. It
+polls the Worker's `/export`, compares against a stored snapshot of the
+last-seen active list (`subscriber_state.json`), and emails a summary of
+additions (new subscribers) and departures (unsubscribes) over SMTP to
+`NOTIFY_TO` (defaults to your address). First run seeds a silent baseline so an
+existing list doesn't all arrive as "new".
 
 ```bash
 python3 -m mailer.notify_new_subscribers --dry-run          # preview

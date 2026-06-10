@@ -34,7 +34,7 @@ for d in (LOGS_DIR, PREVIEW_DIR):
 # ---- Runtime data ----------------------------------------------------------
 SUBSCRIBERS_CSV = DATA_DIR / "subscribers.csv"
 SENT_LOG = DATA_DIR / "sent.json"   # records which post slugs have been sent
-NOTIFIED_JSON = DATA_DIR / "notified.json"  # emails already announced to the operator
+NOTIFY_STATE = DATA_DIR / "subscriber_state.json"  # snapshot of last-seen active emails
 
 # ---- Blog source -----------------------------------------------------------
 SITE_BASE = os.environ.get(
