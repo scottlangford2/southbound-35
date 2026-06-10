@@ -1,307 +1,350 @@
-"""
-Southbound 35 — Self-hosted mailer
+#!/usr/bin/env python3
+"""Send a Southbound 35 post to the subscriber list, one personal email each.
 
-Sends a blog-post notification email to each subscriber listed in
-`subscribers.csv`, one at a time, via SMTP (Gmail by default). Each
-recipient gets a personalized "Hi {name}" greeting, an excerpt of the
-post, and a link to the live URL.
-
-This is a hand-managed mailing list — no third party between you and
-your subscribers. The list lives in a local CSV file. Subscribers and
-unsubscribes are processed by hand. Suitable up to a few hundred
-addresses; beyond that, switch to a hosted service.
+By default it pulls the *published* post HTML from the live site (so the email
+matches what readers see), strips the article body, rewrites relative links to
+absolute, and wraps it in a clean email template with a per-subscriber
+unsubscribe link. Sends individually (not BCC) over the existing SMTP creds.
 
 Usage:
-    # First time: copy the env template
-    cp .env.example .env
-    # Edit .env to add SMTP_USER and SMTP_APP_PASSWORD (Gmail app password)
+    python3 -m mailer.send_post <slug | permalink-path | url | file.md> [options]
 
-    # Send the latest post
-    python send_post.py --post 2026-05-25-hays-county-governance
+Options:
+    --test EMAIL     Send only to EMAIL (a real render); does not mark as sent.
+    --dry-run        Render to a preview .html file and exit; send nothing.
+    --resend         Send even if this post is already in the sent log.
+    --subject "..."  Override the subject line (default: the post title).
+    --local          Render from the local markdown file instead of live HTML
+                     (use for drafts not yet published).
+    --limit N        Send to at most N subscribers (testing).
 
-    # Or pass the post slug from the _posts filename
-    python send_post.py --post 2026-05-18-hays-county-schools --dry-run
-
-    # Send to a single test address before the real run
-    python send_post.py --post 2026-05-25-hays-county-governance \\
-        --only test@example.com
-
-CSV format (subscribers.csv, comma-separated):
-    email,name,status,subscribed_on
-    jane@example.com,Jane Doe,active,2026-05-01
-    john@example.com,,active,2026-05-03
-
-`status` should be `active` or `unsubscribed`. The script skips any
-row whose status is not `active`. `name` is optional; if missing the
-greeting reads "Hi there,".
-
-Authentication: this uses SMTP with an app password, not OAuth. Create
-a Gmail app password at https://myaccount.google.com/apppasswords and
-put it in `.env` as SMTP_APP_PASSWORD. The script never touches your
-real account password.
+Examples:
+    python3 -m mailer.send_post hays-county-governance --dry-run
+    python3 -m mailer.send_post hays-county-governance --test you@example.com
+    python3 -m mailer.send_post hays-county-governance
 """
 
 from __future__ import annotations
 
 import argparse
 import csv
+import html as html_lib
 import json
-import os
+import re
 import smtplib
 import sys
 import time
+from datetime import datetime, timezone
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from email.utils import formataddr, formatdate, make_msgid
 from pathlib import Path
 
-try:
-    import yaml  # PyYAML, used to parse Jekyll front matter
-except ImportError:
-    print("Missing dependency. Run: pip install -r requirements.txt", file=sys.stderr)
-    sys.exit(1)
+import requests
+from bs4 import BeautifulSoup
+
+from . import config
+
+HOST = "https://scottlangford2.github.io"  # for rewriting root-relative URLs
+STRIP_SELECTORS = [
+    "script", "style", ".series-spine", ".page__share", ".page__comments",
+    ".page__related", ".pagination", "nav", ".page__taxonomy",
+]
 
 
-# ── Configuration ─────────────────────────────────────────────────────────────
-
-REPO_ROOT       = Path(__file__).resolve().parents[1]
-SUBSCRIBERS_CSV = Path(__file__).resolve().parent / "subscribers.csv"
-POSTS_DIR       = Path(os.environ.get("POSTS_DIR",
-                                       Path.home() / "scott_langford" / "_posts"))
-SITE_BASE_URL   = os.environ.get("SITE_BASE_URL",
-                                  "https://scottlangford2.github.io/scott_langford")
-
-SMTP_HOST       = os.environ.get("SMTP_HOST", "smtp.gmail.com")
-SMTP_PORT       = int(os.environ.get("SMTP_PORT", "587"))
-SMTP_USER       = os.environ.get("SMTP_USER")           # e.g. you@gmail.com
-SMTP_APP_PW     = os.environ.get("SMTP_APP_PASSWORD")
-FROM_NAME       = os.environ.get("FROM_NAME", "Scott Langford")
-REPLY_TO        = os.environ.get("REPLY_TO", SMTP_USER)
-THROTTLE_SECONDS = float(os.environ.get("THROTTLE_SECONDS", "2.0"))
+# --------------------------------------------------------------------------- #
+# Post resolution
+# --------------------------------------------------------------------------- #
+def find_local_post(arg: str) -> Path | None:
+    p = Path(arg).expanduser()
+    if p.is_file():
+        return p
+    # treat as slug: match against _posts filenames
+    matches = sorted(config.POSTS_DIR.glob(f"*{arg}*.md"))
+    return matches[-1] if matches else None
 
 
-# ── Helpers ───────────────────────────────────────────────────────────────────
-
-def load_env(env_path: Path = Path(__file__).resolve().parent / ".env") -> None:
-    """Minimal .env loader. No external dependency."""
-    if not env_path.exists():
-        return
-    for line in env_path.read_text().splitlines():
-        line = line.strip()
-        if not line or line.startswith("#") or "=" not in line:
-            continue
-        key, _, val = line.partition("=")
-        os.environ.setdefault(key.strip(), val.strip().strip("'\""))
-
-
-def parse_post(post_slug: str) -> dict:
-    """Locate a post by slug (e.g. '2026-05-25-hays-county-governance'),
-    parse the YAML front matter, and return a dict with title, url,
-    permalink, excerpt, and full body markdown."""
-    path = POSTS_DIR / f"{post_slug}.md"
-    if not path.exists():
-        # fall back: look for any file matching the slug
-        matches = list(POSTS_DIR.glob(f"*{post_slug}*.md"))
-        if len(matches) == 1:
-            path = matches[0]
-        else:
-            raise FileNotFoundError(
-                f"No post found for slug {post_slug!r} in {POSTS_DIR}")
-
-    text = path.read_text(encoding="utf-8")
-    if not text.startswith("---"):
-        raise ValueError(f"Post {path.name} has no YAML front matter")
-
-    _, fm_block, body = text.split("---", 2)
-    front = yaml.safe_load(fm_block)
-    body = body.strip()
-
-    # First non-empty paragraph as the excerpt
-    paragraphs = [p.strip() for p in body.split("\n\n") if p.strip()]
-    excerpt_md = paragraphs[0] if paragraphs else ""
-
-    permalink = front.get("permalink", f"/{path.stem}/")
-    url = SITE_BASE_URL.rstrip("/") + permalink
-
-    return {
-        "title":    front.get("title", "(untitled)"),
-        "url":      url,
-        "permalink": permalink,
-        "date":     front.get("date"),
-        "excerpt":  excerpt_md,
-        "body":     body,
-        "path":     path,
-    }
+def parse_front_matter(md_text: str) -> tuple[dict, str]:
+    if not md_text.startswith("---"):
+        return {}, md_text
+    end = md_text.find("\n---", 3)
+    if end == -1:
+        return {}, md_text
+    fm_block = md_text[3:end]
+    body = md_text[end + 4:].lstrip("\n")
+    fm: dict[str, str] = {}
+    for line in fm_block.splitlines():
+        m = re.match(r"^([A-Za-z0-9_]+)\s*:\s*(.*)$", line)
+        if m:
+            fm[m.group(1)] = m.group(2).strip().strip("'\"")
+    return fm, body
 
 
-def load_subscribers(csv_path: Path) -> list[dict]:
-    """Load active subscribers.
+def resolve_post(arg: str):
+    """Return (title, date_str, url, slug, local_path_or_None)."""
+    if arg.startswith("http"):
+        url = arg
+        slug = url.rstrip("/").split("/")[-1]
+        return None, None, url, slug, None
 
-    Preference order:
-      1) If SB35_WORKER_URL and SB35_ADMIN_TOKEN are set in the
-         environment, pull confirmed subscribers from the Cloudflare
-         Worker. This is the production path.
-      2) Otherwise fall back to reading the local subscribers.csv
-         (legacy / offline mode).
-    """
-    worker_url = os.environ.get("SB35_WORKER_URL")
-    admin_token = os.environ.get("SB35_ADMIN_TOKEN")
+    local = find_local_post(arg)
+    if local is None:
+        raise SystemExit(f"No post found matching {arg!r} in {config.POSTS_DIR}")
 
-    if worker_url and admin_token:
-        return _load_from_worker(worker_url, admin_token)
-
-    if not csv_path.exists():
-        raise FileNotFoundError(
-            f"Subscribers file not found at {csv_path}, and no "
-            f"SB35_WORKER_URL / SB35_ADMIN_TOKEN set in the environment "
-            f"to pull from the Cloudflare Worker. Either set those, or "
-            f"copy subscribers.csv.example and add real entries.")
-    subs: list[dict] = []
-    with csv_path.open(encoding="utf-8") as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            if (row.get("status") or "active").strip().lower() == "active":
-                subs.append({
-                    "email": row["email"].strip(),
-                    "name":  (row.get("name") or "").strip(),
-                })
-    return subs
+    fm, _ = parse_front_matter(local.read_text(encoding="utf-8"))
+    permalink = fm.get("permalink", "")
+    title = fm.get("title", local.stem)
+    date_str = fm.get("date", "")
+    slug = local.stem.split("-", 3)[-1]  # strip YYYY-MM-DD-
+    if permalink:
+        url = config.SITE_BASE + "/" + permalink.strip("/") + "/"
+    else:
+        url = config.SITE_BASE  # fallback; live fetch will still work if given
+    return title, date_str, url, slug, local
 
 
-def _load_from_worker(worker_url: str, admin_token: str) -> list[dict]:
-    """Pull confirmed subscribers from the Cloudflare Worker /subscribers
-    endpoint. Returns the list in the same shape the CSV loader returns."""
-    import urllib.request
-    import urllib.error
-    url = worker_url.rstrip("/") + "/subscribers"
-    req = urllib.request.Request(url, headers={"X-Admin-Token": admin_token})
+# --------------------------------------------------------------------------- #
+# Content rendering
+# --------------------------------------------------------------------------- #
+def rewrite_relative_urls(soup: BeautifulSoup) -> None:
+    for tag in soup.find_all(["a", "img"]):
+        for attr in ("href", "src"):
+            v = tag.get(attr)
+            if v and v.startswith("/"):
+                tag[attr] = HOST + v
+
+
+def content_from_live(url: str) -> tuple[str, str, str]:
+    resp = requests.get(url, timeout=30)
+    resp.raise_for_status()
+    soup = BeautifulSoup(resp.text, "html.parser")
+
+    title = ""
+    og = soup.select_one('meta[property="og:title"]')
+    if og:
+        title = og.get("content", "")
+    if not title:
+        h1 = soup.select_one("h1.page__title")
+        title = h1.get_text(strip=True) if h1 else ""
+
+    date_str = ""
+    t = soup.select_one('meta[property="article:published_time"]')
+    if t:
+        date_str = t.get("content", "")[:10]
+
+    nodes = soup.select(".page__content")
+    if not nodes:
+        raise SystemExit(f"Could not find .page__content in {url}")
+    content = max(nodes, key=lambda n: len(n.get_text()))
+    for sel in STRIP_SELECTORS:
+        for el in content.select(sel):
+            el.decompose()
+    rewrite_relative_urls(content)
+    inner = content.decode_contents()
+    return title, date_str, inner
+
+
+def content_from_local(local: Path) -> str:
+    import markdown
+    fm, body = parse_front_matter(local.read_text(encoding="utf-8"))
+    # Drop Liquid tags python-markdown can't handle.
+    body = re.sub(r"\{%.*?%\}", "", body)
+    body = re.sub(r"\{\{.*?\}\}", "", body)
+    inner = markdown.markdown(body, extensions=["extra", "sane_lists", "smarty"])
+    soup = BeautifulSoup(inner, "html.parser")
+    rewrite_relative_urls(soup)
+    return str(soup)
+
+
+def pretty_date(date_str: str) -> str:
     try:
-        with urllib.request.urlopen(req, timeout=15) as resp:
-            payload = json.loads(resp.read().decode("utf-8"))
-    except urllib.error.HTTPError as e:
-        raise RuntimeError(
-            f"Worker returned HTTP {e.code} when listing subscribers. "
-            f"Check SB35_WORKER_URL and SB35_ADMIN_TOKEN.")
-    except urllib.error.URLError as e:
-        raise RuntimeError(
-            f"Could not reach Worker at {url}: {e.reason}")
-
-    subs: list[dict] = []
-    for rec in payload.get("subscribers", []):
-        if rec.get("status") != "confirmed":
-            continue
-        subs.append({
-            "email": rec.get("email", "").strip(),
-            "name":  (rec.get("name") or "").strip(),
-        })
-    return subs
+        return datetime.fromisoformat(date_str.replace("Z", "+00:00")).strftime("%B %-d, %Y")
+    except ValueError:
+        pass
+    try:
+        return datetime.strptime(date_str[:10], "%Y-%m-%d").strftime("%B %-d, %Y")
+    except ValueError:
+        return date_str
 
 
-def render_email(post: dict, name: str) -> tuple[str, str]:
-    """Return (plain_text, html) bodies for one subscriber."""
-    greeting = f"Hi {name.split()[0]}," if name else "Hi there,"
+def build_html(title: str, date_str: str, content_html: str, url: str, unsub_url: str) -> str:
+    nice_date = pretty_date(date_str) if date_str else ""
+    return f"""\
+<!doctype html>
+<html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#f4f4f2;">
+<div style="max-width:640px;margin:0 auto;padding:24px 20px;background:#ffffff;
+            font-family:Georgia,'Times New Roman',serif;color:#1a1a1a;line-height:1.6;">
+  <div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;font-size:12px;
+              letter-spacing:.08em;text-transform:uppercase;color:#006BA2;">
+    Southbound 35
+  </div>
+  <h1 style="font-size:24px;line-height:1.25;margin:8px 0 4px;">{html_lib.escape(title)}</h1>
+  <div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;font-size:13px;
+              color:#777;margin-bottom:6px;">{nice_date}</div>
+  <p style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;font-size:13px;margin:0 0 18px;">
+    <a href="{url}" style="color:#006BA2;">Read this online</a>
+  </p>
+  <hr style="border:0;border-top:1px solid #e2e2e0;margin:0 0 22px;">
+  <div style="font-size:17px;">
+    {content_html}
+  </div>
+  <hr style="border:0;border-top:1px solid #e2e2e0;margin:28px 0 14px;">
+  <div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;font-size:12px;color:#888;">
+    <p style="margin:0 0 8px;">You're receiving this because you subscribed to Southbound 35,
+    a newsletter on public finance and economic development along the Texas I-35 corridor.</p>
+    <p style="margin:0;"><a href="{unsub_url}" style="color:#888;">Unsubscribe</a>
+    &nbsp;·&nbsp; Just reply to reach me directly.</p>
+  </div>
+</div>
+</body></html>"""
 
-    plain = (
-        f"{greeting}\n\n"
-        f"New post on Southbound 35:\n\n"
-        f"    {post['title']}\n"
-        f"    {post['url']}\n\n"
-        f"{post['excerpt']}\n\n"
-        f"Read the full post:\n  {post['url']}\n\n"
-        f"— Scott\n\n"
-        f"---\n"
-        f"You're receiving this because you subscribed to Southbound 35.\n"
-        f"To unsubscribe, reply with 'unsubscribe' and I'll remove you the same day."
+
+def build_text(title: str, url: str, unsub_url: str) -> str:
+    return (
+        f"Southbound 35 — {title}\n\n"
+        f"Read this post online:\n{url}\n\n"
+        f"(This email's HTML version has the full text. If you only see this, "
+        f"open the link above.)\n\n"
+        f"---\nYou subscribed to Southbound 35. Unsubscribe: {unsub_url}\n"
+        f"Or just reply to reach me directly.\n"
     )
 
-    html = f"""\
-<html><body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.55; color: #1a1a1a; max-width: 620px; margin: 24px auto; padding: 0 16px;">
-  <p>{greeting}</p>
-  <p>New post on <em>Southbound 35</em>:</p>
-  <h2 style="margin-top: 0.5em;"><a href="{post['url']}" style="color: #006BA2; text-decoration: none;">{post['title']}</a></h2>
-  <p style="color: #333;">{post['excerpt']}</p>
-  <p><a href="{post['url']}" style="display: inline-block; background: #006BA2; color: white; padding: 8px 16px; border-radius: 4px; text-decoration: none;">Read the full post →</a></p>
-  <p style="margin-top: 2em;">— Scott</p>
-  <hr style="border: none; border-top: 1px solid #ddd; margin: 2em 0 1em;">
-  <p style="font-size: 0.85em; color: #888;">
-    You're receiving this because you subscribed to <em>Southbound 35</em>.
-    To unsubscribe, reply with "unsubscribe" and I'll remove you the same day.
-  </p>
-</body></html>
-"""
-    return plain, html
+
+# --------------------------------------------------------------------------- #
+# Subscribers + sent log
+# --------------------------------------------------------------------------- #
+def load_subscribers() -> list[dict]:
+    if not config.SUBSCRIBERS_CSV.exists():
+        raise SystemExit(
+            f"No subscriber list at {config.SUBSCRIBERS_CSV}. "
+            f"Run: python3 -m mailer.sync_subscribers"
+        )
+    with config.SUBSCRIBERS_CSV.open(encoding="utf-8") as fh:
+        return [row for row in csv.DictReader(fh) if row.get("email")]
 
 
-def send_one(server: smtplib.SMTP, to_email: str, to_name: str,
-             post: dict, dry_run: bool = False) -> None:
-    """Send the post email to a single subscriber."""
-    plain, html = render_email(post, to_name)
+def load_sent() -> dict:
+    if config.SENT_LOG.exists():
+        return json.loads(config.SENT_LOG.read_text())
+    return {}
+
+
+def save_sent(log: dict) -> None:
+    config.SENT_LOG.write_text(json.dumps(log, indent=2))
+
+
+# --------------------------------------------------------------------------- #
+# Sending
+# --------------------------------------------------------------------------- #
+def make_message(to_email: str, subject: str, html_body: str, text_body: str, unsub_url: str):
     msg = MIMEMultipart("alternative")
-    msg["Subject"] = post["title"]
-    msg["From"]    = f"{FROM_NAME} <{SMTP_USER}>"
-    msg["To"]      = f"{to_name} <{to_email}>" if to_name else to_email
-    msg["Reply-To"] = REPLY_TO
-    msg.attach(MIMEText(plain, "plain"))
-    msg.attach(MIMEText(html, "html"))
+    msg["Subject"] = subject
+    msg["From"] = formataddr((config.FROM_NAME, config.FROM_EMAIL))
+    msg["To"] = to_email
+    msg["Reply-To"] = config.REPLY_TO
+    msg["Date"] = formatdate(localtime=True)
+    msg["Message-ID"] = make_msgid()
+    # One-click unsubscribe for Gmail/Apple Mail.
+    msg["List-Unsubscribe"] = f"<{unsub_url}>"
+    msg["List-Unsubscribe-Post"] = "List-Unsubscribe=One-Click"
+    msg.attach(MIMEText(text_body, "plain", "utf-8"))
+    msg.attach(MIMEText(html_body, "html", "utf-8"))
+    return msg
 
-    if dry_run:
-        print(f"  [dry-run] would send to {to_email}")
-        return
 
-    server.sendmail(SMTP_USER, [to_email], msg.as_string())
-    print(f"  sent → {to_email}")
-
-
-# ── Main ──────────────────────────────────────────────────────────────────────
-
-def main() -> None:
-    load_env()
-
+def main() -> int:
     ap = argparse.ArgumentParser(description="Send a Southbound 35 post to subscribers.")
-    ap.add_argument("--post", required=True,
-                    help="Post slug (filename without .md), e.g. "
-                         "2026-05-25-hays-county-governance")
-    ap.add_argument("--only", help="Send only to this single email address (testing)")
-    ap.add_argument("--dry-run", action="store_true",
-                    help="Render and log without sending")
+    ap.add_argument("post", help="slug, permalink path, full URL, or local .md path")
+    ap.add_argument("--test", metavar="EMAIL", help="send only to this address; don't mark sent")
+    ap.add_argument("--dry-run", action="store_true", help="render preview and exit")
+    ap.add_argument("--resend", action="store_true", help="send even if already sent")
+    ap.add_argument("--subject", help="override subject line")
+    ap.add_argument("--local", action="store_true", help="render from local markdown")
+    ap.add_argument("--limit", type=int, help="cap number of recipients")
     args = ap.parse_args()
 
-    if not args.dry_run and not (SMTP_USER and SMTP_APP_PW):
-        print("ERROR: SMTP_USER and SMTP_APP_PASSWORD must be set in .env "
-              "(or pass --dry-run).", file=sys.stderr)
-        sys.exit(1)
+    title, date_str, url, slug, local = resolve_post(args.post)
 
-    post = parse_post(args.post)
-    print(f"\nPost: {post['title']}")
-    print(f"URL:  {post['url']}\n")
+    if args.local:
+        if local is None:
+            raise SystemExit("--local needs a local post (give a slug or .md path).")
+        content_html = content_from_local(local)
+    else:
+        live_title, live_date, content_html = content_from_live(url)
+        title = title or live_title
+        date_str = date_str or live_date
 
-    subs = load_subscribers(SUBSCRIBERS_CSV)
-    if args.only:
-        subs = [s for s in subs if s["email"] == args.only]
-        if not subs:
-            # Allow ad-hoc test send to an address not in the list
-            subs = [{"email": args.only, "name": ""}]
-            print(f"(Test send to {args.only} — not in subscribers.csv)")
+    subject = args.subject or title
 
-    print(f"Sending to {len(subs)} subscriber(s) "
-          f"{'(dry run)' if args.dry_run else 'live'}.\n")
+    # --- dry run: render with a placeholder unsubscribe link and stop ---
+    if args.dry_run:
+        preview_unsub = config.unsubscribe_url("PREVIEW-TOKEN") if config.WORKER_BASE_URL else "#unsubscribe"
+        html_body = build_html(title, date_str, content_html, url, preview_unsub)
+        out = config.PREVIEW_DIR / f"{slug}.html"
+        out.write_text(html_body, encoding="utf-8")
+        subs = []
+        try:
+            subs = load_subscribers()
+        except SystemExit:
+            pass
+        print(f"DRY RUN — wrote preview: {out}")
+        print(f"Subject: {subject}")
+        print(f"Would send to {len(subs)} subscriber(s).")
+        return 0
 
-    server = None
-    if not args.dry_run:
-        server = smtplib.SMTP(SMTP_HOST, SMTP_PORT)
-        server.starttls()
-        server.login(SMTP_USER, SMTP_APP_PW)
+    config.require_smtp()
 
-    try:
-        for i, s in enumerate(subs, 1):
-            send_one(server, s["email"], s["name"], post, dry_run=args.dry_run)
-            if not args.dry_run and i < len(subs):
-                time.sleep(THROTTLE_SECONDS)
-    finally:
-        if server is not None:
-            server.quit()
+    # --- recipients ---
+    if args.test:
+        recipients = [{"email": args.test, "token": "TEST-TOKEN"}]
+    else:
+        sent = load_sent()
+        if slug in sent and not args.resend:
+            raise SystemExit(
+                f"Post {slug!r} already sent on {sent[slug].get('sent_at')}. "
+                f"Use --resend to send again."
+            )
+        recipients = load_subscribers()
+        if args.limit:
+            recipients = recipients[: args.limit]
+        if not recipients:
+            raise SystemExit("No subscribers to send to.")
 
-    print(f"\nDone. {len(subs)} email(s) {'simulated' if args.dry_run else 'sent'}.")
+    print(f"Sending {subject!r} to {len(recipients)} recipient(s)...")
+    sent_count = 0
+    with smtplib.SMTP(config.SMTP_HOST, config.SMTP_PORT, timeout=30) as s:
+        s.starttls()
+        s.login(config.SMTP_USER, config.SMTP_PASS)
+        for i, sub in enumerate(recipients, 1):
+            email = sub["email"]
+            unsub = config.unsubscribe_url(sub.get("token", "")) if config.WORKER_BASE_URL else "#"
+            html_body = build_html(title, date_str, content_html, url, unsub)
+            text_body = build_text(title, url, unsub)
+            msg = make_message(email, subject, html_body, text_body, unsub)
+            try:
+                s.send_message(msg)
+                sent_count += 1
+                print(f"  [{i}/{len(recipients)}] sent -> {email}")
+            except Exception as e:  # noqa: BLE001
+                print(f"  [{i}/{len(recipients)}] FAILED -> {email}: {e}")
+            if i < len(recipients):
+                time.sleep(config.SEND_THROTTLE_SEC)
+
+    if not args.test:
+        sent = load_sent()
+        sent[slug] = {
+            "title": title,
+            "url": url,
+            "sent_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "count": sent_count,
+        }
+        save_sent(sent)
+
+    print(f"Done. Sent {sent_count}/{len(recipients)}.")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

@@ -1,110 +1,109 @@
-# Southbound 35 — Mailer
+# Southbound 35 — mailer
 
-Self-hosted, hand-managed mailing list for the Southbound 35 blog. Sends each post as an **individual email** to every active subscriber — no third-party newsletter service between you and your readers.
+Sends each published post to the subscriber list, one personal email per
+recipient (not a BCC blast), from this machine over the existing
+lookoutanalytics SMTP creds. Pairs with `../subscribe-worker/`, which captures
+signups; this side pulls that list and does the sending.
 
-## What it does
+## Layout
 
-- Reads `subscribers.csv` (kept locally, never committed)
-- Parses the latest Jekyll post by slug
-- Sends one personalized email per subscriber via SMTP
-- Throttles between sends to stay under SMTP rate limits
-
-Suitable up to a few hundred subscribers. Past that, migrate to a hosted service.
-
-## One-time setup (on the machine that will actually send)
-
-The recommended setup is your desktop — the machine you use for blog work. Once configured, sending a post is one command.
-
-### Quick setup
-
-```bash
-# Clone the repo (if you don't already have it)
-git clone https://github.com/scottlangford2/southbound-35.git
-cd southbound-35/mailer
-
-# Run the setup script — creates a virtualenv, installs deps,
-# and copies the .env and subscribers.csv templates.
-bash setup.sh
+```
+mailer/
+├── config.py            paths, SMTP + Worker config (reads two .env files)
+├── sync_subscribers.py  pull active list from the Worker  -> local CSV
+└── send_post.py         render a post and send it to subscribers
 ```
 
-The script prints next-step instructions at the end.
+Private runtime data (never in this public repo) lives in
+`~/lookout_local/southbound35/`:
 
-### Manual setup (if you skip setup.sh)
-
-1. **Install dependencies**
-   ```bash
-   cd mailer
-   python3 -m venv .venv
-   source .venv/bin/activate
-   pip install -r requirements.txt
-   ```
-
-2. **Create a Gmail App Password** at [myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords). You need 2-step verification enabled on the account.
-
-3. **Configure environment**
-   ```bash
-   cp .env.example .env
-   # Edit .env — fill in SMTP_USER and SMTP_APP_PASSWORD
-   ```
-
-4. **Create the subscribers list**
-   ```bash
-   cp subscribers.csv.example subscribers.csv
-   # Edit subscribers.csv — replace example entries with real ones
-   ```
-
-`.env` and `subscribers.csv` are both in `.gitignore` and will never be committed.
-
-## Sending a post
-
-```bash
-# Dry run — prints what would happen without sending
-python send_post.py --post 2026-05-25-hays-county-governance --dry-run
-
-# Real send to all active subscribers
-python send_post.py --post 2026-05-25-hays-county-governance
-
-# Test send to one address (yourself)
-python send_post.py --post 2026-05-25-hays-county-governance \
-    --only you@example.com
+```
+.env              Worker URL + admin key + From/Reply-To overrides
+subscribers.csv   synced list (email, token, created_at)
+sent.json         which post slugs have gone out
+preview/          --dry-run output
+logs/
 ```
 
-The `--post` argument is the Jekyll post slug — typically the `_posts/` filename without `.md`. The script will also accept a partial slug if it uniquely matches one post.
+## Setup (one time)
 
-## Managing the list
+1. SMTP creds are already shared from `~/lookout_local/research_scraper/.env`
+   (`SMTP_USER`, `SMTP_PASS`, etc.) — the same ones the digests use. Nothing to do.
 
-- **New subscriber**: open `subscribers.csv` and add a row.
-- **Unsubscribe**: change the row's `status` from `active` to `unsubscribed`. Don't delete — keeping the row prevents accidental re-adds and provides an audit trail.
-- The CSV is human-editable. Sort it however you like.
+2. `~/lookout_local/southbound35/.env` holds the Worker config:
 
-## Email format
+   ```ini
+   WORKER_BASE_URL=https://southbound35-subscribe.southbound35.workers.dev
+   ADMIN_KEY=<the same long string set as the Worker secret>
+   # optional overrides:
+   # NEWSLETTER_FROM=you@yourdomain
+   # NEWSLETTER_FROM_NAME=Scott Langford
+   # NEWSLETTER_REPLY_TO=scottlangford@txstate.edu
+   ```
 
-Each subscriber gets:
-- A personalized greeting (`Hi {first-name},`)
-- The post title as the subject line
-- The first paragraph as the email body excerpt
-- A "Read the full post →" button linking to the live URL
-- A clear unsubscribe instruction at the bottom
+3. Install deps (most are already present):
 
-Both plain-text and HTML versions are generated; the recipient's mail client picks whichever it prefers.
+   ```bash
+   pip3 install -r ~/southbound-35/mailer/requirements.txt
+   ```
 
-## Sending limits and deliverability
+## Usage
 
-- **Gmail SMTP**: hard limit of ~500 outbound messages per 24 hours for personal accounts, ~2,000 for Workspace. The script throttles by default at 2 seconds between sends; adjust `THROTTLE_SECONDS` in `.env`.
-- **Deliverability**: sending from a Gmail account using a real human's identity is reasonably reliable for small lists. If recipients start reporting messages going to spam, set up [SPF/DKIM for your domain](https://support.google.com/a/answer/33786) and send from a custom address.
-- **Per-recipient send**: the script uses `server.sendmail()` with a single recipient per call. Each subscriber receives an email addressed only to them — no BCC, no list disclosure.
+Run from the repo root so the package imports resolve:
 
-## Files
+```bash
+cd ~/southbound-35
 
-| File | Description |
-|------|-------------|
-| `send_post.py` | The mailer script |
-| `requirements.txt` | Python dependencies (just PyYAML) |
-| `.env.example` | Template for SMTP credentials and paths |
-| `subscribers.csv.example` | Template for the list |
-| `.env` | (not committed) Real SMTP credentials |
-| `subscribers.csv` | (not committed) Real subscriber list |
+# 1. Pull the latest list
+python3 -m mailer.sync_subscribers
 
-## Why hand-managed
+# 2. Preview an email without sending (writes preview/<slug>.html)
+python3 -m mailer.send_post hays-county-governance --dry-run
 
-For a blog at this size, a hosted service costs $9/mo and adds a vendor between you and your readers. A self-managed list costs nothing, exposes the subscriber's email to no third party, and forces you to know who your readers are. Migrate when the list outgrows the workflow — not before.
+# 3. Send a test only to yourself
+python3 -m mailer.send_post hays-county-governance --test you@example.com
+
+# 4. Send to everyone
+python3 -m mailer.send_post hays-county-governance
+```
+
+`post` can be a slug (`hays-county-governance`), a permalink path, a full URL,
+or a local `.md` path. By default the email body is pulled from the **published**
+live page so it matches the site; use `--local` to render an unpublished draft
+from its markdown instead.
+
+Re-sending the same post is blocked unless you pass `--resend` (guards against
+double-sends). Sends are throttled (~1.5s apart) to stay under SMTP limits.
+
+## Subscriber-change notifications
+
+`notify_new_subscribers.py` emails you whenever someone joins **or leaves**. It
+polls the Worker's `/export`, compares against a stored snapshot of the
+last-seen active list (`subscriber_state.json`), and emails a summary of
+additions (new subscribers) and departures (unsubscribes) over SMTP to
+`NOTIFY_TO` (defaults to your address). First run seeds a silent baseline so an
+existing list doesn't all arrive as "new".
+
+```bash
+python3 -m mailer.notify_new_subscribers --dry-run          # preview
+python3 -m mailer.notify_new_subscribers --include-existing # email about current list too
+```
+
+It runs automatically every 15 minutes via launchd. To (re)install:
+
+```bash
+cp mailer/com.langfordlab.southbound35.subscriber-notify.plist ~/Library/LaunchAgents/
+launchctl load ~/Library/LaunchAgents/com.langfordlab.southbound35.subscriber-notify.plist
+```
+
+Logs: `~/lookout_local/southbound35/logs/notify.{out,err}.log`.
+
+## Typical Monday flow
+
+```bash
+cd ~/southbound-35
+python3 -m mailer.sync_subscribers
+python3 -m mailer.send_post <this-week-slug> --dry-run    # eyeball it
+python3 -m mailer.send_post <this-week-slug> --test you@example.com
+python3 -m mailer.send_post <this-week-slug>              # ship it
+```

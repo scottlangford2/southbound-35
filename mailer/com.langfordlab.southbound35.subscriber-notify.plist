@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.langfordlab.southbound35.subscriber-notify</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Library/Frameworks/Python.framework/Versions/3.13/bin/python3</string>
+        <string>-m</string>
+        <string>mailer.notify_new_subscribers</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/scottlangford/southbound-35</string>
+
+    <key>StartInterval</key>
+    <integer>900</integer>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>StandardOutPath</key>
+    <string>/Users/scottlangford/lookout_local/southbound35/logs/notify.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/scottlangford/lookout_local/southbound35/logs/notify.err.log</string>
+</dict>
+</plist>
