@@ -34,6 +34,7 @@ for d in (LOGS_DIR, PREVIEW_DIR):
 # ---- Runtime data ----------------------------------------------------------
 SUBSCRIBERS_CSV = DATA_DIR / "subscribers.csv"
 SENT_LOG = DATA_DIR / "sent.json"   # records which post slugs have been sent
+NOTIFIED_JSON = DATA_DIR / "notified.json"  # emails already announced to the operator
 
 # ---- Blog source -----------------------------------------------------------
 SITE_BASE = os.environ.get(
@@ -55,6 +56,13 @@ SMTP_PASS = os.environ.get("SMTP_PASS", "")
 FROM_NAME = os.environ.get("NEWSLETTER_FROM_NAME", "Scott Langford")
 FROM_EMAIL = os.environ.get("NEWSLETTER_FROM", SMTP_USER)
 REPLY_TO = os.environ.get("NEWSLETTER_REPLY_TO", "scottlangford@txstate.edu")
+
+# Where new-subscriber notifications go (defaults to the operator's address).
+NOTIFY_TO = (
+    os.environ.get("NEWSLETTER_NOTIFY_TO")
+    or os.environ.get("EMAIL_TO")
+    or "scottlangford2@gmail.com"
+)
 
 # Seconds to pause between individual sends, to stay under SMTP rate limits.
 SEND_THROTTLE_SEC = float(os.environ.get("NEWSLETTER_THROTTLE", "1.5"))

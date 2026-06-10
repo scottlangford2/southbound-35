@@ -75,6 +75,27 @@ from its markdown instead.
 Re-sending the same post is blocked unless you pass `--resend` (guards against
 double-sends). Sends are throttled (~1.5s apart) to stay under SMTP limits.
 
+## New-subscriber notifications
+
+`notify_new_subscribers.py` emails you whenever someone new joins. It polls the
+Worker's `/export`, diffs against `notified.json`, and sends a summary over SMTP
+to `NOTIFY_TO` (defaults to your address). First run seeds a silent baseline so
+an existing list doesn't all arrive as "new".
+
+```bash
+python3 -m mailer.notify_new_subscribers --dry-run          # preview
+python3 -m mailer.notify_new_subscribers --include-existing # email about current list too
+```
+
+It runs automatically every 15 minutes via launchd. To (re)install:
+
+```bash
+cp mailer/com.langfordlab.southbound35.subscriber-notify.plist ~/Library/LaunchAgents/
+launchctl load ~/Library/LaunchAgents/com.langfordlab.southbound35.subscriber-notify.plist
+```
+
+Logs: `~/lookout_local/southbound35/logs/notify.{out,err}.log`.
+
 ## Typical Monday flow
 
 ```bash
