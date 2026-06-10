@@ -1,17 +1,15 @@
 {
-  "name": "southbound-35-subscribe",
+  "name": "southbound35-subscribe-worker",
   "version": "1.0.0",
-  "description": "Cloudflare Worker for Southbound 35 newsletter subscription",
-  "main": "src/worker.ts",
+  "private": true,
+  "description": "Cloudflare Worker that captures Southbound 35 newsletter signups into D1.",
   "scripts": {
-    "deploy": "wrangler deploy",
     "dev": "wrangler dev",
-    "tail": "wrangler tail",
-    "list-subs": "curl -s -H \"X-Admin-Token: $ADMIN_TOKEN\" \"$WORKER_URL/subscribers\" | jq"
+    "deploy": "wrangler deploy",
+    "schema": "wrangler d1 execute southbound35-subscribers --file=./schema.sql --remote",
+    "schema:local": "wrangler d1 execute southbound35-subscribers --file=./schema.sql --local"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20250101.0",
-    "typescript": "^5.4.0",
     "wrangler": "^3.90.0"
   }
 }

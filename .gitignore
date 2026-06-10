@@ -23,3 +23,12 @@ posts/*/inputs/shapefiles/
 # Mailer secrets and subscriber list (NEVER commit)
 mailer/.env
 mailer/subscribers.csv
+
+# Cloudflare Worker deps and cache (NEVER commit)
+subscribe-worker/node_modules/
+subscribe-worker/.wrangler/
+
+# Extra guards for off-repo newsletter data (lives in ~/lookout_local/southbound35)
+.env
+*subscribers*.csv
+sent.json

@@ -1,34 +1,17 @@
-# Cloudflare Workers config for the Southbound 35 subscribe endpoint.
-#
-# Deploy:
-#   npm install -g wrangler
-#   wrangler login
-#   wrangler kv namespace create SUBSCRIBERS
-#   # paste the printed namespace id into [[kv_namespaces]] below
-#   wrangler secret put RESEND_API_KEY
-#   wrangler secret put NOTIFY_EMAIL
-#   wrangler secret put ADMIN_TOKEN
-#   wrangler deploy
+name = "southbound35-subscribe"
+main = "src/index.js"
+compatibility_date = "2024-11-01"
 
-name = "southbound-35-subscribe"
-main = "src/worker.ts"
-compatibility_date = "2025-01-01"
-
-# Non-secret config (visible in dashboard). Override per environment if needed.
+# The blog origin allowed to POST the signup form (CORS).
 [vars]
-FROM_EMAIL = "Southbound 35 <onboarding@resend.dev>"
-ALLOWED_ORIGIN = "https://scottlangford2.github.io"
-WORKER_URL = "https://southbound-35-subscribe.YOUR-SUBDOMAIN.workers.dev"
+ALLOW_ORIGIN = "https://scottlangford2.github.io"
 
-# KV namespace for the subscriber list.
-# Run:  wrangler kv namespace create SUBSCRIBERS
-# Paste the returned id into the `id` field below.
-[[kv_namespaces]]
-binding = "SUBSCRIBERS"
-id = "REPLACE_WITH_KV_ID_FROM_WRANGLER_CREATE"
+# D1 database binding.
+[[d1_databases]]
+binding = "DB"
+database_name = "southbound35-subscribers"
+database_id = "d77bd648-7160-486b-8a7b-588ee4de2d9a"
 
-# Optional: bind a preview namespace for local dev.
-# [[kv_namespaces]]
-# binding = "SUBSCRIBERS"
-# id = "REPLACE_WITH_PROD_ID"
-# preview_id = "REPLACE_WITH_PREVIEW_ID"
+# Secrets are NOT stored here. Set them with:
+#   wrangler secret put ADMIN_KEY          (required, gates /export)
+#   wrangler secret put TURNSTILE_SECRET   (optional, enables Turnstile checks)
