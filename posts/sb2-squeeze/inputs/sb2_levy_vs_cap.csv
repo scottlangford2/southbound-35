@@ -1,0 +1,33 @@
+# SB 2 levy vs. voter-approval cap, by city and fiscal year.
+# Source: Scott's mf_scraper ACFR pipeline (Texas COG + ASLGF + city-filed
+#   Truth-in-Taxation worksheets archived by the Texas Comptroller).
+#   https://comptroller.texas.gov/taxes/property-tax/truth-in-taxation/
+#
+# Columns:
+#   year                  - fiscal year (integer; Texas cities use Oct–Sep fiscal year)
+#   city                  - city name (string; one of Kyle, Buda, San Marcos, Dripping Springs)
+#   prior_year_mo_levy    - M&O levy collected in the prior fiscal year ($thousands)
+#   this_year_mo_levy     - M&O levy adopted for this fiscal year ($thousands)
+#   no_new_revenue_rate   - no-new-revenue M&O rate ($/100 of assessed value), per Tx Tax Code §26.04
+#   voter_approval_rate   - voter-approval M&O rate = NNR × 1.035 ($/100 AV), per §26.04(c)
+#   actual_rate           - adopted M&O rate ($/100 AV)
+#
+# Units: levy columns in $thousands; rate columns in dollars per $100 of assessed value.
+#
+# NOTE: Rows below are SYNTHETIC PLACEHOLDER values (3 years × 4 cities = 12 rows).
+# Replace with real values from Scott's mf_scraper pipeline before publication.
+# Real values come from: Comptroller Truth-in-Taxation worksheet archives and
+# city-filed rate certification worksheets (Form 50-856 or equivalent).
+year,city,prior_year_mo_levy,this_year_mo_levy,no_new_revenue_rate,voter_approval_rate,actual_rate
+2022,Kyle,36200.0,37467.0,0.3195,0.3307,0.3307
+2023,Kyle,37467.0,38778.0,0.2740,0.2836,0.2836
+2024,Kyle,38778.0,40135.0,0.2520,0.2608,0.2565
+2022,Buda,13800.0,14283.0,0.3540,0.3664,0.3620
+2023,Buda,14283.0,14783.0,0.3080,0.3188,0.3150
+2024,Buda,14783.0,15300.0,0.2790,0.2888,0.2810
+2022,San Marcos,24100.0,24943.0,0.4820,0.4989,0.4940
+2023,San Marcos,24943.0,25816.0,0.4380,0.4533,0.4450
+2024,San Marcos,25816.0,26720.0,0.3970,0.4109,0.4020
+2022,Dripping Springs,3220.0,3333.0,0.2330,0.2412,0.2380
+2023,Dripping Springs,3333.0,3450.0,0.1960,0.2029,0.1970
+2024,Dripping Springs,3450.0,3570.0,0.1730,0.1790,0.1745

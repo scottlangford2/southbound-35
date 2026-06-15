@@ -1,0 +1,28 @@
+# Voter-approval tax-rate elections in Hays-area cities since SB 2 took effect.
+# Source: Scott's mf_scraper pipeline (Texas Secretary of State election results;
+#   Texas Tribune election database; city council minutes).
+#   https://www.sos.state.tx.us/elections/historical/
+#
+# A voter-approval tax rate election is triggered when a city adopts an M&O rate
+# above the voter-approval rate (NNR × 1.035) as defined in Texas Tax Code §26.07.
+# Under SB 2 (86th Legislature, 2019), the election is automatic rather than
+# petition-initiated. If voters ratify, the rate stands; if they reject it,
+# the city's rate reverts to the voter-approval rate.
+#
+# Columns:
+#   election_date    - date of the election (YYYY-MM-DD)
+#   city             - city name
+#   election_type    - type of election (tax_rate_election | general_obligation_bond)
+#   proposition      - short description of the ballot proposition
+#   outcome          - voter outcome (approved | failed)
+#   vote_for_pct     - percentage of votes cast in favor (0-100)
+#   vote_against_pct - percentage of votes cast against (0-100)
+#
+# NOTE: Rows below are SYNTHETIC PLACEHOLDER values for schema demonstration.
+# Replace with real election results from Scott's mf_scraper pipeline.
+# If no tax-rate elections have been held in these cities under SB 2, delete
+# the placeholder rows and leave only the header.
+election_date,city,election_type,proposition,outcome,vote_for_pct,vote_against_pct
+2021-11-02,Kyle,tax_rate_election,Ratify M&O rate above voter-approval rate,approved,56.4,43.6
+2022-11-08,San Marcos,tax_rate_election,Ratify M&O rate above voter-approval rate,approved,54.1,45.9
+2023-05-06,Buda,tax_rate_election,Ratify M&O rate above voter-approval rate,failed,47.2,52.8
