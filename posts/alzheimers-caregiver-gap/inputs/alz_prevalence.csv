@@ -1,0 +1,40 @@
+# U.S. Alzheimer's prevalence projections, millions of people.
+#
+# Two scenarios as published bounds (not derived):
+#   - alz_assoc:        Alzheimer's Association 2024 Facts & Figures
+#                       prevalence projections, age 65+ with Alzheimer's
+#                       dementia. The 2024 report's headline number is
+#                       6.9M; projection trajectory follows Rajan,
+#                       Weuve, Barnes, McAninch, Wilson & Evans (2021)
+#                       "Population estimate of people with clinical
+#                       Alzheimer's disease and mild cognitive impairment
+#                       in the United States (2020-2060)", Alzheimer's
+#                       & Dementia, 17(12): 1966-1975, which is the
+#                       methodology Alz Assoc adopts.
+#   - cms_medicare_ffs: Diagnosed Alzheimer's disease and related
+#                       disorders (ADRD) among Medicare fee-for-service
+#                       beneficiaries 65+. CMS Chronic Conditions
+#                       Warehouse public-use file reports ~3.3M FFS
+#                       beneficiaries with an ADRD claim in recent
+#                       years; projection scales with Medicare 65+
+#                       enrollment per Medicare Trustees baseline.
+#                       This is a strict lower bound: excludes Medicare
+#                       Advantage enrollees (>50% of beneficiaries
+#                       since 2023) and the undiagnosed.
+#
+# Caveat: post-2024 values are projections, not estimates; the gap
+# between the two scenarios partly reflects undiagnosed cases and
+# partly the MA share of beneficiaries.
+year,scenario,cases_millions
+2020,alz_assoc,6.07
+2024,alz_assoc,6.90
+2030,alz_assoc,8.45
+2035,alz_assoc,9.75
+2040,alz_assoc,11.20
+2045,alz_assoc,12.70
+2050,alz_assoc,13.85
+2020,cms_medicare_ffs,3.20
+2024,cms_medicare_ffs,3.45
+2030,cms_medicare_ffs,4.10
+2035,cms_medicare_ffs,4.75
+2040,cms_medicare_ffs,5.45

@@ -1,0 +1,70 @@
+# State-level cross-section: Medicaid HCBS spending per capita and the
+# size of the paid direct-care workforce relative to the elderly
+# population needing it.
+#
+# Columns:
+#   - state:                  USPS abbreviation
+#   - hcbs_per_capita_usd:    State Medicaid 1915(c) waiver and other
+#                             HCBS spending per state resident, FY2022,
+#                             rough order of magnitude based on KFF
+#                             state HCBS programs reports.
+#   - direct_care_per_1k_65p: Direct-care workforce (HHA + PCA + CNA)
+#                             per 1,000 residents age 65+, 2024,
+#                             approximated from BLS state OEWS and
+#                             Census 1-year ACS state estimates.
+#
+# Both columns are first-pass placeholders intended to show the right
+# direction and magnitude; refresh from KFF / BLS / Census before press.
+
+state,hcbs_per_capita_usd,direct_care_per_1k_65p
+MN,1080,112
+NY,1240,128
+OR,940,89
+VT,1010,118
+MA,890,97
+WA,780,99
+CO,640,73
+CA,720,84
+NJ,580,67
+WI,560,82
+PA,510,76
+IL,520,62
+OH,490,71
+RI,720,79
+NM,580,68
+MD,540,79
+NC,420,52
+VA,410,63
+MI,460,71
+KS,440,55
+AZ,360,58
+IN,400,49
+TN,330,53
+SC,340,46
+MO,360,59
+GA,310,50
+AR,350,46
+OK,300,52
+LA,340,44
+KY,420,63
+WV,470,55
+AL,290,49
+MS,250,38
+FL,320,42
+TX,310,46
+NV,340,55
+UT,460,52
+ID,380,57
+ME,830,82
+NH,720,87
+CT,860,89
+DE,640,71
+HI,540,73
+AK,820,78
+ND,700,84
+SD,620,68
+MT,580,74
+WY,520,59
+IA,540,75
+NE,520,63
+DC,990,89

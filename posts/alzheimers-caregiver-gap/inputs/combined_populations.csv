@@ -1,0 +1,26 @@
+# U.S. populations needing intensive ongoing care, 2024, millions of
+# people. This is the unified-demand side of the labor market: the
+# four populations that the paid direct-care + DSP workforce serves,
+# plus a row for the paid workforce itself.
+#
+# Definitions:
+#   - alz_dementia:     Americans 65+ with Alzheimer's or other
+#                       dementias (Alzheimer's Association 2024 F&F).
+#   - elderly_adl:      Americans 65+ with at least one ADL limitation,
+#                       not also captured under alz_dementia (Census
+#                       ACS / HRS estimates).
+#   - idd_adults:       Adults 18+ with intellectual or developmental
+#                       disabilities (CDC NHIS; Larson et al. 2023).
+#   - disabled_kids:    Children under 18 with significant disability
+#                       affecting ADLs (CDC NHIS; ACS combined).
+#   - paid_workforce:   Total paid direct-care workers (HHA + PCA + CNA
+#                       + DSP), 2024 BLS OEWS + ANCOR.
+#
+# The paid_workforce row is shown for context; it is the supply side
+# of the same labor market.
+population,label,millions
+alz_dementia,"Alzheimer's & other dementias (65+)",6.9
+elderly_adl,"Other elderly with ADL limitations",6.1
+idd_adults,"Adults with intellectual/developmental disabilities",6.5
+disabled_kids,"Children with significant disabilities",3.5
+paid_workforce,"Paid direct-care + DSP workforce",6.5
