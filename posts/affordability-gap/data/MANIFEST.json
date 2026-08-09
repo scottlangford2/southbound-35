@@ -1,0 +1,30 @@
+{
+  "created": "2026-04-21T19:07:03.415903+00:00",
+  "sources": {
+    "zhvi_bottom": {
+      "bytes": 12802461,
+      "fetched": "2026-04-21T19:07:05.445828+00:00",
+      "notes": "1,397 rows, 2000-01-31 \u2192 2026-03-31",
+      "output": "data/zhvi_bottom.csv",
+      "sha256": "0a31df078a30c53b1f4d36acd7313cfa1b1097915d13d015a5bffa3dfb925192",
+      "url": "https://files.zillowstatic.com/research/public_csvs/zhvi/County_zhvi_uc_sfrcondo_tier_0.0_0.33_sm_sa_month.csv"
+    },
+    "zhvi_mid": {
+      "bytes": 13291608,
+      "fetched": "2026-04-21T19:07:04.313479+00:00",
+      "notes": "1,398 rows, 2000-01-31 \u2192 2026-03-31",
+      "output": "data/zhvi_mid.csv",
+      "sha256": "eb41a780314887569e4f0c013229663affea84b5042f9e04abd89c23e97b55bc",
+      "url": "https://files.zillowstatic.com/research/public_csvs/zhvi/County_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv"
+    },
+    "zhvi_top": {
+      "bytes": 13344946,
+      "fetched": "2026-04-21T19:07:06.428188+00:00",
+      "notes": "1,398 rows, 2000-01-31 \u2192 2026-03-31",
+      "output": "data/zhvi_top.csv",
+      "sha256": "2cc77782102d3904171a130978eea3f05609ec763cf029e497f4ac08f98ea417",
+      "url": "https://files.zillowstatic.com/research/public_csvs/zhvi/County_zhvi_uc_sfrcondo_tier_0.67_1.0_sm_sa_month.csv"
+    }
+  },
+  "updated": "2026-04-21T19:07:06.761168+00:00"
+}

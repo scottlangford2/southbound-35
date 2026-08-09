@@ -1,0 +1,39 @@
+{%- comment -%}
+  Per-page view count rendered from GoatCounter's /counter/ JSON endpoint.
+
+  Requires: goatcounter.code set in _config.yml, AND "Allow public access
+  to site statistics" enabled in the GoatCounter site settings.
+
+  The fetch runs client-side and fails silently if the API is unreachable
+  or stats aren't public, so the badge never renders as "…" forever — it
+  just hides itself.
+
+  Opt a page out by setting  views: false  in its front matter.
+{%- endcomment -%}
+
+{%- if site.goatcounter.code and page.views != false -%}
+<span class="page__views" aria-label="Page views (GoatCounter)">
+  <i class="fas fa-chart-line" aria-hidden="true"></i>
+  <span id="gc-views">…</span>&nbsp;views
+</span>
+<script>
+(function () {
+  var el = document.getElementById("gc-views");
+  if (!el) { return; }
+  var path = {{ page.url | jsonify }};
+  var url = "https://{{ site.goatcounter.code }}.goatcounter.com/counter/"
+          + encodeURIComponent(path) + ".json";
+  fetch(url, { cache: "no-store" })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (d) {
+      if (!d) { throw new Error("no-data"); }
+      var n = (typeof d.count_unique !== "undefined") ? d.count_unique : d.count;
+      if (typeof n === "undefined") { throw new Error("no-count"); }
+      el.textContent = Number(n).toLocaleString();
+    })
+    .catch(function () {
+      if (el.parentElement) { el.parentElement.style.display = "none"; }
+    });
+})();
+</script>
+{%- endif -%}

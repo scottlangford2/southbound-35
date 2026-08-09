@@ -1,0 +1,21 @@
+{%- comment -%}
+  GoatCounter — lightweight, cookieless, privacy-friendly page-view counter.
+  Dropped in via the theme's "custom" analytics provider slot so no upstream
+  theme files have to be modified.
+
+  Config is read from _config.yml under `goatcounter:`.
+
+  Setup:
+    1. Register at https://www.goatcounter.com and create a site. Pick a
+       short code (e.g. "southbound35"). Free for personal sites.
+    2. Set  goatcounter.code: southbound35  in _config.yml.
+    3. In _config.yml set  analytics.provider: custom  to route here.
+    4. (Only if you also want the per-page view-count badge from
+       view-count.html to work) — in GoatCounter → Site settings, turn on
+       "Allow public access to site statistics".
+{%- endcomment -%}
+
+{%- if site.goatcounter.code -%}
+<script data-goatcounter="https://{{ site.goatcounter.code }}.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+{%- endif -%}

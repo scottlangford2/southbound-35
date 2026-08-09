@@ -1,0 +1,38 @@
+{%- comment -%}
+  giscus — GitHub Discussions as blog comments. No database, no tracking,
+  commenters sign in with GitHub.
+
+  Routed via the theme's "custom" comments provider slot so no upstream
+  theme files have to be modified.
+
+  Config is read from _config.yml under `giscus:`.
+
+  Setup (one-time, on the blog repo):
+    1. Enable GitHub Discussions: repo → Settings → General → Features →
+       check "Discussions".
+    2. Install the giscus GitHub App on the repo:
+       https://github.com/apps/giscus
+    3. Generate config values at https://giscus.app — it prints the repo_id
+       and category_id for your chosen Discussion category. Paste those
+       into _config.yml under `giscus:`.
+    4. In _config.yml set  comments.provider: custom  to route here.
+{%- endcomment -%}
+
+{%- if site.giscus.repo -%}
+<script src="https://giscus.app/client.js"
+        data-repo="{{ site.giscus.repo }}"
+        data-repo-id="{{ site.giscus.repo_id }}"
+        data-category="{{ site.giscus.category | default: 'General' }}"
+        data-category-id="{{ site.giscus.category_id }}"
+        data-mapping="{{ site.giscus.mapping | default: 'pathname' }}"
+        data-strict="{{ site.giscus.strict | default: '0' }}"
+        data-reactions-enabled="{{ site.giscus.reactions_enabled | default: '1' }}"
+        data-emit-metadata="{{ site.giscus.emit_metadata | default: '0' }}"
+        data-input-position="{{ site.giscus.input_position | default: 'bottom' }}"
+        data-theme="{{ site.giscus.theme | default: 'preferred_color_scheme' }}"
+        data-lang="{{ site.giscus.lang | default: 'en' }}"
+        crossorigin="anonymous"
+        async>
+</script>
+<noscript>Please enable JavaScript to view the comments powered by giscus.</noscript>
+{%- endif -%}
